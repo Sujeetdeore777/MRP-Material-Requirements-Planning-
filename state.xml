@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="simrp_state_tree" model="ir.ui.view">
+<field name="name">simrp.state.tree</field>
+<field name="model">simrp.state</field>
+<field name="arch" type="xml">
+<tree editable="bottom">
+    <field name="name"/>
+    <field name="gstcode"/>
+	</tree>
+</field>
+</record>
+
+<record id="simrp_state_search" model="ir.ui.view">
+<field name="name">simrp.state.search</field>
+<field name="model">simrp.state</field>
+<field name="arch" type="xml">
+<search>
+    <field name="name"/>
+    <field name="gstcode"/>
+</search>
+</field>
+</record>
+
+<record id="simrp_state_action" model="ir.actions.act_window">
+<field name="name">State</field>
+<field name="res_model">simrp.state</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+</record>
+
+<menuitem action="simrp_state_action" id="simrp_state_menu" name="States List" parent="simrp_Mlist" sequence="" groups="group_simrp_user"/>
+
+		</odoo>
+		

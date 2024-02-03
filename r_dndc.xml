@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="printdndc">
+		<t t-call="web.basic_layout">
+			<t t-foreach="docs" t-as="doc">
+
+				<div class="page" style="page-break-after: always;">
+					<div class="oe_structure"/>
+
+					<h2>
+					</h2>
+
+					<style type="text/css">
+	.bgp {
+	  background-color: #000 !important;
+	  color: #FFF;
+	}
+
+  @media print {
+    .bgp {
+      background-color: #000 !important;
+    }
+    .table td {
+      background-color: transparent !important;
+    }
+  }
+					</style>
+					<table class="table bgp mb-0" >
+						<tr>
+							<td>
+								<img src='/web/binary/company_logo' />
+							</td>
+							<td align="center" class="align-bottom" style="color: GreenYellow">
+								<t t-esc="res_company.website"/>
+							</td>
+							<td align="right" class="h1 align-bottom">Debit Note</td>					
+						</tr>
+					</table>
+					<table class="table mb-0" height="10%">
+						<tr>
+							<td class="h6 small" width="64%">
+								<span class="h6 font-weight-bold">
+									<t t-esc="res_company.name"/>
+								</span>
+								<br/>
+								<t t-esc="res_company.street"/>, <t t-esc="res_company.street2"/>
+								<br/>
+						City: <t t-esc="res_company.city"/>, <t t-esc="res_company.zip"/>
+								<br/>
+						State: <t t-esc="res_company.state_id.name"/>, Code: <t t-esc="res_company.state_id.code"/>
+								<br/>
+						E-mail: <t t-esc="res_company.email"/>
+								<br/>
+								<span class="font-weight-bold">GST No.: <t t-esc="res_company.company_registry"/>
+								</span>
+							</td>
+							<td class="m-0 p-0" >
+								<table class="table" border="0">
+									<tr>
+										<td class="h6 small text-right font-weight-bold" width="24%">DN No.:</td>
+										<td class="h2 text-right font-weight-bold">
+											<t t-esc="doc.name"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">DN Date:</td>
+										<td class="h5 text-right font-weight-bold">
+											<t t-esc="doc.rdate.strftime('%d.%m.%Y')"/>
+										</td>
+									</tr>
+								</table>
+							</td>					
+						</tr>
+					</table>
+					<table class="table table-bordered" height="15%">
+						<tr >
+							<td width="64%" class="h5">
+								<span class="h5 font-weight-bold">Debit To</span>
+								<br/>
+								<span class="">
+									<t t-esc="doc.party_.name"/>
+								</span>
+								<br/>
+								<t t-esc="doc.party_.address1"/>
+								<br/>
+								<t t-esc="doc.party_.address2"/>
+								<br/>
+								<t t-esc="doc.party_.address3"/>
+								<br/>
+								<span class="font-weight-bold">GST No.: <t t-esc="doc.party_.gstno"/>
+								</span>
+							</td>
+							<td class="m-0 p-0">
+								<table class="table m-0 p-0" height="100%">
+									<tr>
+										<td class="h6 small text-right" width="24%">Your DC.:</td>
+										<td class="h5 text-right">
+											<t t-if="doc.qcinspection_">
+												<t t-esc="doc.qcinspection_.grn_.grnmaster_.dcno"/>
+											</t>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">Date:</td>
+										<td class="h5 text-right">
+											<t t-if="doc.qcinspection_">
+												<t t-if="doc.qcinspection_.grn_">
+													<t t-esc="doc.qcinspection_.grn_.grnmaster_.dcdate.strftime('%d.%m.%Y')"/>
+												</t>
+											</t>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">Transport:</td>
+										<td class="h5 text-right">
+											<t t-esc="doc.returntransport"/>
+										</td>
+									</tr>
+								</table>
+							</td>					
+						</tr>
+					</table>
+					<table class="table table-sm o_main_table" height="480" width="100%">
+						<thead>
+							<tr height="7%">
+								<th class="text-left" width="65%">Debit Description</th>
+								<th class="text-right" width="10%">Quantity</th>
+								<th class="text-left" width="7%">unit</th>
+								<th class="text-right" width="18%">Amount</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody">
+							<tr>
+								<td class="text-left pt-4">
+									<t t-if="doc.qcinspection_">
+										<t t-esc="doc.qcinspection_.item_.name"/>
+										<br/>
+									</t>
+									<span class="pt-4">
+										<pre><t t-esc="doc.ar"/></pre>
+									</span>
+								</td>
+								<td class="text-right pt-4">
+									<t t-if="doc.qcinspection_">
+										<t t-esc="'{:.2f}'.format( doc.qcinspection_.rejqty )"/>
+									</t>
+								</td>
+								<td class="text-left pt-4">
+									<t t-if="doc.qcinspection_">
+										<t t-esc="doc.qcinspection_.item_.uom_.name"/>
+									</t>
+								</td>
+								<td class="text-right pt-4">
+									<t t-esc="'{:.2f}'.format( doc.basicamount )"/>
+								</td>
+							</tr>
+							<tr height="9%">
+								<td colspan="3" class="text-right pt-3">Basic Amount (Rs.):</td>
+								<td class="text-right pt-3 h5" style="background-color: silver !important;">
+									<t t-esc="'{:.2f}'.format( doc.basicamount )"/>
+								</td>
+							</tr>
+							<t t-set="t_" t-value="doc.taxscheme_.compute( doc.basicamount )"/>
+							<t t-foreach="t_[ 'printTaxes' ]" t-as="taxline">
+								<tr height="7%">
+									<td colspan="1" class="text-left pt-2">
+										<t t-esc="taxline[ 'name' ]"/>
+									</td>
+									<td class="text-right pt-2">
+										<t t-esc="taxline['rate']"/>
+									</td>
+									<td class="text-left pt-2">%</td>
+									<td class="text-right pt-2" >
+										<t t-esc="'{:.2f}'.format( taxline['taxamount'] )"/>
+									</td>
+								</tr>
+							</t>
+							<tr height="9%">
+								<td colspan="3" class="text-right pt-3">Net Amount (Rs.):</td>
+								<td class="text-right pt-3 h5" style="background-color: gray !important;">
+									<t t-esc="'{:.2f}'.format( doc.basicamount + t_[ 'tax' ] )"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table width="100%" height="400" >
+						<tr class="align-top">
+							<td width="50%" class="align-top text-justify">
+								<b>Declaration:</b>
+								<br/>
+						We confirm that we are a registered tax payer as per the Indian GST Act and that we will remit the GST amount if applicable as reflected in this document to the Govt. of India on or before the due date as per the law.<br/>
+								<br/>
+								<b>Important Terms and Conditions:</b>
+								<br/>
+						1. No quality complaint / goods return or debit will be entertained after 7 calender days of the receipt of goods.<br/>
+						2. It will be your responsibility for the safety and maintenance of uninsured goods once the material leaves our factory<br/>
+						3. The amount reflected in this note will be debited from your Credit ledger balance and due payments.<br/>
+						4. In case you have no credit balance with us, you agree to immediately transfer the document amount to our bank.<br/>
+								<br/>
+								<b>Complaints / Quality Concerns:</b> Kindly drop in an email to 3049005@gmail.com<br/>
+							</td>
+							<td>
+								<table width="100%" class="small">
+									<tr>
+										<td width="33%" class="text-right align-top">
+											<b>Our Bank A/c No.:</b>
+										</td>
+										<td class="pl-3 align-top">C/A No. 0064 256 000 9808</td>
+									</tr>
+									<tr>
+										<td width="33%" class="text-right align-top">
+											<b>Our Bank:</b>
+										</td>
+										<td class="pl-3 align-top">HDFC Bank, Thatte Nagar, Nashik</td>
+									</tr>
+									<tr>
+										<td width="33%" class="text-right align-top">
+											<b>Our Bank IFSC:</b>
+										</td>
+										<td class="pl-3 align-top">HDFC0000064</td>
+									</tr>
+									<tr height="150">
+										<td colspan="2" class="text-right small align-bottom">:Receipt Acknowledgement<br/>We confirm that we have received the material in right quantity and we will<br/>	process this delivery as per the invoice terms and condistions mentioned here.</td>
+									</tr>
+									<tr height="200">
+										<td colspan="2" class="text-right align-bottom">For, <b>
+												<t t-esc="res_company.name"/>
+											</b>, Authorised Signatory.</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<br/>
+				</div>
+
+			</t>
+		</t>
+
+	</template>
+
+	<report 
+		id="action_report_printdndc"
+		string="Delivery Challan"
+		model="simrp.debit" 
+		report_type="qweb-html"
+		file="simrp.printdndc" 
+		name="simrp.printdndc"
+		print_report_name="'%s' % (object.name)"
+	/>
+	<report 
+		id="action_report_printdndcpdf"
+		string="Debit Note"
+		model="simrp.debit" 
+		report_type="qweb-pdf"
+		file="simrp.printdndc" 
+		name="simrp.printdndc"
+		paperformat="simrp.paperformat_inv"
+		print_report_name="'%s_%s_%s' % (object.party_.vcode, object.name , object.rdate.strftime('%d%m%Y'))"
+	/>
+
+</odoo>

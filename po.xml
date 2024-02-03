@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_porder_form" model="ir.ui.view">
+		<field name="name">simrp.porder.form</field>
+		<field name="model">simrp.porder</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="approve" type="object" class="oe_stat_button" icon="fa-check-circle" string="Approve" attrs="{'invisible': [('state','!=','d')]}" groups="simrp.group_simrp_works"/>
+					<button name="reopen" type="object" class="oe_stat_button" icon="fa-undo" string="Re-open" attrs="{'invisible': [('state','!=',('c'))]}" groups="simrp.group_simrp_works"/>
+					<button name="close" type="object" class="oe_stat_button" icon="fa-close" string="Close" attrs="{'invisible': [('state','!=','o')]}" groups="simrp.group_simrp_works"/>
+					<button name="redraft" type="object" class="oe_stat_button" icon="fa-check-circle" string="Redraft" attrs="{'invisible': [('state','!=','o')]}" groups="simrp.group_simrp_works"/>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="porder">
+					<div class="oe_button_box" name="button_box">
+						<button name="sendemail" type="object" class="oe_stat_button" icon="fa-folder-open" string="Send Email" attrs="{'invisible': [('state','!=','o')]}" groups="simrp.group_simrp_works"/>
+						<button name="printpo" type="object" class="oe_stat_button" icon="fa-print" string="Print PO" attrs="{'invisible': [('state','!=','o')]}" groups="simrp.group_simrp_works"/>
+					</div>
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name"/>
+						</h1>
+					</div>
+					<group>
+						<group>
+							<field name="party_" options='{"no_create": True}' attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="item_" options='{"no_create": True}' attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="wo_" attrs="{'invisible': [('type','not in',['rmb','bo'])], 'readonly': [('state','not in',['d'])]}" options='{"no_create": True}' domain="[('state','=','o')]" />
+							<field name="itemprocess_" domain="[('item_','=',item_)]" attrs="{'invisible': [('type','not in',['rmb','bo','fg'])], 'required': [('type','in',['rmb','bo'])], 'readonly': [('state','not in',['d'])]}" options='{"no_create": True}' widget="selection"/>
+							<field name="poqty" attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="rate" attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="taxscheme_" options='{"no_open": True, "no_create": True}' widget="selection" domain="[('account_.type','=','purc')]" attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="deliveryparty_" options='{"no_create": True}' attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="transport" attrs="{'readonly': [('state','not in',['d'])]}"/>
+						</group>
+						<group>
+							<field name="advance" attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="type"/>
+							<field name="woitem_" string='WO FG Item'/>
+							<field name="wotqty" string='WO Target Qty'/>
+							<field name="des" attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="uom_" options='{"no_open": True, "no_create": True}' widget="selection"/>
+							<field name="loadrate" attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="testrate" attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="transportrate" attrs="{'readonly': [('state','not in',['d'])]}"/>
+						</group>
+					</group>
+					<group>
+						<group>
+							<field name="podate"/>
+							<field name="ordervalue"/>
+							<field name="netvalue"/>
+						</group>
+						<group>
+							<field name="grnqty"/>
+							<field name="balanceqty"/>
+						</group>
+					</group>
+					<notebook>
+						<page name="p1" string="GRNs">
+							<group col="4">
+								<field name="grn_s" nolabel="1" colspan="4" readonly="1">
+									<tree>
+										<field name="name"/>
+										<field name="dcno"/>
+										<field name="recdate"/>
+										<field name="qtyactual" sum="In Qty"/>
+										<field name="rejinqty" sum="Rej Qty"/>
+										<field name="okinqty" sum="GRN Qty"/>
+										<field name="qcstate"/>
+										<field name="servicestate"/>
+										<field name="accstate"/>
+										<field name="state"/>
+									</tree>
+								</field>
+							</group>
+							<field name="log" colspan="4"/>
+						</page>
+						<!--						<page name="Info" string="">
+							<group col="4">
+							</group>
+						</page>
+-->
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_porder_tree" model="ir.ui.view">
+		<field name="name">simrp.porder.tree</field>
+		<field name="model">simrp.porder</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='o'" decoration-danger="state=='d'">
+				<field name="name"/>
+				<field name="podate"/>
+				<field name="party_"/>
+				<field name="item_"/>
+				<field name="wo_"/>
+				<field name="poqty"/>
+				<field name="ordervalue"/>
+				<field name="balanceqty"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+	<record id="simrp_porder_search" model="ir.ui.view">
+		<field name="name">simrp.porder.search</field>
+		<field name="model">simrp.porder</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="podate"/>
+				<field name="party_"/>
+				<field name="item_"/>
+				<field name="wo_"/>
+				<field name="poqty"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+	<record id="simrp_porder_action" model="ir.actions.act_window">
+		<field name="name">Purchase Order</field>
+		<field name="res_model">simrp.porder</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+	<menuitem action="simrp_porder_action" id="simrp_porder_menu" name="Purchase Order" parent="simrp_menu_oper_p" sequence="10" groups="group_simrp_user"/>
+</odoo>

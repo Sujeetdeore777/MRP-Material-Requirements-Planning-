@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_paymentreceipt_form" model="ir.ui.view">
+		<field name="name">simrp.paymentreceipt.form</field>
+		<field name="model">simrp.paymentreceipt</field>
+		<field name="arch" type="xml">
+			<form>
+                <header>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Payment Receipt">
+				<div class="oe_button_box" name="button_box">
+					<button name="load" type="object" class="oe_stat_button" icon="fa-check-circle" string="Load" groups="simrp.group_simrp_user" />
+                    <button name="confirm" type="object" class="oe_stat_button" icon="fa-check-circle" string="Confirmed"  groups="simrp.group_simrp_user" />
+				</div>
+
+					<group col="4">
+						<field name="party_"/>
+						<field name="date" colspan="2" attrs="{'readonly': [('state','in',['l','c','p'])]}"/>
+                        <field name="chq_no"/>
+                        <field name="chq_amt"/>
+                        <field name="fundaccount_" colspan="2" domain="[ ( 'type', '=', 'fund' ) ]" options='{"no_create": True}' widget="selection" />
+                        <field name="uti_no"/>
+					</group>
+                    <group col="6">
+                        <label for="tcustpaymentrecords_s" string="Pending Payment"/>
+						<field name="tcustpaymentrecords_s" nolabel="1" colspan="6" >
+                            <tree editable="bottom">
+								<field name="paymentreceipt_" invisible="1"/>
+								<field name="accline_"/>
+								<field name="tran"/>
+								<field name="doc_date"/>
+								<field name="doc_dr" sum="Total"/>
+								<field name="doc_cr" sum="Total"/>
+								<field name="bal_amt" sum="Total"/>
+								<field name="check"/>
+							</tree>
+						</field>
+                    </group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+
+	<record id="simrp_paymentreceipt_action" model="ir.actions.act_window">
+		<field name="name">Payment receipt Report</field>
+		<field name="res_model">simrp.paymentreceipt</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<!-- <menuitem action="simrp_paymentreceipt_action" id="simrp_paymentreceipt_menu" name="Payment Receipt" parent="simrp_menu_account_fund" sequence="300" groups="group_simrp_user"/> -->
+
+
+</odoo>

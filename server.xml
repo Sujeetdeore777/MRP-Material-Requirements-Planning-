@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="server_backup" model="ir.actions.server">
+		<field name="name">Backup</field>
+		<field name="type">ir.actions.server</field>
+		<field name="model_id" ref="model_simrp_server" />
+		<field name="state">code</field>
+		<field name="code">
+			model.backup()
+		</field>
+	</record>
+
+	<menuitem name="Backup DB/FileStore" action="server_backup" id="simrp_menu_backup" parent="simrp_Mserver" sequence="100" groups="group_simrp_ceo"/>
+	<menuitem name="Parameters" action="base.ir_config_list_action" id="simrp_menu_systemparam" parent="simrp_Mserver" sequence="110" groups="group_simrp_ceo"/>
+
+	<!-- <record id="server_sync" model="ir.actions.server"> -->
+		<!-- <field name="name">Sync Companies</field> -->
+		<!-- <field name="type">ir.actions.server</field> -->
+		<!-- <field name="model_id" ref="model_simrp_server" /> -->
+		<!-- <field name="state">code</field> -->
+		<!-- <field name="code"> -->
+			<!-- model.sync() -->
+		<!-- </field> -->
+	<!-- </record> -->
+
+	<!-- <menuitem name="Sync Companies" action="server_sync" id="simrp_menu_sync" parent="simrp_Mserver" sequence="101" groups="group_simrp_ceo"/> -->
+
+	<record id="server_op1" model="ir.actions.server">
+		<field name="name">Sync Companies</field>
+		<field name="type">ir.actions.server</field>
+		<field name="model_id" ref="model_simrp_server" />
+		<field name="state">code</field>
+		<field name="code">
+			model.tfunc1()
+		</field>
+	</record>
+
+	<menuitem name="tfunc1" action="server_op1" id="simrp_menu_syncop1" parent="simrp_Mserver" sequence="101" groups="group_simrp_ceo"/>
+
+	<record id="server_op2" model="ir.actions.server">
+		<field name="name">Sync Employees</field>
+		<field name="type">ir.actions.server</field>
+		<field name="model_id" ref="model_simrp_server" />
+		<field name="state">code</field>
+		<field name="code">
+			model.shahemplsync()
+		</field>
+	</record>
+
+	<menuitem name="Employee Sync" action="server_op2" id="simrp_menu_syncop2" parent="simrp_Mserver" sequence="102" groups="group_simrp_works"/>
+
+</odoo>

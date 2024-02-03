@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_advancegrn_form" model="ir.ui.view">
+		<field name="name">simrp.advancegrn.form</field>
+		<field name="model">simrp.advancegrn</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="cancel" type="object" class="oe_stat_button" icon="fa-cross" string="Cancel Tool DC" attrs="{'invisible': [('state','!=','r')]}" groups="simrp.group_simrp_user" />
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Tool Advance GRN">
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+							<field name="id" invisible="1"/>
+
+					<group col="6">
+						<group colspan="6" col="6">
+							<field name="party_" attrs="{'readonly': [('id','!=',False)]}"  options='{"no_create": True}' colspan="4"/>
+							<field name="item_" domain="[('type','=',['insert','cons'])]" options='{"no_create": True}' colspan="4"/>
+							<field name="agrndatetime"/>
+							
+
+							<field name="des" colspan="6"/>	
+						
+							<hr colspan="6"/>
+							
+							<field name="receiveqty" />
+							<field name="rate"/>
+							<field name="taxscheme_" widget="selection" domain="[('account_.type','=','purc')]"/>
+
+							<hr colspan="6"/>
+
+							<field name="purchase_" colspan="4"/>
+							<field name="amount"/>
+						</group>
+					</group>
+					</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_advancegrn_tree" model="ir.ui.view">
+		<field name="name">simrp.advancegrn.tree</field>
+		<field name="model">simrp.advancegrn</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='a'" decoration-info="state=='r'" decoration-warning="state=='p'">
+				<field name="name"/>
+				<field name="agrndate"/>
+				<field name="party_"/>
+				<field name="item_"/>
+				<field name="receiveqty"/>
+				<field name="rate"/>
+				<field name="amount"/>
+				<field name="taxscheme_"/>
+				<field name="state"/>
+				<button name="accept_" type="object" class="oe_stat_button" icon="fa-check-circle" string="Accept" attrs="{'invisible': [('state','!=','r')]}" groups="simrp.group_simrp_ceo" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_advancegrn_search" model="ir.ui.view">
+		<field name="name">simrp.advancegrn.search</field>
+		<field name="model">simrp.advancegrn</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="agrndate"/>
+				<field name="des"/>
+				<field name="party_"/>
+				<field name="item_"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_advancegrn_action" model="ir.actions.act_window">
+		<field name="name">Misc. GRN</field>
+		<field name="res_model">simrp.advancegrn</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_advancegrn_action" id="simrp_advancegrn_menu" name="Misc GRN (Without PO)" parent="simrp_menu_material_in" sequence="" groups="group_simrp_user"/>
+
+</odoo>

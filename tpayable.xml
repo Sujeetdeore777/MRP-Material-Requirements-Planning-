@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_tpayable_form" model="ir.ui.view">
+		<field name="name">simrp.tpayable.form</field>
+		<field name="model">simrp.tpayable</field>
+		<field name="arch" type="xml">
+			<form>
+                <header>
+					<button name="deleterecord" type="object" attrs="{'invisible': [('state','in',['d','r'])]}" class="oe_stat_button" icon="fa-check-circle" string="Delete Record" groups="simrp.group_simrp_works" />
+					<field name="state" widget="statusbar"/>
+				</header>
+				<div class="oe_button_box" name="button_box">
+					<button name="generates" type="object" attrs="{'invisible': [('state','not in',['st'])]}" class="oe_stat_button" icon="fa-check-circle" string="Fetch Ledger Data" groups="simrp.group_simrp_user" />
+                    <button name="update" type="object" class="oe_stat_button" icon="fa-refresh" string="Refresh" attrs="{'invisible': [('state','not in',['s','sub'])]}" groups="simrp.group_simrp_user" />
+                    <!-- <button name="submit" type="object" class="oe_stat_button" icon="fa-check-circle" string="Submit" attrs="{'invisible': [('state','not in',['s'])]}" groups="simrp.group_simrp_user" /> -->
+                    <button name="bankfilegen" type="object" class="oe_stat_button" icon="fa-print" string="Generate Bank File" attrs="{'invisible': [('state','not in',['d'])]}" groups="simrp.group_simrp_works" />
+                    <button name="email" type="object" class="oe_stat_button" icon="fa-check-circle" string="Email Creation" attrs="{'invisible': [('state','not in',['r'])]}" groups="simrp.group_simrp_works" />
+                    <button name="approve" type="object" class="oe_stat_button" icon="fa-check-circle" string="Lock" attrs="{'invisible': [('state','not in',['s'])]}" groups="simrp.group_simrp_works" />
+                    <button name="uploaded" type="object" class="oe_stat_button" icon="fa-check-circle" string="Uploaded" attrs="{'invisible': [('state','not in',['d'])]}" groups="simrp.group_simrp_works" />
+                    <button name="bankapprove" type="object" class="oe_stat_button" icon="fa-check-circle" string="Bank Approved" attrs="{'invisible': [('state','not in',['u'])]}" groups="simrp.group_simrp_works" />
+
+                    <button name="confirm" type="object" class="oe_stat_button" icon="fa-check-circle" string="Generate ERP Records" attrs="{'invisible': [('state','not in',['a'])]}" groups="simrp.group_simrp_works" />
+    			</div>
+
+					<group col="4">
+						<field name="date" attrs="{'readonly': [('state','not in',['st'])]}"/>
+						<field name="id" />
+                        <field name="fundaccount_" colspan="2" domain="[ ( 'type', '=', 'fund' ) ]" options='{"no_create": True}' widget="selection" attrs="{'readonly': [('state','in',['d','r','u','a'])]}"/>
+						<field name="bankfile" filename="bankfilename" attrs="{'invisible': [('state','not in',['d','r','u','a'])]}" readonly="1"/>
+						<field name="bankfilename" invisible="1"/>
+					</group>
+
+					<notebook>
+						<page name="p1" string="Parties">
+							<group colspan="4">
+								<field name="tpayablerecords_s" nolabel="1" colspan="14" attrs="{'readonly': [('state','not in',['s','st','sub','d','u','a'])]}" >
+									<tree decoration-danger="balance &lt; 0" limit="500" create="false" default_order="party_">
+										<field name="tpayable_" invisible="1"/>
+										<field name="parentstate" invisible="1"/>
+										<field name="party_"/>
+										<field name="partystate" invisible="1"/>
+										<field name="category"/>
+										<field name="credit"/>
+										<field name="due_upto"/>
+										<button name="reload" type="object" class="oe_stat_button" icon="fa-refresh" string="Reset Ledger" attrs="{'invisible': [('parentstate','!=','s')]}" groups="simrp.group_simrp_works" />
+										<field name="net_ledger" sum="nl"/>
+										<field name="unadj_dr" sum="udr"/>
+										<field name="adjproblem" invisible="1"/>
+										<button name="dummy" type="object" class="oe_stat_button" icon="fa-id-card-o" string="Bank Details Locked" attrs="{'invisible': [('partystate','=','o')]}" groups="simrp.group_simrp_iuser" />
+										<button name="dummy" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" string="Adj mismatch" attrs="{'invisible': [('adjproblem','=',True)]}" groups="simrp.group_simrp_iuser" />
+										
+										<field name="due_amt" sum="da"/>
+										<field name="chq_no"/>
+										<field name="balance" sum="sel"/>
+										<field name="gstr2mm" sum="g2mm" attrs="{'invisible': [('gstr2mm','=',0)]}"  style="color:red"/>
+									</tree>
+								</field>
+								<field name="tpayablerecords_s_other" nolabel="1" colspan="14" attrs="{'readonly': [('state','not in',['s','st','sub','d','u','a'])]}">
+									<tree decoration-danger="balance &lt; 0"  limit="500" create="false">
+										<field name="tpayable_" invisible="1"/>
+										<field name="parentstate" invisible="1"/>
+										<field name="party_"/>
+										<field name="partystate" invisible="1"/>
+										<field name="category"/>
+										<field name="credit"/>
+										<field name="due_upto"/>
+										<button name="reload" type="object" class="oe_stat_button" icon="fa-refresh" string="Reset Ledger" attrs="{'invisible': [('parentstate','!=','s')]}" groups="simrp.group_simrp_works" />
+										<field name="net_ledger" sum="nl"/>
+										<field name="unadj_dr" sum="udr"/>
+										<field name="adjproblem" invisible="1"/>
+										<button name="dummy" type="object" class="oe_stat_button" icon="fa-id-card-o" string="Bank Details Locked" attrs="{'invisible': [('partystate','=','o')]}" groups="simrp.group_simrp_iuser" />
+										<button name="dummy" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" string="Adj mismatch" attrs="{'invisible': [('adjproblem','=',True)]}" groups="simrp.group_simrp_iuser" />
+										
+										<field name="due_amt" sum="da"/>
+										<field name="chq_no"/>
+										<field name="balance" sum="sel"/>
+										<field name="gstr2mm" sum="g2mm" attrs="{'invisible': [('gstr2mm','=',0)]}"  style="color:red"/>
+									</tree>
+								</field>
+
+							</group>
+						</page>
+						<page name="Info" string="Bills Passed">
+							<group colspan="4">
+								<field name="tpayabletreerecords_s" nolabel="1" colspan="14" readonly="1">
+									<tree limit="5000" >
+										<field name="pname"/>
+										<field name="tran"/>
+										<field name="doc_date"/>
+										<field name="doc_dr" sum="Total1"/>
+										<field name="doc_cr" sum="Total2"/>
+										<field name="bal_amt" sum="Tota3"/>
+										<field name="due_date"/>
+										<field name="due"/>
+										<field name="select_amt" sum="Tota4"/>
+										<field name="check"/>
+									</tree>
+								</field>
+							</group>
+						</page>
+						<page name="p3" string="Fund Transactions">
+							<group colspan="4">
+								<field name="fundtransaction_s" nolabel="1" colspan="14" readonly="1">
+									<tree decoration-warning="(wa==0) and (da==0)" decoration-success="state=='s'">
+										<field name="name"/>
+										<field name="id" invisible="1"/>
+										<field name="statementid" invisible="1"/>
+										<field name="des" invisible="1"/>
+										<field name="fundaccline_" invisible="1"/>
+										<field name="ftdate"/>
+										<field name="type"/>
+										<field name="party_"/>
+										<field name="fundaccount_"/>
+										<field name="wa" sum="T:"  attrs="{'invisible': [('wa','=',0)]}"/>
+										<field name="da" sum="T:" attrs="{'invisible': [('da','=',0)]}"/>
+										<field name="amount" attrs="{'invisible': ['|',('da','!=',0),('wa','!=',0)]}"/>
+										
+										<field name="accounttype" invisible="1"/>
+										<field name="baladjAmount" attrs="{'invisible': ['|',('accounttype','!=','p'),('baladjAmount','=',0)]}"/>
+										<field name="state"/>
+									</tree>
+								</field>
+							</group>
+						</page>
+					</notebook>
+
+			</form>
+		</field>
+	</record>
+
+    <record id="simrp_tpayable_tree" model="ir.ui.view">
+		<field name="name">simrp.tpayable.tree</field>
+		<field name="model">simrp.tpayable</field>
+		<field name="arch" type="xml">
+			<tree>
+                <field name="id" />
+                <field name="date" />
+                <field name="fundaccount_" />
+                <field name="state" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_tpayable_action" model="ir.actions.act_window">
+		<field name="name">Payment Processing</field>
+		<field name="res_model">simrp.tpayable</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+        <field name="view_id" ref="simrp_tpayable_tree"/>
+	</record>
+
+	<menuitem action="simrp_tpayable_action" id="simrp_tpayable_menu" name="Payment Processing" parent="simrp_menu_finance" sequence="100" groups="group_simrp_user"/>
+    
+    <record id="simrp_tpayablerecords_form" model="ir.ui.view">
+		<field name="name">simrp.tpayablerecords.form</field>
+		<field name="model">simrp.tpayablerecords</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet string="payable">
+					<group col="4">
+						<field name="party_" colspan="2"/>
+						<field name="unadj_dr" colspan="2"/>
+						
+						<field name="due_upto" colspan="2"/>
+						<field name="due_amt" colspan="2"/>
+						
+						<field name="credit" colspan="2"/>
+						<field name="chq_no" colspan="2"/>
+					</group>
+					<group colspan="4">
+						<field name="tpayabletreerecords_s" nolabel="1" colspan="12"  >
+                            <tree editable="bottom" limit="500">
+                                <field name="tpayablerecords_" invisible="1"/>
+                                <field name="lock" invisible="1"/>
+								<field name="accline_"/>
+								<field name="tran"/>
+								<field name="doc_date"/>
+								<field name="doc_dr" sum="Total1"/>
+								<field name="doc_cr" sum="Total2"/>
+								<field name="bal_amt" sum="Tota3"/>
+								<field name="due_date"/>
+								<field name="due"/>
+								<field name="select_amt" sum="Tota4"/>
+                                <field name="check"/>
+                                <button name="checkboxstatus" attrs="{'invisible':['|',('check','!=',False),('lock','=',True)]}" type="object" class="oe_stat_button" icon="fa-check-circle" string="Select" groups="simrp.group_simrp_user" />
+                                <button name="checkboxstatus" attrs="{'invisible':['|',('check','!=',True),('lock','=',True)]}" type="object" class="oe_stat_button" icon="fa-close" string="Reject" groups="simrp.group_simrp_user" />
+                            </tree>
+                        </field>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+</odoo>

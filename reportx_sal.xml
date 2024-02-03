@@ -1,0 +1,40 @@
+<odoo>
+    <report
+        id="simrp_reportx_sal"
+        model="report.simrp.reportx_sal"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="report.simrp.reportx_sal"
+        file="salary"
+        attachment_use="False"
+    />
+
+	<record id="simrp_reportx_form1" model="ir.ui.view">
+		<field name="name">report.simrp.reportx_sal.form</field>
+		<field name="model">report.simrp.reportx_sal</field>
+		<field name="arch" type="xml">
+			<form>
+                <sheet>
+					<group>
+						<field name="monthempsalary_" options='{"no_open": True, "no_create": True}'/>
+						<field name="bu_" options='{"no_open": True, "no_create": True}' widget="selection"/>
+						<!-- <field name="fromdate"/> -->
+						<!-- <field name="todate"/> -->
+						<field name="type"/>
+						<button name="generate" type="object" class="oe_stat_button" icon="fa-folder-open" string="Generate Report" groups="simrp.group_simrp_user" />
+					</group>
+                </sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_reportx_sal_action" model="ir.actions.act_window">
+		<field name="name">Report Generation</field>
+		<field name="res_model">report.simrp.reportx_sal</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_reportx_sal_action" id="simrp_report_sal_menu" name="Salary Reports" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/>
+
+</odoo>

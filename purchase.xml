@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- <record id="simrp_tadvancegrntool_action" model="ir.actions.act_window"> -->
+		<!-- <field name="name">Tooling GRN</field> -->
+		<!-- <field name="res_model">simrp.tadvancegrn</field> -->
+		<!-- <field name="view_type">form</field> -->
+		<!-- <field name="view_mode">form</field> -->
+		<!-- <field name="target">new</field> -->
+	<!-- </record> -->
+
+	<record id="action_repost" model="ir.actions.server">
+		<field name="name">Repost Accounts</field>
+		<field name="model_id" ref="model_simrp_purchase"/>
+		<field name="binding_model_id" ref="model_simrp_purchase"/>
+		<field name="binding_view_types">list</field>
+		<field name="state">code</field>
+		<field name="code">
+if records.env['res.users'].has_group('simrp.group_simrp_ceo'):
+	records.repost()
+		</field>
+	</record>
+		
+	<record id="simrp_purchase_form" model="ir.ui.view">
+		<field name="name">simrp.purchase.form</field>
+		<field name="model">simrp.purchase</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<field name="name" style="font-weight: bold"/>
+					<field name="id" invisible="1"/>
+							<field name="pdate" invisible="1"/>
+					<field name="state" widget="statusbar"/>
+					<button name="draft1" type="object" class="oe_stat_button" icon="fa-folder-open" string="Reset Entry" attrs="{'invisible': [('state','!=',('a'))]}" groups="simrp.group_simrp_ceo" />
+					<button name="repost" type="object" class="oe_stat_button" icon="fa-folder-open" string="RePOST" attrs="{'invisible': [('state','!=',('a'))]}" groups="simrp.group_simrp_ceo" />
+					<button name="gstr2ok" type="object" class="oe_stat_button" icon="fa-folder-open" string="GSTR2A Match Manual" attrs="{'invisible': [('gstr2state','!=','n')]}" groups="simrp.group_simrp_ceo" />
+						<button name="grnreset" type="object" class="oe_stat_button" icon="fa-folder-open" string="Reset GRNs" attrs="{'invisible': [('state','!=',('d'))]}" groups="simrp.group_simrp_user" />
+						<button name="grnrate" type="object" class="oe_stat_button" icon="fa-folder-open" string="Update GRN PO Rates" attrs="{'invisible': [('state','!=',('d'))]}" groups="simrp.group_simrp_works" />
+							<button name="draft" type="object" class="oe_stat_button" icon="fa-folder-open" string="Rework Draft" attrs="{'invisible': [('state','!=',('s'))]}" groups="simrp.group_simrp_user" />
+				</header>
+					<group col="6"  style="position:relative; top:-5vh; background-color:#e6f3ff">
+						<group colspan="5" col="6">
+							<field name="party_" options='{"no_create": True}' colspan="4" attrs="{'readonly': [('state','!=','i')]}" />
+							<field name="gstr2state"/>
+							<field name="docno" attrs="{'readonly': [('state','=','a')]}"/>
+							<field name="docdate" attrs="{'readonly': [('state','=','a')]}"/>
+							<field name="matchnet" attrs="{'readonly': [('state','not in',['d','i'])]}" string="Amt on Invoice"/>
+						</group>
+						<group colspan="1" col="2" class="small">
+							<button name="draft" type="object" class="oe_stat_button" icon="fa-folder-open" string="Select Items" attrs="{'invisible': [('state','!=',('i'))]}" groups="simrp.group_simrp_user" />
+							<button name="submit" type="object" class="oe_stat_button" icon="fa-folder-open" string="Submit for Approval" attrs="{'invisible': [('state','!=',('d'))]}" groups="simrp.group_simrp_works" />
+							<button name="accept" type="object" class="oe_stat_button" icon="fa-folder-open" string="Accept and	 Post" attrs="{'invisible': [('state','!=',('s'))]}" groups="simrp.group_simrp_works" />
+						</group>
+					</group>
+                    <group col="6" class="small" style="position:relative; top:-8vh; background-color:#ffffe6">
+						<group colspan="4" col="6">
+
+							<field name="regulergrn_amt"/>
+								<field name="associate" />
+									<field name="basicamount"/>
+
+							<field name="directtool_amt" />
+								<field name="tdsamount" />
+									<field name="taxamount"/>
+
+							<field name="directpur_amt"/>
+								<field name="duedate"/>
+									<field name="netamount"/>
+
+
+						</group>
+						<group colspan="2">
+							<field name="adj" attrs="{'readonly': [('state','!=','d')]}"/>
+							<field name="basicamountadj" attrs="{'invisible': [('adj','=',False)],'readonly': [('state','=','a')]}"/>
+							<field name="bataxscheme_" attrs="{'invisible': [('adj','=',False)], 'readonly': [('state','=','a')]}" options="{'no_create': True, 'no_open': True}" />
+							<field name="adjreason" attrs="{'invisible': [('adj','=',False)], 'readonly': [('state','=','a')]}"/>
+						</group>
+					</group>
+                    <notebook style="position:relative; top:-11vh; background-color:white" class="small" >
+                        <page string="Regular GRN (PO+GRN)" attrs="{'invisible': [('state','in',['s','a']), ('regulergrn_amt','=',0)]}">
+						<field name="grn_s" colspan="4" nolabel="1" domain="[('party_','=',party_), ( 'accstate', '=', 'u' ) ]" 
+							widget="many2many" options="{'no_create': True}"  attrs="{'readonly': ['|',('state','!=','d'),('state','=','i')] }">
+							<tree edit="false" decoration-success="qcstate in ['ok', 'na']" decoration-warning="qcstate in ['dok']" decoration-danger="qcstate in ['rej', 'i']" >
+								<field name="qcstate"/>
+								<field name="name"/>
+								<field name="recdate" widget="date"/>
+								<field name="dcno"/>
+								<field name="item_"/>
+								<field name="hsnsac" string="HSN/SAC"/>
+								<field name="okinqty"/>
+								<field name="rejinqty"/>
+								<field name="billqty"/>
+								<field name="rate"/>
+								<field name="charges" sum="Charges"/>
+								<field name="basicamount" sum="Total"/>
+							</tree>							
+						</field>
+                        </page>
+                        <page string="Misc GRN (W/o PO,QC) - Stock items" attrs="{'invisible': [('state','in',['s','a']), ('directtool_amt','=',0),('directpur_amt','=',0)]}">
+							<field name="advancegrn_s" nolabel="1" colspan="4" domain="[('party_','=',party_),('state','=','r')]" widget="many2many" attrs="{'readonly': ['|',('state','!=','d'),('state','=','i')], 'invisible': [('state','in',['s','a']), ('directtool_amt','=',0)]}" context="{'default_party_':party_}">
+								<tree edit="false">
+									<field name="name" />
+									<field name="agrndate"/>
+									<field name="des"/>
+									<field name="item_"/>
+									<field name="hsnsac" string="HSN/SAC"/>
+									<field name="taxscheme_"/>
+									<field name="receiveqty"/>
+									<field name="rate"/>
+									<field name="amount" sum="Total"/>
+								</tree>
+							</field>
+							<div>Expenses (Non stock)</div>
+                            <field name="directpurchase_s" nolabel="1" colspan="4" domain="[('state','=','a')]" options='{"no_open": True, "no_create": True}' attrs="{'readonly': ['|',('state','!=','d'),('state','=','i')], 'invisible': [('state','in',['s','a']), ('directpur_amt','=',0)] }">
+                                <tree editable="bottom">
+                                    <field name="purchase_" invisible="1" />
+                                    <field name="date" />
+                                    <field name="des" />
+
+									<field name="expenseaccount_" domain="[('type','in',['ex','iex'])]" options="{'no_create': True, 'no_open': True}"/>
+
+                                    <field name="taxscheme_" options='{"no_create": True, "no_open":True}' domain="[('account_.type','=','purc')]"/>
+									<field name="qty"/>
+									<field name="rate"/>
+									<field name="amount" sum="Total"/>
+								</tree>
+							</field>
+                        </page>
+                    </notebook>
+						<field name="accline_s" nolabel="1" colspan="6" attrs="{'invisible': [('state','!=','a')]}"/>
+						<group colspan="6">
+							<field name="gadjreason" colspan="6" attrs="{'readonly': [('gstr2state','!=','n')]}"/>
+							<field name="log" colspan="6"/>
+						</group>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_purchase_tree" model="ir.ui.view">
+		<field name="name">simrp.purchase.tree</field>
+		<field name="model">simrp.purchase</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='a'" >
+				<field name="name"/>
+				<field name="docdate"/>
+				<field name="pdate"/>
+				<field name="party_"/>
+
+				<field name="adj"/>
+				<field name="netamount"/>
+				<field name="duedate"/>
+
+				<field name="state"/>
+							<field name="gstr2state"/>
+
+
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_purchase_search" model="ir.ui.view">
+		<field name="name">simrp.purchase.search</field>
+		<field name="model">simrp.purchase</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="docdate"/>
+				<field name="pdate"/>
+				<field name="party_"/>
+
+				<field name="adj"/>
+				<field name="duedate"/>
+							<field name="gstr2state"/>
+
+				<field name="state"/>
+				<filter string="Unmatched" name="purchase_unmatched" domain="[('gstr2state','in',['n','x'])]"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_purchase_action" model="ir.actions.act_window">
+		<field name="name">Purchase</field>
+		<field name="res_model">simrp.purchase</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_purchase_action" id="simrp_purchase_menu" name="Purchase" parent="simrp_menu_account_transact" sequence="5" groups="group_simrp_user"/>
+
+	<record id="simrp_purchase_action1" model="ir.actions.act_window">
+		<field name="name">Unmatched Purchase</field>
+		<field name="res_model">simrp.purchase</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{'search_default_purchase_unmatched': 1}</field>		
+	</record>
+
+	<menuitem action="simrp_purchase_action1" id="simrp_purchase_menu1" name="Unmatched Purchases" parent="simrp_gstr2_menu" sequence="30" groups="group_simrp_user"/>
+
+</odoo>

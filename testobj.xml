@@ -1,0 +1,84 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<!-- <odoo> -->
+	<!-- <record id="simrp_testobj1_form" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.testobj1.form</field> -->
+		<!-- <field name="model">simrp.testobj1</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <form> -->
+				<!-- <header> -->
+					<!-- <button name="approve" type="object" class="oe_stat_button" icon="fa-check-circle" string="Approve" attrs="{'invisible': [('state','=',('s'))]}" groups="simrp.group_simrp_ceo"/> -->
+					<!-- <button name="draft" type="object" class="oe_stat_button" icon="fa-undo" string="Re-open" attrs="{'invisible': [('state','=',('d'))]}" groups="simrp.group_simrp_works"/> -->
+					<!-- <button name="submit" type="object" class="oe_stat_button" icon="fa-folder-open" string="Submit for Approval" attrs="{'invisible': [('state','=',('d'))]}" groups="simrp.group_simrp_iuser"/> -->
+					<!-- <field name="state" widget="statusbar"/> -->
+				<!-- </header> -->
+				<!-- <sheet string="testobj1"> -->
+					<!-- <field name="id"/> -->
+					<!-- <group> -->
+						<!-- <field name="name"/> -->
+						<!-- <field name="party_"/> -->
+						<!-- <field name="rate"/> -->
+					<!-- </group> -->
+				<!-- </sheet> -->
+			<!-- </form> -->
+		<!-- </field> -->
+	<!-- </record> -->
+	<!-- <record id="simrp_testobj1_tree" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.testobj1.tree</field> -->
+		<!-- <field name="model">simrp.testobj1</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <tree> -->
+				<!-- <field name="name"/> -->
+				<!-- <field name="party_"/> -->
+				<!-- <field name="rate"/> -->
+			<!-- </tree> -->
+		<!-- </field> -->
+	<!-- </record> -->
+	<!-- <record id="simrp_testobj1_search" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.testobj1.search</field> -->
+		<!-- <field name="model">simrp.testobj1</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <search> -->
+				<!-- <field name="name"/> -->
+				<!-- <field name="party_"/> -->
+				<!-- <field name="rate"/> -->
+			<!-- </search> -->
+		<!-- </field> -->
+	<!-- </record> -->
+	<!-- <record id="simrp_testobj1_action" model="ir.actions.act_window"> -->
+		<!-- <field name="name">testobj1</field> -->
+		<!-- <field name="res_model">simrp.testobj1</field> -->
+		<!-- <field name="view_mode">tree,form</field> -->
+	<!-- </record> -->
+	<!-- <menuitem action="simrp_testobj1_action" id="simrp_testobj1_menu" name="testobj1" parent="simrp_menu_oper_s" sequence="" groups="group_simrp_iuser"/> -->
+<!-- </odoo> -->
+		
+		
+		
+		<!-- class Testobj1(models.Model): -->
+    <!-- _name = 'simrp.testobj1' -->
+    <!-- _inherits = {'simrp.auditlog': 'auditlog_'}  -->
+    <!-- auditlog_ = fields.Many2one( 'simrp.auditlog', 'Auditlog', required=True, ondelete="cascade" ) -->
+    
+    <!-- name = fields.Char( 'Rate Code', size = 50, readonly = True ) -->
+    <!-- party_ = fields.Many2one( 'simrp.party', 'Customer', required = True ) -->
+    <!-- rate = fields.Float( 'Rate', digits=(8,2), required = True ) -->
+    <!-- state = fields.Selection( [ -->
+            <!-- ( 'd', 'draft' ), -->
+            <!-- ( 's', 'Submit' ), -->
+            <!-- ( 'a', 'approved' ), -->
+            <!-- ], 'State', readonly = True, default='d' ) -->
+
+    <!-- @api.model -->
+    <!-- def create(self, vals): -->
+        <!-- vals['name'] = self.env['ir.sequence'].next_by_code('simrp.itemrate') -->
+        <!-- o = super(Testobj1, self).create(vals) -->
+        <!-- o.auditlog_.initAudit( 'simrp.testobj1', o.id ) -->
+        <!-- return o -->
+        
+<!-- simrp_testobj1_iuser,simrp_testobj1_iuser,model_simrp_testobj1,simrp.group_simrp_iuser,1,0,0,0 -->
+<!-- simrp_testobj1_user,simrp_testobj1_user,model_simrp_testobj1,simrp.group_simrp_user,1,1,1,0 -->
+<!-- simrp_testobj1_works,simrp_testobj1_works,model_simrp_testobj1,simrp.group_simrp_works,1,1,1,0 -->
+<!-- simrp_testobj1_ceo,simrp_testobj1_ceo,model_simrp_testobj1,simrp.group_simrp_ceo,1,1,1,1 -->
+
+
+        <!-- 'testobj.xml', -->

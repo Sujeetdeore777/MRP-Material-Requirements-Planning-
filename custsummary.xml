@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<report
+        id="simrp_tcustsummary"
+        model="simrp.tcustsummary"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="simrp.tcustsummary"
+        file="r3"
+        attachment_use="False"
+    />
+
+
+	<record id="simrp_tcustsummary_form" model="ir.ui.view">
+		<field name="name">simrp.tcustsummary.form</field>
+		<field name="model">simrp.tcustsummary</field>
+		<field name="arch" type="xml">
+			<form string="Customer Outstanding Summary Report">
+				<header>
+					<button name="downloadreport" type="object" class="oe_stat_button" icon="fa-download" string="Download XL" groups="simrp.group_simrp_works" />
+				</header>
+				<group>
+					<group cols="2">
+						<field name="currentdate"/>
+					</group>
+					<group cols="2">
+						<button name="custoutsmry" type="object" class="oe_stat_button" icon="fa-folder-open" string="Generate Report" groups="simrp.group_simrp_user" />
+					</group>
+				</group>
+				
+				<group colspan="2" col="4">
+					<field name="tcustsummaryline" nolabel="1" colspan="4">
+						<tree create="false" delete="false" limit="100" default_order="currentdate" editable="bottom">
+							<field name="party_"/>
+							<field name="creditperiod" widget="integer" string="Credit Days"/>
+							<field name="currentdate" invisible="1"/>
+							<field name="balance" widget="integer"/>
+							<field name="badj" widget="integer"/>
+							<field name="diff" widget="integer"/>
+							<field name="unduebills" widget="integer"/>
+							<field name="dueamount" widget="integer"/>
+							<field name="ageing" invisible="1"/>
+							<field name="ageing15days"/>
+							<field name="ageing15daysoverdue"/>
+							<field name="ageing30daysoverdue"/>
+							<field name="ageing60daysoverdue"/>
+							<field name="ageing90daysoverdue"/>
+							<field name="unadjpayments" widget="integer"/>
+						</tree>
+					</field>
+				</group>
+				
+				<!-- <notebook> -->
+					<!-- <page string="HTML View"> -->
+						<!-- <field name="reporthtml" nolabel="1" widget="html" /> -->
+					<!-- </page> -->
+				<!-- </notebook> -->
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_tcustsummary_action" model="ir.actions.act_window">
+		<field name="name">Summary Reports</field>
+		<field name="res_model">simrp.tcustsummary</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_tcustsummary_action" id="simrp_tcustsummary_menu" name="Summary Reports" parent="simrp_menu_oper_s" sequence="" groups="group_simrp_user"/>
+
+</odoo>

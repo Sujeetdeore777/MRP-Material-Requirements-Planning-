@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_exportinv_form" model="ir.ui.view">
+		<field name="name">simrp.exportinv.form</field>
+		<field name="model">simrp.exportinv</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Exportinv">
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+						<button name="submit" type="object" class="oe_stat_button" icon="fa-folder-open" string="Submit for Review" attrs="{'invisible': [('state','!=','d')]}" groups="simrp.group_simrp_user"/>
+						<button name="draft" type="object" class="oe_stat_button" icon="fa-folder-open" string="Redraft for editing" attrs="{'invisible': [('state','!=','s')]}" groups="simrp.group_simrp_user"/>
+						<button name="record" type="object" class="oe_stat_button" icon="fa-folder-open" string="Record Transaction" attrs="{'invisible': [('state','!=','s')]}" groups="simrp.group_simrp_ceo"/>
+					</div>
+					<div class="oe_title pr-0">
+					</div>
+					<group col="4">
+						<field name="name" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="edate" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="pono" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="podate" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="party_" options='{"no_create": True}' attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="saleaccount_" options='{"no_create": True, "no_open": True}' attrs="{'readonly': [('state','!=','d')]}" domain="[('type','=','sale')]"/>
+						<field name="exportdetails_s" colspan="4" attrs="{'readonly': [('state','!=','d')]}">
+							<tree editable="bottom">
+								<field name="des"/>
+								<field name="qty"/>
+								<field name="rate"/>
+								<field name="amount"/>
+							</tree>
+						</field>
+						<field name="currency" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="amount"/>
+						<field name="sbconvrate" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="inramount"/>
+						<field name="sbno" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="sbdate" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="insno" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="insdate" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="transportagency" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="awbno" attrs="{'readonly': [('state','!=','d')]}"/>
+						<field name="des" colspan="4" attrs="{'readonly': [('state','!=','d')]}"/>
+					</group>
+					<notebook>
+						<page name="p1" string="Account Postings">
+							<group col="4">
+								<field name="accline_s" nolabel="1" colspan="4"/>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_exportinv_tree" model="ir.ui.view">
+		<field name="name">simrp.exportinv.tree</field>
+		<field name="model">simrp.exportinv</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='r'">
+				<field name="name"/>
+				<field name="edate"/>
+				<field name="party_"/>
+				<field name="currency"/>
+				<field name="amount"/>
+				<field name="inramount"/>
+				<field name="sbno"/>
+				<field name="sbdate"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+	<record id="simrp_exportinv_search" model="ir.ui.view">
+		<field name="name">simrp.exportinv.search</field>
+		<field name="model">simrp.exportinv</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="edate"/>
+				<field name="party_"/>
+				<field name="currency"/>
+				<field name="amount"/>
+				<field name="inramount"/>
+				<field name="sbno"/>
+				<field name="sbdate"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+	<record id="simrp_exportinv_action" model="ir.actions.act_window">
+		<field name="name">Export Invoices</field>
+		<field name="res_model">simrp.exportinv</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_type">form</field>
+	</record>
+	<menuitem action="simrp_exportinv_action" id="simrp_exportinv_menu" name="Export Invoices" parent="simrp_menu_account_transact" sequence="100" groups="group_simrp_user"/>
+</odoo>
+		

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="grn_updateqty_action" model="ir.actions.act_window">
+		<field name="name">Update Qty Infomation</field>
+		<field name="res_model">simrp.tgrnqty</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	<record id="grn_approveservice_action" model="ir.actions.act_window">
+		<field name="name">Service Billing Decision</field>
+		<field name="res_model">simrp.tgrnservice</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<record id="simrp_grn_form" model="ir.ui.view">
+		<field name="name">simrp.grn.form</field>
+		<field name="model">simrp.grn</field>
+		<field name="arch" type="xml">
+			<form create="false" edit="false" delete="false">
+				<header>
+					<button name="deletegrn" type="object" class="oe_stat_button" icon="fa-undo" string="Delete GRN" groups="simrp.group_simrp_ceo"/>
+					<button name="resetinvoice" type="object" class="oe_stat_button" icon="fa-undo" string="Reset to Unaccounted" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('accstate','=','u')]}" />
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Grn">
+
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+						<button name="%(grn_updateqty_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="Update Qty Informtion" attrs="{'invisible': [('state','!=',('qtm'))]}" groups="simrp.group_simrp_user" context="{'default_grn_':id, 'default_qtyactual':qtyactual}"/>
+						<button name="%(grn_approveservice_action)d" type="action" class="oe_stat_button" icon="fa-check" string="Service Billing Decision" attrs="{'invisible': [('servicestate','!=',('p'))]}" groups="simrp.group_simrp_user" context="{'default_grn_':id}"/>
+						<button name="resetservice" type="object" class="oe_stat_button" icon="fa-undo" string="Reset Service Billing" attrs="{'invisible': [('servicestate','not in',['x','a'])]}" groups="simrp.group_simrp_user"/>
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group col="6">
+							<field name="party_" options='{"no_create": True}'/>
+							<field name="grnmaster_"/>
+							<field name="recdate" widget="date" string="GRN Date"/>
+
+							<field name="grnmodedc"/>
+							<field name="porder_"/>
+							<field name="subcondc_"/>
+
+							<field name="item_" colspan="3"/>
+							<field name="itemprocess_" colspan="2" nolabel="1"/>
+							<field name="uom_" colspan="1" nolabel="1"/>
+							<hr colspan="6"/>
+
+							<field name="dcno"/>
+							<field name="dcdate" colspan="4"/>
+							
+
+							<field name="qtydc"/>
+							<field name="phycounter" string="Cross-check" colspan="4"/>
+
+							<field name="qtyactual"/>
+							<field name="qtyremarks" colspan="4"/>
+							
+							<hr colspan="6"/>
+							
+							<field name="okinqty"/>
+							<field name="qcidate" string="Submit Time"/>
+							<field name="qcinspection_"/>
+
+							<field name="rejinqty"/>
+							<field name="qccdate" string="Decision Time"/>
+							<field name="qcstate"/>
+
+							<field name="qclog" colspan="6" nolabel="1"/>
+							<hr colspan="6"/>
+
+							<field name="serviceremarks" string="Svc Approval" colspan="4"/>
+							<field name="servicestate"/>
+
+							<field name="billqty"/>
+							<field name="purchase_"/>
+							<field name="accstate"/>
+					</group>
+
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_grn_tree" model="ir.ui.view">
+		<field name="name">simrp.grn.tree</field>
+		<field name="model">simrp.grn</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='c'" decoration-danger="state=='qtm'" create="false" edit="false" delete="false">
+
+				<field name="name"/>
+				<field name="recdate"/>
+				<field name="party_"/>
+				<field name="dcno"/>
+				<field name="item_"/>
+				<field name="qtyactual" sum="a"/>
+				<field name="okinqty" sum="a"/>
+				<field name="rejinqty" sum="a"/>
+				<field name="billqty" sum="a"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_grn_search" model="ir.ui.view">
+		<field name="name">simrp.grn.search</field>
+		<field name="model">simrp.grn</field>
+		<field name="arch" type="xml">
+			<search > 
+				<field name="name"/>
+				<field name="recdate"/>
+				<field name="party_"/>
+				<field name="dcno"/>
+				<field name="item_"/>
+				<field name="itemprocess_"/>
+				<field name="qcstate"/>
+				<field name="accstate"/>
+				<field name="servicestate"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_grn_action" model="ir.actions.act_window">
+		<field name="name">GRN</field>
+		<field name="res_model">simrp.grn</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_grn_action" id="simrp_grn_menu" name="GRN" parent="simrp_menu_material_records" sequence="" groups="group_simrp_user"/>
+
+	<record id="simrp_tgrnqty_form" model="ir.ui.view">
+		<field name="name">simrp.tgrnqty.form</field>
+		<field name="model">simrp.tgrnqty</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+				<sheet string="g">
+
+					<group>
+						<group>
+							<field name="grn_"/>
+							<field name="dcno"/>
+							<field name="party_"/>
+							<field name="item_"/>
+							<field name="itemprocess_"/>
+							<field name="uom_"/>
+						</group>
+						<group>
+							<field name="qtydc"/>
+							<field name="phycounter"/>
+							<field name="qtyremarks"/>
+
+							<field name="qtyactual"/>
+							<field name="addremarks"/>
+							<field name="finalize"/>
+						</group>
+					</group>
+				</sheet>
+				<footer>
+					<button string="Update Qty Data" name="update" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_tgrnservice_form" model="ir.ui.view">
+		<field name="name">simrp.tgrnservice.form</field>
+		<field name="model">simrp.tgrnservice</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+				<sheet string="g">
+
+					<group>
+						<group>
+							<field name="grn_"/>
+							<field name="dcno"/>
+							<field name="party_"/>
+							<field name="item_"/>
+						</group>
+						<group>
+							<field name="qtyactual"/>
+							<field name="phycounter"/>
+							<field name="addremarks"/>
+						</group>
+					</group>
+				</sheet>
+				<footer>
+					<button string="Update Service Remarks" name="update" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Approval Service Billing" name="approve" type="object" class="btn-primary o_open_tasks" icon="fa-check" groups="simrp.group_simrp_user"/>
+					<button string="Not Approve Service Billing" name="notapprove" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+</odoo>

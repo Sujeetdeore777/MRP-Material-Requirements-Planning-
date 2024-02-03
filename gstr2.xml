@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_gstr2line_form" model="ir.ui.view">
+		<field name="name">simrp.gstr2line.form</field>
+		<field name="model">simrp.gstr2line</field>
+		<field name="arch" type="xml">
+			<form create="false" edit="false" delete="false">
+				<header>
+					<button name="ignore" type="object" class="oe_stat_button" icon="fa-check" string="Ignore GSTR2A Entry" attrs="{'invisible': [('match','!=','-')]}" groups="simrp.group_simrp_ceo" />
+					<button name="unignore" type="object" class="oe_stat_button" icon="fa-check" string="Un-ignore" attrs="{'invisible': [('match','!=','x')]}" groups="simrp.group_simrp_ceo" />
+					<field name="match" widget="statusbar"/>
+				</header>
+				<sheet string="Gstr2">
+
+					<field name="id" invisible="1"/>
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="type"/>
+							
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="gstin"/>
+							<field name="gstname"/>
+							<field name="itcavailable"/>
+							<field name="itcreason"/>
+							<field name="oinvno"/>
+							<field name="oinvdt"/>
+						</group>
+						<group>
+							<field name="doctype"/>
+							<field name="invno"/>
+							<field name="invdt"/>
+							<field name="invval"/>
+							<field name="totgst"/>
+						</group>
+					</group>
+					<group cols="4">
+						<field name="purchase_s"  nolabel="1" colspan="4" attrs="{'invisible': [('match','=','a')]}">
+							<tree>
+								<button name="gstr2mismatch" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" string="Mark Mismatch" context="{'glid': parent.id }" groups="simrp.group_simrp_ceo" />
+								<field name="name" />
+								<field name="party_"/>
+								<field name="docno"/>
+								<field name="pdate"/>
+								<field name="docdate"/>
+								<field name="matchnet"/>
+								<field name="taxamount"/>
+								<field name="state"/>
+								<field name="gstr2state"/>
+								<button name="gstr2manual" type="object" class="oe_stat_button" icon="fa-check" string="Manual Match" context="{'glid': parent.id }" attrs="{'invisible': [('state','!=','a')]}" groups="simrp.group_simrp_works" />
+							</tree>
+						</field>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_gstr2line_tree" model="ir.ui.view">
+		<field name="name">simrp.gstr2line.tree</field>
+		<field name="model">simrp.gstr2line</field>
+		<field name="arch" type="xml">
+			<tree create="false" edit="false" delete="false"  limit="5000">
+				<field name="type"/>
+				<field name="gstin"/>
+				<field name="gstname"/>
+				<field name="invno"/>
+				<field name="invdt"/>
+				<field name="invval"/>
+				<field name="totgst"/>
+				<field name="itcavailable"/>
+				<field name="itcreason"/>
+
+				<field name="oinvno"/>
+				<field name="oinvdt"/>
+				<field name="doctype"/>
+
+				<field name="match"/>
+			</tree>
+		</field>
+	</record>
+	<record id="simrp_gstr2line_search" model="ir.ui.view">
+		<field name="name">simrp.gstr2line.search</field>
+		<field name="model">simrp.gstr2line</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="type"/>
+				<field name="gstin"/>
+				<field name="gstname"/>
+				<field name="invno"/>
+				<field name="invdt"/>
+				<field name="invval"/>
+				<field name="totgst"/>
+				<field name="itcavailable"/>
+				<field name="itcreason"/>
+
+				<field name="oinvno"/>
+				<field name="oinvdt"/>
+				<field name="doctype"/>
+
+				<field name="match"/>
+
+				<filter string="Unmatched" name="gl_unmatched" domain="[('match','=','-'),('itcavailable','=',True)]"/>
+				<filter string="Ignored" name="gl_ignored" domain="[('match','=','x')]"/>
+				<filter string="Non ITC" name="gl_nonitc" domain="[('itcavailable','=',False)]"/>
+			</search>
+		</field>
+	</record>
+
+
+
+	<record id="simrp_gstr2_form" model="ir.ui.view">
+		<field name="name">simrp.gstr2.form</field>
+		<field name="model">simrp.gstr2</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<!-- attrs="{'invisible': [('state','!=','i')]}" -->
+					<!-- attrs="{'invisible': [('state','!=','p')]}" -->
+					<!-- attrs="{'invisible': [('state','!=','p')]}" -->
+					
+					<button name="importfile" type="object" class="oe_stat_button" icon="fa-check-circle" string="Import File"  groups="simrp.group_simrp_works" />
+					<button name="process" type="object" class="oe_stat_button" icon="fa-check" string="Process"  groups="simrp.group_simrp_works" />
+					<button name="dummy" type="object" class="oe_stat_button" icon="fa-check" string="Refresh"  groups="simrp.group_simrp_works" />
+					<!-- <field name="state" widget="statusbar"/> -->
+				</header>
+				<sheet string="Gstr2">
+
+					<field name="id" invisible="1"/>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+						</h1>
+					</div>
+
+					<group>
+						<group>
+    <field name="name"/>
+	<field name="notes"/>
+	
+						</group>
+						<group>
+    <field name="store" filename="storename"/>
+    <field name="storename" invisible="1"/>
+<field name="log" colspan="2" nolabel="1"/>
+							</group>
+					</group>
+
+					<notebook>
+						<page name="Unmatched" string="Unmatched">
+							<group col="4">
+								<!-- <field name="gstr2line_s_um_b2b_noitc"  nolabel="1" colspan="4"/>  -->
+								<field name="gstr2line_s_b2ba" nolabel="1" colspan="4"/>
+								<field name="gstr2line_s_b2bc" nolabel="1" colspan="4"/> 
+								<field name="gstr2line_s_b2bca" nolabel="1" colspan="4"/> 
+								<field name="gstr2line_s_um_b2b"  nolabel="1" colspan="4"/> 
+							</group>
+						</page>
+						<page string="Matching Suggestions">
+							<group col="4">
+								<field name="gstr2line_s_um" nolabel="1" colspan="4">
+									<tree create="false" edit="false" delete="false"  limit="5000">
+										<field name="type"/>
+										<field name="gstin"/>
+										<field name="gstname"/>
+										<field name="invno"/>
+										<field name="invdt"/>
+										<field name="invval"/>
+										<field name="totgst"/>
+
+										<field name="oinvno"/>
+										<field name="oinvdt"/>
+
+										<!-- <button name="matchsuggestion" type="object" class="oe_stat_button" icon="fa-check" string="Accept suggestion"  groups="simrp.group_simrp_works" /> -->
+										
+										<field name="purchase_docno"/>
+										<field name="purchase_docdate"/>
+										<field name="purchase_matchnet"/>
+										<field name="purchase_taxamount"/>
+										
+									</tree>
+								</field>
+							</group>
+						</page>
+						<page name="All" string="All">
+							<group col="4">
+								<field name="gstr2line_s" nolabel="1" colspan="4"/>
+							</group>
+						</page>
+						<page string="Ignored">
+							<group col="4">
+								<field name="gstr2line_s_ignored" nolabel="1" colspan="4"/>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_gstr2_tree" model="ir.ui.view">
+		<field name="name">simrp.gstr2.tree</field>
+		<field name="model">simrp.gstr2</field>
+		<field name="arch" type="xml">
+			<tree>
+    <field name="id"/>
+    <field name="name"/>
+    <field name="notes"/>
+					<!-- <field name="state"/> -->
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_gstr2_search" model="ir.ui.view">
+		<field name="name">simrp.gstr2.search</field>
+		<field name="model">simrp.gstr2</field>
+		<field name="arch" type="xml">
+			<search>
+    <field name="name"/>
+    <field name="notes"/>
+					<!-- <field name="state"/> -->
+			</search>
+		</field>
+	</record>
+
+
+	<menuitem id="simrp_gstr2_menu" name="Gstr2 Matching" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/>
+
+	<record id="simrp_gstr2_action" model="ir.actions.act_window">
+		<field name="name">Gstr2 Matching</field>
+		<field name="res_model">simrp.gstr2</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+	<menuitem action="simrp_gstr2_action" id="simrp_gstr2_menu1" name="Gstr2 Matching" parent="simrp_gstr2_menu" sequence="10" groups="group_simrp_user"/>
+
+
+	<record id="simrp_gstr2line_action1" model="ir.actions.act_window">
+		<field name="name">Gstr2 Lines</field><field name="res_model">simrp.gstr2line</field><field name="view_type">form</field><field name="view_mode">tree,form</field>	
+		<field name="context">{'search_default_gl_unmatched': 1}</field>		
+		
+	</record>
+	<menuitem action="simrp_gstr2line_action1" id="simrp_gstr2line_menu1" name="Gstr2 Lines" parent="simrp_gstr2_menu" sequence="20" groups="group_simrp_user"/>
+
+
+</odoo>

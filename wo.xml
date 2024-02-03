@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="two_action" model="ir.actions.act_window">
+		<field name="name">WO Progress</field>
+		<field name="res_model">simrp.two</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	<record id="simrp_wo_form" model="ir.ui.view">
+		<field name="name">simrp.wo.form</field>
+		<field name="model">simrp.wo</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="refresh" type="object" class="oe_stat_button" icon="fa-retweet" string="Refresh BOM and Process" attrs="{'invisible': [('state','!=','o')]}" groups="simrp.group_simrp_works"/>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<field name="id" invisible="1"/>
+				<div class="oe_button_box" name="button_box">
+					<button name="%(two_action)d" type="action" class="oe_stat_button" icon="fa-check" string="Issue Material" attrs="{'invisible': [('state','!=','o')]}" groups="simrp.group_simrp_user" context="{'default_wo_':id, 'default_type':'woissue'}"/>
+					<button name="%(two_action)d" type="action" class="oe_stat_button" icon="fa-check" string="Book FG" attrs="{'invisible': [('state','!=','o')]}" groups="simrp.group_simrp_user" context="{'default_wo_':id, 'default_type':'fg'}"/>
+					<button name="submit" type="object" class="oe_stat_button" icon="fa-folder-open" string="Submit for Approval" attrs="{'invisible': [('state','!=','o')]}" groups="simrp.group_simrp_user"/>
+					<button name="reopen" type="object" class="oe_stat_button" icon="fa-undo" string="Re-open" attrs="{'invisible': [('state','in',['o'])]}" groups="simrp.group_simrp_ceo"/>
+					<button name="close" type="object" class="oe_stat_button" icon="fa-close" string="Close" attrs="{'invisible': [('state','!=',('s'))]}" groups="simrp.group_simrp_ceo"/>
+				</div>
+				<div class="oe_title pr-0">
+					<h1 class="d-flex flex-row ">
+						<field name="name"/>
+					</h1>
+				</div>
+				<group col="6">
+					<field name="item_" domain="[('state', '=', 'a'),('type', '=', 'fg')]" options='{"no_create": True}' colspan="4" attrs="{'readonly': [('id','!=',False)]}"/>
+					<field name="saleorder_"/>
+					<field name="tqty" attrs="{'readonly': [('id','!=',False)]}"/>
+					<field name="type" attrs="{'readonly': [('id','!=',False)]}"/>
+					<field name="wodate"/>
+					<field name="woprogress" widget="html" colspan="6" nolabel="1"/>
+					<field name="id" invisible="1"/>
+				</group>
+				<notebook>
+						<page name="p2" string="Process">
+							<field name="wobom_s" colspan="4">
+								<tree editable="bottom">
+									<field name="bomitem_"/>
+									<field name="bomqty"/>
+									<field name="bomuom_"/>
+									<field name="wostate" invisible="1"/>
+									<button name="generatewopo" type="object" class="oe_stat_button" icon="fa-fast-forward" string="Raise PO" groups="simrp.group_simrp_works" attrs="{'invisible': [('wostate','!=','o')]}"/>
+									<field name="requiredqty"/>
+									<field name="issueqty"/>
+									<field name="toutput"/>
+									<field name="consumed"/>
+									<field name="balance"/>
+								</tree>
+							</field>
+							<field name="woprocess_s" colspan="4">
+								<tree>
+									<field name="wostate" invisible="1"/>
+									<field name="name"/>
+									<field name="itemprocess_"/>
+									<field name="allowsubcon"/>
+									<field name="speed"/>
+									<field name="tqtytoprocess"/>
+									<field name="ppokqty"/>
+									<field name="pprejqty"/>
+									<field name="balqty"/>
+									<field name="planqty"/>
+									<button name="generatewoproduction" type="object" class="oe_stat_button" icon="fa-fast-forward" string="start Prod" groups="simrp.group_simrp_user" attrs="{'invisible': [('wostate','!=','o')]}"/>
+									<!-- <button name="generatewoproduction" type="object" class="oe_stat_button" icon="fa-fast-forward" string="start Prod" groups="simrp.group_simrp_user" attrs="{'invisible': ['|',('wostate','!=','o'),('allowsubcon','=',True)]}"/> -->
+									<button name="generatewoproductionsetup" type="object" class="oe_stat_button" icon="fa-cogs" string="start Setup" groups="simrp.group_simrp_user" attrs="{'invisible': ['|',('wostate','!=','o'),('allowsubcon','=',True)]}"/>
+									<button name="generatewoproductionrework" type="object" class="oe_stat_button" icon="fa-wrench" string="start Rework" groups="simrp.group_simrp_user" attrs="{'invisible': [('wostate','!=','o')]}"/>
+								</tree>
+							</field>
+							<field name="processsubcon_s" colspan="4" context="{'wost':state}">
+								<tree editable="bottom" create="false" edit="false" delete="false">
+									<field name="wostate" invisible="1"/>
+									<field name="code" readonly="1"/>
+									<field name="party_" readonly="1"/>
+									<field name="inputitem_" readonly="1"/>
+									<field name="itemprocess_" readonly="1"/>
+									<field name="rateuom_" readonly="1"/>
+									<button name="generatesubcondc" type="object" class="oe_stat_button" icon="fa-fast-forward" string="start DC" groups="simrp.group_simrp_user" context="{'default_wo_': parent.id}" attrs="{'invisible': [('wostate','!=','o')]}"/>
+								</tree>
+							</field>
+						</page>
+						<page name="p2a" string="Tooling">
+							<field name="wotool_s" colspan="4">
+								<tree>
+									<field name="woprocess_"/>
+									<field name="item_"/>
+									<field name="expectedlife"/>
+									<field name="pqty"/>
+									<field name="tconsumed"/>
+									<field name="achievedlife"/>
+								</tree>
+							</field>
+							<field name="wotoolconsume_s" colspan="4">
+								<tree>
+									<field name="item_"/>
+									<field name="woprocess_"/>
+									<field name="woproduction_"/>
+									<field name="totalqty"/>
+									<field name="wotoolqty"/>
+								</tree>
+							</field>
+						</page>
+						<page name="p3" string="Progress Updates">
+							<field name="woissue_s" colspan="4">
+								<tree>
+									<field name="idate"/>
+									<field name="lotno"/>
+									<field name="item_"/>
+									<field name="iqty"/>
+								</tree>
+							</field>
+							<field name="porder_s" colspan="4"/>
+							<field name="woproduction_s" colspan="4">
+								<tree>
+									<field name="name"/>
+									<field name="woprocess_"/>
+									<field name="processmode"/>
+									<field name="itemprocess_"/>
+									<field name="machine_"/>
+									<field name="employee_"/>
+									<field name="setuptime"/>
+									<field name="pstime"/>
+									<field name="prodtime"/>
+									<field name="okqty"/>
+									<field name="rejqty"/>
+									<field name="itspeed"/>
+									<field name="aspeed"/>
+									<field name="state"/>
+								</tree>
+							</field>
+							<field name="subcondc_s" colspan="4"/>
+							<field name="wobyproduct_s" colspan="4">
+								<tree>
+									<field name="item_"/>
+									<field name="woproduction_"/>
+									<field name="woprocess_"/>
+									<field name="qtyper"/>
+									<field name="pqty"/>
+								</tree>
+							</field>
+						</page>
+						<page name="p4" string="Output">
+							<field name="womfg_s" colspan="4">
+								<tree>
+									<field name="name"/>
+									<field name="mfgdate"/>
+									<field name="okqty" sum="Total OK"/>
+									<field name="rejqty" sum="Total Rej"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
+				</form>
+			</field>
+		</record>
+		<record id="simrp_wo_tree" model="ir.ui.view">
+			<field name="name">simrp.wo.tree</field>
+			<field name="model">simrp.wo</field>
+			<field name="arch" type="xml">
+				<tree decoration-success="state=='a'">
+					<field name="name"/>
+					<field name="wodate"/>
+					<field name="saleorder_"/>
+					<field name="item_"/>
+					<field name="tqty"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+		<record id="simrp_wo_search" model="ir.ui.view">
+			<field name="name">simrp.wo.search</field>
+			<field name="model">simrp.wo</field>
+			<field name="arch" type="xml">
+				<search>
+					<field name="name"/>
+					<field name="wodate"/>
+					<field name="saleorder_"/>
+					<field name="item_"/>
+					<field name="state"/>
+				</search>
+			</field>
+		</record>
+		<record id="simrp_wo_action" model="ir.actions.act_window">
+			<field name="name">Work Order</field>
+			<field name="res_model">simrp.wo</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem action="simrp_wo_action" id="simrp_wo_menu" name="Work Order" parent="simrp_menu_oper_w" sequence="" groups="group_simrp_user"/>
+		<record id="simrp_twoform" model="ir.ui.view">
+			<field name="name">simrp.two.form</field>
+			<field name="model">simrp.two</field>
+			<field name="arch" type="xml">
+				<form>
+					<field name="wo_" invisible="1"/>
+					<group>
+						<field name="type"/>
+						<field name="wobom_" domain="[('wo_', '=', wo_)]" attrs="{'invisible': [('type','not in',['woissue'])]}" options="{'no_create': True, 'no_edit': True, 'no_open': True}" widget="selection"/>
+						<field name="lotno" attrs="{'invisible': [('type','not in',['woissue'])]}"/>
+						<field name="iqty" attrs="{'invisible': [('type','not in',['woissue'])]}"/>
+						<field name="woitem_" attrs="{'invisible': [('type','not in',['fg'])]}" options="{'no_create': True, 'no_edit': True, 'no_open': True}" widget="selection"/>
+						<field name="fgokqty" attrs="{'invisible': [('type','not in',['fg'])]}"/>
+						<field name="fgrejqty" attrs="{'invisible': [('type','not in',['fg'])]}"/>
+					</group>
+					<footer>
+						<button string="Issue Material" name="bomissue" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user" attrs="{'invisible': [('type','not in',['woissue'])]}"/>
+						<button string="Generate Stock Record" name="mfg" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user" attrs="{'invisible': [('type','not in',['fg'])]}"/>
+						<button string="Discard" class="btn-secondary" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+		<record id="simrp_woprocess_tree" model="ir.ui.view">
+			<field name="name">simrp.woprocess.tree</field>
+			<field name="model">simrp.woprocess</field>
+			<field name="arch" type="xml">
+				<tree editable="bottom" create="false" edit="false" delete="false">
+					<field name="woitem_"/>
+					<field name="wo_" widget="many2one"/>
+					<field name="name"/>
+					<field name="itemprocess_"/>
+					<field name="allowsubcon"/>
+					<field name="speed"/>
+					<field name="tqtytoprocess"/>
+					<field name="ppokqty"/>
+					<field name="pprejqty"/>
+					<field name="balqty"/>
+					<field name="planqty"/>
+					<button name="generatewoproduction" type="object" class="oe_stat_button" icon="fa-fast-forward" string="start Prod" groups="simrp.group_simrp_user" attrs="{'invisible': [('allowsubcon','=',True)]}"/>
+					<button name="generatewoproductionsetup" type="object" class="oe_stat_button" icon="fa-cogs" string="start Setup" groups="simrp.group_simrp_user" attrs="{'invisible': [('allowsubcon','=',True)]}"/>
+					<button name="generatewoproductionrework" type="object" class="oe_stat_button" icon="fa-wrench" string="start Rework" groups="simrp.group_simrp_user"/>
+				</tree>
+			</field>
+		</record>
+		<record id="simrp_woprocess_search" model="ir.ui.view">
+			<field name="name">simrp.woprocess.search</field>
+			<field name="model">simrp.woprocess</field>
+			<field name="arch" type="xml">
+				<search>
+					<field name="wo_"/>
+					<field name="woitem_"/>
+					<field name="name"/>
+					<field name="itemprocess_"/>
+					<field name="allowsubcon"/>
+					<filter name="group_woitem" string="Item Group" icon="terp-partner" context="{'group_by':'woitem_'}"/>
+				</search>
+			</field>
+		</record>
+		<record id="simrp_woprocess_action" model="ir.actions.act_window">
+			<field name="name">Work Order Process</field>
+			<field name="res_model">simrp.woprocess</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[ ('wostate', '=', 'o') ]</field>
+			<field name="context">{'search_default_group_woitem': 1}</field>
+		</record>
+		<menuitem action="simrp_woprocess_action" id="simrp_woprocess_menu" name="Work Order Process" parent="simrp_menu_ppc" sequence="" groups="group_simrp_user"/>
+	</odoo>

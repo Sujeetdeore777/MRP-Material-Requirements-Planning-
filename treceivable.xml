@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_treceivable_form" model="ir.ui.view">
+		<field name="name">simrp.treceivable.form</field>
+		<field name="model">simrp.treceivable</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<div style="text-align:center;font: bold 4vh Arial">Receivables Report</div>
+				<group col="4">
+					<field name="edate" attrs="{'readonly': [('state','=','c')]}"/>
+					<button name="generate" type="object" class="oe_stat_button" icon="fa-check-circle" string="Generate" groups="simrp.group_simrp_user" attrs="{'invisible': [('state','!=','d')]}" colspan="2" style="width:94%"/>
+					<field name="trecdetails_s" nolabel="1" colspan="4"/>
+					<field name="trecdetails_s_other" nolabel="1" colspan="4"/>
+				</group>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_treceivable_action" model="ir.actions.act_window">
+		<field name="name">Treceivable</field>
+		<field name="res_model">simrp.treceivable</field>
+		<field name="view_mode">form</field>
+	</record>
+	<menuitem action="simrp_treceivable_action" id="simrp_treceivable_menu" name="Receivables Statement" parent="simrp_menu_finance" sequence="30" groups="group_simrp_user"/>
+	
+	<record id="simrp_trecdetails_tree" model="ir.ui.view">
+		<field name="name">simrp.trecdetails.tree</field>
+		<field name="model">simrp.trecdetails</field>
+		<field name="arch" type="xml">
+						<tree create="false" delete="false" limit="1000" default_order="party_">
+							<field name="party_"/>
+							<field name="category"/>
+							<field name="credit"/>
+							<field name="due_upto"/>
+							<field name="net_ledger" sum="nl"/>
+							<field name="unadj_dr" sum="udr"/>
+							<field name="adjproblem" invisible="1"/>
+							<button name="dummy" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" string="Adj mismatch" attrs="{'invisible': [('adjproblem','=',True)]}" groups="simrp.group_simrp_iuser"/>
+							<field name="due_amt" sum="da"/>
+						</tree>
+		</field>
+	</record>	
+	<record id="simrp_trecdetails_form" model="ir.ui.view">
+		<field name="name">simrp.trecdetails.form</field>
+		<field name="model">simrp.trecdetails</field>
+		<field name="arch" type="xml">
+						<form create="false" delete="false" limit="1000" default_order="party_">
+							<group col="6">
+							<field name="party_"/>
+							<field name="credit" string="Credit Period"/>
+							<field name="due_upto"/>
+    <field name="accline_s" colspan="6" nolabel="1"/>
+    <field name="fundtransaction_s" colspan="6" nolabel="1"/>
+							
+							</group>
+						</form>
+		</field>
+	</record>	
+</odoo>
+		

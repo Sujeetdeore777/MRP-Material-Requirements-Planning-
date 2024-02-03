@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<!-- Top menu item -->
+	<menuitem name="Operations Management" id="simrp_menu" sequence="10" groups="group_simrp_iuser"/>
+
+	<menuitem name="Master Data" id="simrp_menu_master" parent="simrp_menu" sequence="10" groups="group_simrp_user"/>
+		<menuitem name="Process" id="simrp_menu_master_process" parent="simrp_menu_master" sequence="10" groups="group_simrp_user"/>
+		<menuitem name="Accounting" id="simrp_menu_master_account" parent="simrp_menu_master" sequence="20" groups="group_simrp_user"/>
+		<menuitem name="Sale" id="simrp_menu_master_sale" parent="simrp_menu_master" sequence="30" groups="group_simrp_iuser"/>
+		<menuitem name="Purchase" id="simrp_menu_master_purchase" parent="simrp_menu_master" sequence="40" groups="group_simrp_user"/>
+
+	<menuitem name="Operations" id="simrp_menu_oper" parent="simrp_menu" sequence="20" groups="group_simrp_user"/>
+		<menuitem name="Sales" id="simrp_menu_oper_s" parent="simrp_menu_oper" sequence="10" groups="group_simrp_user"/>
+		<menuitem name="Procurement" id="simrp_menu_oper_p" parent="simrp_menu_oper" sequence="200" groups="group_simrp_user"/>
+		<menuitem name="Work Orders" id="simrp_menu_oper_w" parent="simrp_menu_oper" sequence="250" groups="group_simrp_user"/>
+<menuitem name="Scrap Record" id="simrp_menu_oper_v" parent="simrp_menu_oper" sequence="50" groups="group_simrp_user"/>
+	<menuitem name="PPC" id="simrp_menu_ppc" parent="simrp_menu" sequence="25" groups="group_simrp_user"/>
+
+	<menuitem name="Materials" id="simrp_menu_material" parent="simrp_menu" sequence="30" groups="group_simrp_user"/>
+		<menuitem name="Out Transactions" id="simrp_menu_material_out" parent="simrp_menu_material" sequence="50" groups="group_simrp_user"/>
+		<menuitem name="In Transactions" id="simrp_menu_material_in" parent="simrp_menu_material" sequence="50" groups="group_simrp_user"/>
+		<menuitem name="Internal" id="simrp_menu_material_internal" parent="simrp_menu_material" sequence="50" groups="group_simrp_user"/>
+		<menuitem name="Records" id="simrp_menu_material_records" parent="simrp_menu_material" sequence="50" groups="group_simrp_user"/>
+
+	<menuitem name="QC" id="simrp_menu_qc" parent="simrp_menu" sequence="40" groups="group_simrp_user"/>
+		<menuitem name="Transactions" id="simrp_menu_qc_tr" parent="simrp_menu_qc" sequence="40" groups="group_simrp_user"/>
+		<menuitem name="Cont. Improvements" id="simrp_menu_qc_record" parent="simrp_menu_qc" sequence="50" groups="group_simrp_user"/>
+		<menuitem name="History" id="simrp_menu_qc_history" parent="simrp_menu_qc" sequence="60" groups="group_simrp_user"/>
+	
+	<menuitem name="Accounts" id="simrp_menu_account" parent="simrp_menu" sequence="50" groups="group_simrp_iuser"/>
+		<menuitem name="Transactions" id="simrp_menu_account_transact" parent="simrp_menu_account" sequence="25" groups="group_simrp_user"/>
+		<menuitem name="V Transactions" id="simrp_menu_account_transact_v" parent="simrp_menu_account" sequence="26" groups="group_simrp_iuser"/>
+		<menuitem name="Funds" id="simrp_menu_account_fund" parent="simrp_menu_account" sequence="35" groups="group_simrp_user"/>
+		
+
+
+	<menuitem name="HR" id="simrp_menu_hr" parent="simrp_menu" sequence="60" groups="group_simrp_user"/>
+		<menuitem name="Attendance" id="simrp_menu_hr_salary" parent="simrp_menu_hr" sequence="15" groups="group_simrp_user"/>
+		<menuitem name="Utilities" id="simrp_menu_hr_utilities" parent="simrp_menu_hr" sequence="20" groups="group_simrp_user"/>
+		<menuitem name="Appraisal" id="simrp_menu_hr_appraisal" parent="simrp_menu_hr" sequence="25" groups="group_simrp_user"/>
+
+	<menuitem name="Reports" id="simrp_menu_report" parent="simrp_menu" sequence="70" groups="group_simrp_user"/>
+		<menuitem name="Postings" id="simrp_menu_postings" parent="simrp_menu_report" sequence="15" groups="group_simrp_user"/>
+		<menuitem name="Finance" id="simrp_menu_finance" parent="simrp_menu_report" sequence="10" groups="group_simrp_user"/>
+	
+	<menuitem name="Configuration" id="simrp_menu_config" parent="simrp_menu" sequence="100" groups="group_simrp_user"/>
+		<menuitem name="Lists" id="simrp_Mlist" parent="simrp_menu_config" sequence="10" groups="group_simrp_user"/>
+		<menuitem name="Opening" id="simrp_Mopen" parent="simrp_menu_config" sequence="20" groups="group_simrp_user"/>
+		<menuitem name="Server" id="simrp_Mserver" parent="simrp_menu_config" sequence="30" groups="group_simrp_user"/>
+
+</odoo>

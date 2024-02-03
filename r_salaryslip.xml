@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="paperformat_sal" model="report.paperformat">
+    <field name="name">A4 Sale Order</field>
+    <field name="default" eval="True" />
+    <field name="format">A4</field>
+    <field name="page_height">0</field>
+    <field name="page_width">0</field>
+    <field name="orientation">Portrait</field>
+    <field name="margin_top">8</field>
+    <field name="margin_bottom">0</field>
+    <field name="margin_left">5</field>
+    <field name="margin_right">5</field>
+    <field name="header_line" eval="False" />
+    <field name="header_spacing">5</field>
+    <field name="dpi">96</field>
+</record>
+
+	<template id="salaryslip">
+		<t t-call="web.basic_layout">
+			<t t-foreach="docs" t-as="doc">
+            <t t-foreach="doc.salaryrecord_s_slip" t-as="d">
+                <t t-if="d.employee_.espf == True">
+				<div class="page" style="page-break-after: always;">
+
+					<div class="oe_structure"/>
+
+					<style type="text/css">
+                        .bgp {
+                          background-color: #000 !important;
+                          color: #FFF;
+                          border: 1px solid black;
+                        }
+                        .bggray {
+                          background-color: #777 !important;
+                          color: #FFF;
+                          border: 1px solid black;
+                        }
+                        .border {
+                          border: 1px solid black;
+                        }
+					</style>
+					<table class="table bgp mb-0" >
+						<tr>
+							<td>
+								<t t-esc="d.employee_.bu_.bname"/>
+							</td>
+							<td align="right">Salary Slip</td>
+						</tr>
+					</table>
+                    <table class="border" width="100%" height="10%" border="1">
+                        <tr>
+                            <td width="10%" class="bggray">Name</td>
+                            <td width="40%"><t t-esc="d.employee_.name"/></td>
+                            <td width="10%" class="bggray">Month</td>
+                            <td width="40%"><t t-esc="d.month_end.strftime('%b-%Y')"/></td>
+                        </tr>
+                    </table>
+                    <table class="border" width="100%" height="10%" border="1">
+                        <tr class="bggray">
+                            <td width="50%" class="text-right align-bottom">Additions</td>
+                            <td width="50%" class="text-right align-bottom">Deductions</td>
+                        </tr>
+                    </table>
+                    <table border="1" width="100%" height="100%" >
+                        <tr class="border">
+                            <td width="40%">Wages (Basic + DA)</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.wages)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%">ESIC</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.esic)"/></td>
+                        </tr>
+                        <tr class="border">
+                            <td width="40%">House Rent Allowance(HRA)</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.hra)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%">TDS</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.tds)"/></td>
+                        </tr>
+                        <tr class="border">
+                            <td width="40%">Conveyance Allowance</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.conv)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%">PT</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.monthpt)"/></td>
+                        </tr>
+                        <tr class="border">
+                            <td width="40%">Uniform Allowance</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.uniform)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%">PF</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.pf)"/></td>
+                        </tr>
+                        <tr class="border">
+                            <td width="40%">Medical Allowance</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.medical)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%">LWF</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.lwf)"/></td>
+                        </tr>
+                        <tr class="border">
+                            <td width="40%">Annual Bonus/Gift</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.annual_bg)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%"></td>
+                            <td width="9%"></td>
+                        </tr>
+                        <tr class="border">
+                            <td width="40%">OT/Performance Benefits</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.others)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%"></td>
+                            <td width="9%"></td>
+                        </tr>
+                        <tr class="border">
+                            <td width="40%">Personal Benefits</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.add_nonslip)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%">Fines</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.addpenaltyreward)"/></td>
+                        </tr>
+                        <tr class="bggray">
+                            <td width="40%">Total</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format( d.wages + d.hra + d.conv + d.uniform + d.medical + d.annual_bg + d.others)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%"></td>
+                            <td width="9%" class="text-right align-bottom">-<t t-esc="'{:.2f}'.format( d.esic + d.tds + d.monthpt + d.pf + d.lwf + d.addpenaltyreward )"/></td>
+                        </tr>
+                        <tr class="border">
+                            <td width="40%">Gross Pay</td>
+                            <td width="9%" class="text-right align-bottom"><!--t t-esc="d.grosspay"/ -->
+                            <t t-esc="'{:.2f}'.format( (d.wages + d.hra + d.conv + d.uniform + d.medical + d.annual_bg + d.others)- ( d.esic + d.tds + d.monthpt + d.pf + d.lwf + d.addpenaltyreward ) )"/>
+                            </td>
+                            <td width="2%"></td>
+                            <td width="40%" class="text-right align-bottom">Advance Deduction</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.adv_deduction)"/></td>
+                        </tr>
+                        <tr class="border">
+                            <td width="40%">Leave Encashment(Annual)</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format(d.leave_encashment)"/></td>
+                            <td width="2%"></td>
+                            <td width="40%" class="text-right align-bottom">Advance Opening</td>
+                            <td width="9%" class="text-right align-bottom">
+                                <t t-esc="'{:.2f}'.format(d.advancebal)"/>
+                            </td>
+                        </tr>
+                        <tr class="bggray">
+                            <td width="40%">Net Pay</td>
+                            <td width="9%" class="text-right align-bottom">
+                            <t t-esc="'{:.2f}'.format( (d.wages + d.hra + d.conv + d.uniform + d.medical + d.annual_bg + d.others)- ( d.esic + d.tds + d.monthpt + d.pf + d.lwf + d.addpenaltyreward ) + d.leave_encashment - d.adv_deduction)"/>
+                            </td>
+                            <td width="2%"></td>
+                            <td width="40%">Advance Salary Balance</td>
+                            <td width="9%" class="text-right align-bottom"><t t-esc="'{:.2f}'.format( d.advancebal - d.adv_deduction )"/></td>
+                        </tr>
+                    </table>
+					<table class="border" width="100%" height="20%" border="1">
+						<tr height="50">
+                            <td width="50%">
+                                Payment Mode<br/>Transfer
+                            </td>
+							<td width="50%" class="text-right align-bottom">For, <b>
+									<t t-esc="d.employee_.bu_.bname"/>
+								</b>, Authorised Signatory. 
+							</td>
+						</tr>
+					</table>
+                    <br/>
+					<br/>
+				</div>
+			</t>
+			</t>
+			</t>
+		</t>
+	</template>
+
+	<report 
+		id="action_report_salaryslip"
+		string="Salary Slip"
+		model="simrp.monthempsalary"
+		report_type="qweb-html"
+		file="simrp.salaryslip"
+		name="simrp.salaryslip"
+        paperformat="simrp.paperformat_sal"
+		print_report_name="'%s' % (object.month_end)"
+	/>
+
+    <report 
+		id="action_report_salaryslippdf"
+		string="Salary Slip"
+		model="simrp.monthempsalary"
+		report_type="qweb-pdf"
+		file="simrp.salaryslip"
+		name="simrp.salaryslip"
+        paperformat="simrp.paperformat_sal"
+		print_report_name="'%s' % (object.month_end)"
+	/>
+
+</odoo>

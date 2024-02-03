@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_salaryrecord_form" model="ir.ui.view">
+		<field name="name">simrp.salaryrecord.form</field>
+		<field name="model">simrp.salaryrecord</field>
+		<field name="arch" type="xml">
+			<form string="salary Record" version="12.0" create="false">
+				<header>
+					<field name="employee_" />
+				</header>
+					<notebook>
+						<page name="p1" string="Information">
+							<group col="10">
+								<field name="incident_s" colspan="10"  readonly="1">
+									<tree decoration-success="type=='Green'" decoration-danger="type=='Red'" decoration-warning="type=='Yellow'" decoration-info="state=='d'">
+										<field name="datetime"/>
+										<field name="name"/>
+										<field name="type" invisible="1"/>
+										<field name="short_des"/>
+										<field name="cost"/>
+										<field name="penalty"/>
+										<field name="state"/>
+									</tree>
+								</field>
+								<field name="adv_deduction_s" colspan="5" context="{'default_employee_': employee_}">
+									<tree editable="bottom">
+										<field name="docdate" readonly="1"/>
+										<field name="employee_" invisible="1" required="1" options="{'no_create': True, 'no_open': True}"/>
+										<field name="amount" string="-ve Amount for Deduction"/>
+									</tree>
+								</field>
+								<field name="leave_s" colspan="5" readonly="1">
+									<tree decoration-success="status=='Approved'" decoration-danger="status=='Unapproved'">
+										<field name="from_date"/>
+										<field name="to_date"/>
+										<field name="fromdate_half"/>
+										<field name="status"/>
+									</tree>
+								</field>
+							</group>
+						</page>
+						<page name="p3" string="Attendance">
+							<field name="attendance_s" nolabel="1" colspan="4">
+							</field>
+						</page>
+					</notebook>
+			</form>
+		</field>
+	</record>
+</odoo>

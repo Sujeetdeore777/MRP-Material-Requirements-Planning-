@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="printtoolDC">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+
+				<div class="page">
+					<div class="oe_structure"/>
+
+					<style type="text/css">
+	.bgp {
+	  background-color: #000 !important;
+	  color: #FFF;
+	}
+
+					</style>
+
+				<t t-foreach="[1,2]" t-as="copy">
+				
+					<table class="table bgp mb-0" >
+						<tr>
+							<td>
+								<img src='/web/binary/company_logo' />
+							</td>
+							<td align="center" class="align-bottom" style="color: GreenYellow">
+								<t t-esc="res_company.website"/>
+							</td>
+							<td align="right" class="h1 align-bottom">Tool Requisition [TR]</td>
+						</tr>
+					</table>
+					<table class="table mb-0" height="10%">
+						<tr>
+							<td class="h6 small" width="64%">
+								<span class="h6 font-weight-bold">
+									<t t-esc="res_company.name"/>
+								</span>
+								<t t-esc="res_company.street"/>, <t t-esc="res_company.street2"/>
+								<br/>
+						City: <t t-esc="res_company.city"/>, <t t-esc="res_company.zip"/>
+								<br/>
+						State: <t t-esc="res_company.state_id.name"/>, Code: <t t-esc="res_company.state_id.code"/>
+								<br/>
+						E-mail: <t t-esc="res_company.email"/>
+								<br/>
+								<span class="font-weight-bold">GST No.: <t t-esc="res_company.company_registry"/>
+								</span>
+							</td>
+							<td class="m-0 p-0" >
+								<table class="table" border="0">
+									<tr>
+										<td class="h6 small text-right font-weight-bold" width="24%"> Adv GRN.No.:</td>
+										<td class="h2 text-right font-weight-bold">
+											<t t-esc="doc.name"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">Adv GRN Date:</td>
+										<td class="h5 text-right font-weight-bold">
+											<t t-esc="doc.agrndate.strftime('%d.%m.%Y')"/>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<table class="table table-bordered" height="15%">
+						<tr >
+							<td width="64%" class="h6">
+								<span class="h6 font-weight-bold">Requisition To,</span>
+								<br/>
+								<br/>
+								<span class="">
+									<t t-esc="doc.party_.name"/>
+								</span>
+								<br/>
+								<t t-esc="doc.party_.address1"/>
+								<br/>
+								<t t-esc="doc.party_.address2"/>
+								<br/>
+								<t t-esc="doc.party_.address3"/>
+								<br/>
+								<span class="font-weight-bold">PAN No.: <t t-esc="doc.party_.panno"/>
+								</span>
+							</td>
+
+							<td class="m-0 p-0">
+								<table class="table m-0 p-0" height="100%">
+									<tr>
+										<td class="h6 small text-right" width="24%">Required Quantity:</td>
+										<td class="h5 small text-right"><t t-esc="doc.qty"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">Received Quantity:</td>
+										<td class="h5 small text-right">
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">Rate:</td>
+										<td class="h5 small text-right">
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">Tax Scheme:</td>
+										<td class="h5 small text-right">
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<table class="table table-sm o_main_table" height="100" width="100%" border="1">
+						<thead>
+							<tr height="7%">
+								<th class="text-left" width="73%">Item Description</th>
+								<th class="text-right" width="20%">Quantity</th>
+								<th class="text-left" width="7%">unit</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody">
+							<tr>
+								<td class="text-left pt-1">
+									<b><t t-esc="doc.item_.name"/></b>
+									<br/>
+								</td>
+								<td class="text-right pt-1">
+									<t t-esc="'{:.2f}'.format( doc.qty )"/>
+									<br/>
+								</td>
+								<td class="text-left pt-1"><t t-esc="doc.item_.uom_.name"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table width="100%" height="100" border="1">
+									<tr height="100">
+										<td width="70%" class="text-left small align-bottom">Created By:<br/>
+											<t t-esc="doc.userid"/>
+										</td>
+										<td width="30%" class="text-right align-bottom">For, <b>
+												<t t-esc="res_company.name"/>
+											</b>, Authorised Signatory.</td>
+									</tr>
+					</table>
+					<br/>
+					<br/>
+					---<br/>
+					<br/>
+					<br/>
+				</t>
+				</div>
+			</t>
+		</t>
+
+	</template>
+
+	<report 
+		id="action_report_printtoolDC"
+		string="Tool Delivery Challan"
+		model="simrp.advancegrn" 
+		report_type="qweb-html"
+		file="simrp.printtoolDC" 
+		name="simrp.printtoolDC"
+		print_report_name="'%s' % (object.name)"
+	/>
+
+</odoo>

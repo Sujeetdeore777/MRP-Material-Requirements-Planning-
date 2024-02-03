@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_dispatchs_action" model="ir.actions.act_window">
+		<field name="name">Generate Invoice</field>
+		<field name="res_model">simrp.tinvoice</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	<record id="simrp_wogen_action" model="ir.actions.act_window">
+		<field name="name">Generate WO</field>
+		<field name="res_model">simrp.twogen</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	
+	<record id="action_soclose" model="ir.actions.server">
+		<field name="name">Close Sale Orders</field>
+		<field name="model_id" ref="model_simrp_saleorder"/>
+		<field name="binding_model_id" ref="model_simrp_saleorder"/>
+		<field name="binding_view_types">list</field>
+		<field name="state">code</field>
+		<field name="code">
+if records.env['res.users'].has_group('simrp.group_simrp_ceo'):
+	records.close()
+		</field>
+	</record>	
+
+	<record id="simrp_saleorder_form" model="ir.ui.view">
+		<field name="name">simrp.saleorder.form</field>
+		<field name="model">simrp.saleorder</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="close" type="object" class="oe_stat_button" icon="fa-check-circle" string="Close" attrs="{'invisible': [('state','=',('c'))]}"  groups="simrp.group_simrp_ceo" />
+					<button name="refreshItemRate" type="object" class="oe_stat_button" icon="fa-check-circle" string="Refresh Item Rate" groups="simrp.group_simrp_ceo" />
+					<button name="open" type="object" class="oe_stat_button" icon="fa-undo" string="Re-open" attrs="{'invisible': [('state','=',('o'))]}" groups="simrp.group_simrp_ceo" />
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Saleorder">
+
+					<div class="oe_button_box" name="button_box">
+						<button name="%(simrp_wogen_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="Generate WO" attrs="{'invisible': [('state','in',['c'])]}" groups="simrp.group_simrp_works" context="{'default_saleorder_':id,'default_itemrate_':itemrate_,'default_woqty':poqty}"/>
+						<button name="%(simrp_dispatchs_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="Send Dispatch" attrs="{'invisible': [('state','in',['c'])]}" groups="simrp.group_simrp_user" context="{'default_saleorder_':id,'default_itemrate_':itemrate_}"/>
+					</div>
+				
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+					<field name="id" invisible="1"/>
+					<group>
+						<group>
+							<field name="party_" options='{"no_create": True}' attrs="{'readonly': [('id','!=',False)]}"/>
+							<field name="itemrate_" options='{"no_open": True, "no_create": True}' domain="[('party_','=',party_)]"  attrs="{'readonly': [('id','!=',False)]}"/>
+							<field name="pono" />
+							<field name="podate" />
+							<field name="poqty"  attrs="{'readonly': [('id','!=',False)]}"/>
+							<field name="commitdate"/>
+							<field name="balanceqty" style="font-weight: bold"/>
+							<field name="taxscheme_"/>
+						</group>
+						<group>
+							<field name="item_"/>
+							<field name="rate"/>
+							<field name="ordervalue"/>
+							<field name="balanceordervalue"/>
+							<field name="dispatchqty"/>
+							<field name="complainqty"/>
+							<field name="woqty"/>
+						</group>
+					</group>
+
+					<notebook>
+						<page name="p1" string="Dispatches">
+							<group col="4">
+								<field name="dispatch_s" nolabel="1" colspan="4"   context="{'default_item_':item_,'default_saleorder_':id,'default_party_':party_}">
+									<tree decoration-success="state in ['i']" decoration-warning="state in ['c']" decoration-danger="state in ['d']">
+								<field name="name"/>
+								<field name="invdate"/>
+								<field name="asn"/>
+								<field name="okoutqty" sum="a"/>
+								<field name="rate"/>
+								<field name="amount" sum="a"/>    
+								<field name="invoice_"/>    
+								<field name="state"/>    
+									</tree>
+								</field>
+							</group>
+						</page>
+						<page name="wos" string="Work Orders">
+							<group col="4">
+								<field name="wo_s" nolabel="1" colspan="4" context="{'default_saleorder_':id}">
+									<!-- <tree> -->
+										<!-- <field name="name"/> -->
+										<!-- <field name="cdate"/> -->
+										<!-- <field name="raisedby"/> -->
+										<!-- <field name="qty"/> -->
+										<!-- <field name="credit_"/> -->
+										<!-- <field name="state"/> -->
+									<!-- </tree> -->
+								</field>
+							</group>
+						</page>
+						<page name="complaint" string="Complaints">
+							<group col="4">
+								<field name="complaint_s" nolabel="1" colspan="4" context="{'default_saleorder_':id}">
+									<tree>
+										<field name="name"/>
+										<field name="cdate"/>
+										<field name="raisedby"/>
+										<field name="qty"/>
+										<field name="credit_"/>
+										<field name="state"/>
+									</tree>
+								</field>
+							</group>
+						</page>
+					</notebook>
+					<group>
+					<group>
+						<field name="create_date"/>
+					</group>
+					<group>
+						<field name="create_uid"/>
+					</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_saleorder_tree" model="ir.ui.view">
+		<field name="name">simrp.saleorder.tree</field>
+		<field name="model">simrp.saleorder</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='a'" >
+				<field name="name"/>
+				<field name="party_"/>
+				<field name="pono"/>
+				<field name="create_date" widget="date"/>
+				<field name="item_"/>
+				<field name="poqty"/>
+				<field name="woqty"/>
+				<field name="balanceqty"/>
+				<field name="balanceordervalue" sum="a"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_saleorder_search" model="ir.ui.view">
+		<field name="name">simrp.saleorder.search</field>
+		<field name="model">simrp.saleorder</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="party_"/>
+				<field name="pono"/>
+				<field name="item_"/>
+				<field name="commitdate"/>
+				<field name="balanceqty"/>
+				<field name="state"/>
+				<filter string="Open Orders" name="open_sale" domain="[('state', '=', 'o')]"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_saleorder_action" model="ir.actions.act_window">
+		<field name="name">Sale Order</field>
+		<field name="res_model">simrp.saleorder</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{'search_default_open_sale': 1}</field>		
+	</record>
+
+	<menuitem action="simrp_saleorder_action" id="simrp_saleorder_menu" name="Sale Order" parent="simrp_menu_oper_s" sequence="" groups="group_simrp_user"/>
+
+
+	<record id="simrp_twogen_form" model="ir.ui.view">
+		<field name="name">simrp_twogen_form</field>
+		<field name="model">simrp.twogen</field>
+		<field name="arch" type="xml">
+			<form string="WO Generation">
+				<group colspan="4">
+					<field name="itemrate_"/>
+					<field name="saleorder_"/>
+					<field name="woqty"/>
+				</group>
+				<footer>
+					<button string="Generate WO" name="genwo" type="object" class="btn-primary o_open_tasks" icon="fa-check" groups="simrp.group_simrp_works"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>	
+
+</odoo>

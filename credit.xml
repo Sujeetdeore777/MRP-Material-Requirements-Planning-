@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_credit_form" model="ir.ui.view">
+		<field name="name">simrp.credit.form</field>
+		<field name="model">simrp.credit</field>
+		<field name="arch" type="xml">
+			<form create="false" delete="false">
+				<header>
+					<button name="reset" type="object" class="oe_stat_button" icon="fa-folder-open" string="Reset Accounting" attrs="{'invisible': [('state','=','p')]}" groups="simrp.group_simrp_ceo" />
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Credit">
+
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+						<button name="post" type="object" class="oe_stat_button" icon="fa-folder-open" string="Post Accouting" attrs="{'invisible': [('state','!=',('p'))]}" groups="simrp.group_simrp_works" />
+						<button name="mrpo" type="object" class="oe_stat_button" icon="fa-folder-open" string="Material Return PO" attrs="{'invisible': [('state','!=',('a'))]}" groups="simrp.group_simrp_ceo" />
+						<button name="mr" type="object" class="oe_stat_button" icon="fa-folder-open" string="Material Return Document" attrs="{'invisible': [('state','!=',('mrpo'))]}" groups="simrp.group_simrp_ceo" />
+						<button name="close" type="object" class="oe_stat_button" icon="fa-folder-open" string="Close w/o Material Movement" attrs="{'invisible': [('state','!=',('a'))]}" groups="simrp.group_simrp_ceo" />
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="item_" domain="[('state', '=', 'a')]" options='{"no_create": True}'/>
+							<field name="qty" attrs="{'readonly': [('state','!=','p')]}"/>
+							<field name="rate" attrs="{'readonly': [('state','!=','p')]}"/>
+							<field name="aamt" attrs="{'readonly': [('state','!=','p')]}"/>
+							<field name="taxscheme_" attrs="{'readonly': [('state','!=','p')]}"/>
+							<field name="gstreturn"/>
+							<field name="partydocno"/>
+						</group>
+						<group>
+							<field name="cndate" attrs="{'readonly': [('state','!=','p')]}"/>
+							<field name="party_" options='{"no_create": True}'/>
+							<field name="ar"/>
+							<field name="basicamount"/>
+							<field name="netamount"/>
+							<field name="cndelivery"/>
+						</group>
+					</group>
+
+					<notebook>
+						<page name="p1" string="Account Postings">
+							<group col="4">
+								<field name="accline_s" nolabel="1" colspan="4"/>
+							</group>
+						</page>
+						<page name="Info" string="">
+							<group col="4">
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_credit_tree" model="ir.ui.view">
+		<field name="name">simrp.credit.tree</field>
+		<field name="model">simrp.credit</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='a'" create="false" delete="false">
+				<field name="name"/>
+				<field name="cndate"/>
+				<field name="party_"/>
+				<field name="item_"/>
+				<field name="qty"/>
+							<field name="netamount"/>
+							<field name="gstreturn"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_credit_search" model="ir.ui.view">
+		<field name="name">simrp.credit.search</field>
+		<field name="model">simrp.credit</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="cndate"/>
+				<field name="party_"/>
+				<field name="item_"/>
+							<field name="gstreturn"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_credit_action" model="ir.actions.act_window">
+		<field name="name">Credit Note</field>
+		<field name="res_model">simrp.credit</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_credit_action" id="simrp_credit_menu" name="Credit Note" parent="simrp_menu_account_transact" sequence="" groups="group_simrp_user"/>
+
+
+
+</odoo>

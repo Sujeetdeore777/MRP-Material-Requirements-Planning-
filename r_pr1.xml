@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="prprint" >
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+<style>
+
+body {
+  margin: 0;
+  margin-left: -120px;
+  background: #999;
+}
+
+div.landscape {
+  width: 355mm;
+  height: 255mm;
+  margin: 10px auto;
+  padding: 10mm;
+  border: solid 1px black;
+  overflow: hidden;
+  page-break-after: always;
+  background: white;
+  transform: scale(0.95);
+}
+
+.bgp {
+  background-color: #000 !important;
+  color: #FFF;
+}
+.bggray {
+  background-color: #777 !important;
+  color: #FFF;
+}
+.bgl {
+  background-color: #AAA !important;
+  color: #000;
+}
+	.bggreen {
+		background-color: LawnGreen !important;
+	}
+	.bgorange {
+		background-color: Orange !important;
+	}
+	.bgyellow {
+		background-color: Yellow !important;
+	}
+	.bgcoral {
+		background-color: LightCoral !important;
+	}
+	
+
+@media print {
+
+	body {
+		background: none;
+		margin-left: 25px;
+	}
+	div.landscape {
+		margin: 0;
+		padding: 0;
+		border: none;
+		background: none;
+	}
+	div.landscape {
+		transform: rotate(270deg) translate(-350mm, 0);
+		transform-origin: 0 0;
+	}
+	  
+	.bgp {
+		background-color: #000 !important;
+	}
+	.bgl {
+		background-color: #AAA !important;
+	}
+	.bggray {
+		background-color: #777 !important;
+	}
+	.bggreen {
+		background-color: LawnGreen !important;
+	}
+	.bgorange {
+		background-color: Orange !important;
+	}
+	.bgcoral {
+		background-color: LightCoral !important;
+	}
+	.bgyellow {
+		background-color: LightYellow !important;
+	}
+	.table td {
+		background-color: transparent !important;
+	}  
+}
+</style>
+		<t t-foreach="doc.itemprocess_s" t-as="d">
+			<div class="landscape">
+				<div class="page">
+					<table width="100%" >
+						<tr>
+							<td width="85%" height="100%">
+								<table class="bgp" style="width: 100%; ">
+									<tr>
+										<td width="30%"><b>JIA Industries</b></td>
+										<td width="50%">Production Process Report</td>
+									</tr>
+								</table>
+								<table class="bggray" style="width: 100%; ">
+									<tr>
+										<td width="55%"><b><t t-esc="doc.name"/></b></td>
+										<td width="45%" align="right"><t t-esc="d.name"/></td>
+									</tr>
+								</table>
+								<table border="1" style="width: 100%; height: 355px">
+									<thead class="bgl small">
+										<tr>
+											<th class="text-left" width="20%">Parameter</th>
+											<th class="text-left" width="15%">Limits</th>
+											<th class="text-left" width="15%">Frequency</th>
+											<th class="text-left" width="20%">Method</th>
+											<th class="text-right" width="3.5%">FPA</th>
+											<th class="text-left" width="20%">Reaction</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!--t t-raw="d.qadetailshtml()"/-->
+									</tbody>
+								</table>
+								
+								<table width="100%" height="350px" border="0">
+									<tr>
+										<td width="30%">
+											<table border="1" style="width: 100%; height:100%">
+												<thead class="bggreen small">
+													<tr>
+														<th class="text-left" width="70%">Setup Checklist</th>
+														<th class="text-left" width="30%">Set Value</th>
+													</tr>
+												</thead>
+												<tbody>
+													<t t-foreach="d.setupinst" t-as="qap">
+														<tr class="small">
+															<td class="text-left">
+																<t t-esc="qap.name"/>
+																<t t-if="qap.type == a">
+																	[ Ok / Not ok ]
+																</t>
+																<t t-if="qap.type != a">
+																	[ <t t-esc="qap.low"/> / <t t-esc="qap.high"/> ]
+																</t>
+															</td>
+															<td class="text-right"></td>
+														</tr>
+													</t>
+												</tbody>
+											</table>
+										</td>
+										<td width="35%">
+											<table border="0" style="width: 100%; height:100%">
+												<tr height="55%">
+													<td width="100%">
+														<table border="1" style="width: 100%; height:100%">
+															<thead class="bggreen small">
+																<tr>
+																	<th class="text-left" width="50%">Tool Name</th>
+																	<th class="text-right" width="20%">Life / edge</th>
+																	<th class="text-left" width="30%">Change numbers</th>
+																</tr>
+															</thead>
+															<tbody>
+																	<tr class="small">
+																		<td class="text-left"><t t-esc="doc.name"/></td>
+																		<td class="text-right"><t t-esc="doc.name"/></td>
+																		<td class="text-right bgyellow"></td>
+																	</tr>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+												<tr height="45%">
+													<td width="100%" height="100%">
+														<table border="1" style="width: 100%; height:100%">
+															<thead class="bgorange small">
+																<tr>
+																	<th class="text-left" width="100%">Operator Instructions</th>
+																</tr>
+															</thead>
+															<tbody>
+																<t t-foreach="d.operinst" t-as="qap">
+																	<tr class="small">
+																		<td class="text-left"><t t-esc="qap.name"/>
+																		</td>
+																	</tr>
+																</t>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td width="35%">
+											<table border="1" width="100%" height="100%" class="bgyellow">
+												<tr class="small">
+													<td valign="top">Setup End:</td>
+													<td colspan="2" valign="top" class="bgl">Downtime notes w/Manager sign:</td>
+												</tr>
+												<tr class="small">
+													<td valign="top">Prod End:</td>
+													<td colspan="2" valign="top" class="bgl">Downtime notes w/Manager sign:</td>
+												</tr>
+												<tr class="small">
+													<td width="30%" valign="top">FPA by:</td>
+													<td width="35%" valign="top">Setup Ok qty:</td>
+													<td width="35%" valign="top">Setup Rej qty:</td>
+												</tr>
+												<tr class="small">
+													<td valign="top">QC by:</td>
+													<td valign="top">Prod Ok qty:</td>
+													<td valign="top">Prod Rej qty:</td>
+												</tr>
+												<tr class="small">
+													<td colspan="2" valign="top">By product (scrap) kg:</td>
+													<td valign="top" height="40px" class="bggray"><b>
+														Target Speed:<br/>
+														/ hour<br/>
+														</b>
+														85%: 0.85 / hour
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+								
+							</td>
+						</tr>
+					</table>
+					<br/>
+				</div>
+			 </div>
+			</t>
+		</t>
+	</t>
+</template>
+
+	<report 
+		id="action_report_prprint"
+		string="Production Process Report"
+		model="simrp.item" 
+		report_type="qweb-html"
+		file="simrp.prprint" 
+		name="simrp.prprint"
+		print_report_name="'%s' % (object.name)"
+	/>
+
+</odoo>

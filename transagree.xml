@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_transprortagreement_form" model="ir.ui.view">
+		<field name="name">simrp.transportagreement.form</field>
+		<field name="model">simrp.transportagreement</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet string="Transport Agreement">
+					<group colspan="4" col="4">
+						<group colspan="2">
+						<field name="party_" domain="[('associate','=','lt')]" options="{'no_create': True, 'no_open': True}"/>
+						<field name="date" />
+						<hr colspan="2"/>
+						<field name="log" />
+						</group>
+						<group colspan="2">
+						<label for="tadetail_s" string="Transport Details"/>
+						<field name="tadetail_s" nolabel="1" colspan="2">
+							<tree editable="bottom">
+								<field name="transportagreement_" invisible="1"/>
+								<field name="name"/>
+								<field name="rate"/>
+							</tree>
+						</field>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_transprortagreement_tree" model="ir.ui.view">
+		<field name="name">simrp.transportagreement.tree</field>
+		<field name="model">simrp.transportagreement</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="date"/>
+				<field name="party_"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_transportagreement_search" model="ir.ui.view">
+		<field name="name">simrp.transportagreement.search</field>
+		<field name="model">simrp.transportagreement</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="date"/>
+				<field name="party_"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_transportagreement_action" model="ir.actions.act_window">
+		<field name="name">Transport Agreement Records</field>
+		<field name="res_model">simrp.transportagreement</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_transportagreement_action" id="simrp_transportagreement_menu" name="Transport Agreement"   parent="simrp_menu_oper_p" sequence="100" groups="group_simrp_user"/>
+
+</odoo>
+

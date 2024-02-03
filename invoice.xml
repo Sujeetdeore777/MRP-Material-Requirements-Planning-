@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_invoice_form" model="ir.ui.view">
+		<field name="name">simrp.invoice.form</field>
+		<field name="model">simrp.invoice</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="cancel" type="object" class="oe_stat_button" icon="fa-cross" string="Cancel Invoice" attrs="{'invisible': [('state','not in',['i'])]}" groups="simrp.group_simrp_ceo" />
+					<button name="reverse" type="object" class="oe_stat_button" icon="fa-cross" string="Reverse Dispatch" attrs="{'invisible': [('state','not in',['c'])]}" groups="simrp.group_simrp_ceo" />
+					<button name="draft" type="object" class="oe_stat_button" icon="fa-cross" string="Re Draft" attrs="{'invisible': [('state','not in',['c'])]}" groups="simrp.group_simrp_ceo" />
+					<button name="%(dispatch_tqtyupdate_action)d" type="action" class="oe_stat_button" icon="fa-check" string="Quantity Change" attrs="{'invisible': ['|',('state','not in',['i']),('printed','=',True)]}" groups="simrp.group_simrp_iuser"  context="{'default_invoice_':id}"/>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Invoice">
+					<field name="id" invisible="1"/>
+	<field name="filename" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+						<button name="invoice" type="object" class="oe_stat_button" icon="fa-fast-forward" string="Confirm Invoice" attrs="{'invisible': [('state','not in',['d'])]}" groups="simrp.group_simrp_user"/>
+
+						<button name="printinv" type="object" class="oe_stat_button" icon="fa-print" string="Print Invoice" attrs="{'invisible': [('state','not in',['i'])]}" groups="simrp.group_simrp_iuser" />
+						<button name="printinvpdf" type="object" class="oe_stat_button" icon="fa-print" string="Download PDF" attrs="{'invisible': [('state','not in',['i'])]}" groups="simrp.group_simrp_iuser" />
+						<button name="signedpdf" type="object" class="oe_stat_button" icon="fa-print" string="Signed PDF" attrs="{'invisible': [('state','not in',['i'])]}" groups="simrp.group_simrp_iuser" />
+					</div>
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name"/><div style="width:5vw;font-size:2vh;color:blue"><field name="group" style=""/></div>
+
+						</h1>
+					</div>
+					<group col="9">
+						<field name="party_" colspan="5"  options='{"no_create": True}' attrs="{'readonly': [('state','not in',['d'])]}"/>
+						<field name="pono"/>
+						<field name="invdate" colspan="2" style="font: 3vh Arial;" />
+
+						<field name="shipparty_" colspan="5" />
+						<field name="podate"/>
+						<field name="saleorder_"/>
+						
+						<field name="eway" colspan="5"/>
+						<field name="transportparty_" colspan="3" options='{"no_create": True, "no_open": True}'/>
+						<field name="vehicle"  nolabel="1" colspan="1"/>
+												
+						<field name="asn" colspan="5"/>
+    <field name="ewayfile" filename="filename"  attrs="{'invisible': [ '|', ( 'transportparty_','=', False ), ( 'distance','=', 0 ) ]}" />
+						<field name="shippingcharge" colspan="2" attrs="{'readonly': [('state','not in',['d'])]}"/>
+						
+						<field name="dispatch_s" colspan="9" nolabel="1" domain="[('party_','=',party_), ( 'state', '=', 's' ) ]" 
+							widget="many2many" options="{'no_create': True}"  attrs="{'readonly': [('state','in',['i','c'])] }">
+							<tree edit="false" decoration-success="state in ['i']" decoration-warning="state in ['c']" decoration-danger="state in ['d']" >
+								<field name="counthelp" sum="a" attrs="{'invisible': [('counthelp','=',1)]}"/>
+								<field name="name"/>
+								<field name="invdate"/>
+								<field name="saleorder_"/>
+
+								<field name="eway"/>
+								<field name="asn"/>
+								<field name="item_"/>
+								<field name="okoutqty" sum="a"/>
+								<field name="rate"/>
+								<field name="amount" sum="a"/>    
+								<field name="state"/>    
+							</tree>							
+						</field>
+						<field name="pack" colspan="4"/>
+						<field name="transport" colspan="3"/>
+						<field name="invamt" style="font-size:3vh;"/>
+
+					</group>
+					<notebook>
+						<page name="p1" string="Accounting">
+							<group col="6">
+								<field name="accline_s" nolabel="1" colspan="6" class="small"/>
+						<field name="duedate"/>
+						<field name="printed" readonly="1"/>
+						<field name="tcopies" readonly="1"/>
+						<field name="distance"/>
+						<field name="invlines" readonly="1"/>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_invoice_tree" model="ir.ui.view">
+		<field name="name">simrp.invoice.tree</field>
+		<field name="model">simrp.invoice</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+				<field name="invdate"/>
+				<field name="party_"/>
+				<field name="pono"/>
+				<field name="invamt" sum="a"/>
+				<field name="group"/>
+				<field name="tempitem_"/>
+				<field name="tempqty" sum="a"/>
+			</tree>
+		</field>
+	</record>
+	<record id="simrp_invoice_search" model="ir.ui.view">
+		<field name="name">simrp.invoice.search</field>
+		<field name="model">simrp.invoice</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="invdate"/>
+				<field name="party_"/>
+				<field name="pono"/>
+				<field name="group"/>
+				<field name="pack"/>
+				<field name="transport"/>
+				<field name="eway"/>
+				<field name="asn"/>
+				<field name="transportparty_"/>
+				<field name="vehicle"/>
+				<field name="tempitem_"/>
+				<field name="tempqty"/>
+				<field name="invamt"/>
+				<field name="duedate"/>
+			</search>
+		</field>
+	</record>
+	<record id="simrp_invoice_action" model="ir.actions.act_window">
+		<field name="name">Invoice</field>
+		<field name="res_model">simrp.invoice</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+	<menuitem action="simrp_invoice_action" id="simrp_invoice_menu" name="Invoice" parent="simrp_menu_account_transact" sequence="41" groups="group_simrp_user"/>
+</odoo>
+		

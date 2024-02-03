@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="tgrn_generategrn_action" model="ir.actions.act_window">
+		<field name="name">GRN Generation</field>
+		<field name="res_model">simrp.tgrn</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+
+	<record id="simrp_grnmaster_form" model="ir.ui.view">
+		<field name="name">simrp.grnmaster.form</field>
+		<field name="model">simrp.grnmaster</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name"/>
+						</h1>
+					</div>
+					<field name="id" invisible="1"/>
+
+					<group>
+						<group>
+							<field name="party_" options='{"no_create": True}'/>
+						</group>
+						<group>
+							<field name="dcno"/>
+							<field name="dcdate"/>
+						</group>
+					</group>
+					<group colspan="4" >
+						<label for="grn_s" string="GRNs" colspan="4"/>					
+						<field name="grn_s" nolabel="1" colspan="4">
+							<tree decoration-success="state=='c'" decoration-danger="state=='qtm'">
+								<field name="name"/>
+								<field name="item_"/>
+								<field name="qtydc"/>
+								<field name="qtyactual"/>
+								<field name="state"/>
+								<field name="okinqty"/>
+								<field name="rejinqty"/>
+							</tree>
+						</field>
+						<label for="subcondc_s" string="Open Subcon DCs for this supplier" colspan="4"/>					
+						<field name="subcondc_s" nolabel="1" colspan="4" domain="['state','=','o']" class="small">
+							<tree>
+								<field name="name"/>
+								<field name="recdate" widget="date"/>
+								<field name="item_" readonly="1"/>
+								<field name="balanceqtyi"/>
+								<field name="outputitem_"/>
+								<field name="balanceqtyo"/>
+								<field name="byproductitem_"/>
+								<field name="balanceqtyb"/>
+								<button name="%(tgrn_generategrn_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="GRN" groups="simrp.group_simrp_user" context="{'default_subcondc_':id, 'default_grnmaster_': parent.id, 'default_grnmode': 'subcondc'}"/>
+							</tree>
+						</field>
+						<label for="porder_s" string="Purchase Orders for this supplier" colspan="4"/>					
+						<field name="porder_s" nolabel="1" colspan="4" domain="['state','=','o']">
+							<tree>
+								<field name="name" />
+								<field name="podate"/>
+								<field name="item_"/>
+								<field name="itemprocess_"/>
+								<field name="poqty"/>
+								<field name="balanceqty"/>
+								<button name="%(tgrn_generategrn_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="GRN" groups="simrp.group_simrp_user" context="{'default_porder_':id, 'default_grnmaster_': parent.id, 'default_grnmode': 'porder'}"/>
+							</tree>
+						</field>
+					</group>
+					<group>
+						<group>
+							<field name="create_uid"/>
+						</group>
+						<group>
+							<field name="create_date"/>
+						</group>
+					</group>
+
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_grnmaster_tree" model="ir.ui.view">
+		<field name="name">simrp.grnmaster.tree</field>
+		<field name="model">simrp.grnmaster</field>
+		<field name="arch" type="xml">
+			<tree  >
+				<field name="name" />
+				<field name="party_"/>
+				<field name="dcno"/>
+				<field name="dcdate"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_grnmaster_search" model="ir.ui.view">
+		<field name="name">simrp.grnmaster.search</field>
+		<field name="model">simrp.grnmaster</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name" />
+				<field name="party_"/>
+				<field name="dcno"/>
+				<field name="dcdate"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_grnmaster_action" model="ir.actions.act_window">
+		<field name="name">Grnmaster</field>
+		<field name="res_model">simrp.grnmaster</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_grnmaster_action" id="simrp_grnmaster_menu" name="Inward Records" parent="simrp_menu_material_in" sequence="200" groups="group_simrp_user"/>
+
+	<record id="simrp_tgrn_form" model="ir.ui.view">
+		<field name="name">simrp.tgrn.form</field>
+		<field name="model">simrp.tgrn</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+				<sheet string="g">
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="item_"/>
+						</h1>
+					</div>
+					<field name="id" invisible="1"/>
+
+					<group>
+						<group>
+							<field name="dcno"/>
+							<field name="grnmode"/>
+							<field name="grnmodedc" attrs="{'readonly': [('subcondc_','=',False)]}"/>
+							<field name="qtydc"/>
+							<field name="qtcdcbaseuom"/>
+							<field name="qtyactual"/>
+							<field name="phycounter"/>
+						</group>
+						<group string="Purchase Order" col="4" attrs="{'invisible': [('subcondc_','!=',False)]}">
+							<field name="porder_" colspan="4"/>
+							<field name="poqty"/>
+							<field name="itemuom_" nolabel="1"/>
+							<field name="balanceqty"/>
+							<field name="itemuom_" nolabel="1"/>
+						</group>
+						<group string="Delivery Challan" col="4" attrs="{'invisible': [('subcondc_','=',False)]}">
+							<field name="subcondc_" colspan="4"/>
+							
+							<field name="itemdco_"/>
+							<field name="balanceqtydco" nolabel="1"/>
+							<field name="itemouom_" nolabel="1"/>
+							
+							<field name="itemdco_"/>
+							<field name="balanceqtydcoruom" nolabel="1"/>
+							<field name="rateuom_" nolabel="1"/>
+							
+							<field name="itemdci_"/>
+							<field name="balanceqtydci" nolabel="1"/>
+							<field name="itemiuom_" nolabel="1"/>
+							
+							<field name="itemdcb_"/>
+							<field name="balanceqtydcb" nolabel="1"/>
+							<field name="itembuom_" nolabel="1"/>
+						</group>
+					</group>
+				</sheet>
+				<footer>
+					<button string="Generate GRN" name="grn" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+</odoo>

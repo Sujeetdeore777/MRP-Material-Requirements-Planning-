@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_partymaterial_form" model="ir.ui.view">
+		<field name="name">simrp.partymaterial.form</field>
+		<field name="model">simrp.partymaterial</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Partymaterial">
+
+					<div class="oe_button_box" name="button_box">
+						<button name="send" type="object" class="oe_stat_button" icon="fa-folder-open" string="Send" attrs="{'invisible': [('state','!=',('mus'))]}" groups="simrp.group_simrp_works" />
+						<button name="printDC" type="object" class="oe_stat_button" icon="fa-folder-open" string="Print DC" attrs="{'invisible': [('state','!=',('mr'))]}" groups="simrp.group_simrp_works" />
+						<button name="ack" type="object" class="oe_stat_button" icon="fa-folder-open" string="Acknowledge" attrs="{'invisible': [('state','!=',('mr'))]}" groups="simrp.group_simrp_works" />
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<field name="id" invisible="1"/>
+					<group col="4">
+						<field name="party_" colspan="4"  options='{"no_create": True, "no_open": True}' attrs="{'readonly': [('id','!=',False)]}" />
+						<field name="partydc" attrs="{'readonly': [('id','!=',False)]}"/>
+						<field name="partydcdate" attrs="{'readonly': [('id','!=',False)]}"/>
+						<field name="itemdes" colspan="4" attrs="{'readonly': [('id','!=',False)]}"/>
+						<field name="ackt" attrs="{'readonly': [('state','=','ack')]}"/>
+						<field name="rdate"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_partymaterial_tree" model="ir.ui.view">
+		<field name="name">simrp.partymaterial.tree</field>
+		<field name="model">simrp.partymaterial</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='ack'" >
+				<field name="party_"/>
+				<field name="partydc"/>
+				<field name="partydcdate"/>
+				<field name="name"/>
+				<field name="rdate"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_partymaterial_search" model="ir.ui.view">
+		<field name="name">simrp.partymaterial.search</field>
+		<field name="model">simrp.partymaterial</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="party_"/>
+				<field name="partydc"/>
+				<field name="partydcdate"/>
+				<field name="name"/>
+				<field name="rdate"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_partymaterial_action" model="ir.actions.act_window">
+		<field name="name">Returnable Property</field>
+		<field name="res_model">simrp.partymaterial</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_partymaterial_action" id="simrp_partymaterial_menu" name="Returnable Property" parent="simrp_menu_material_in" sequence="" groups="group_simrp_user"/>
+
+</odoo>

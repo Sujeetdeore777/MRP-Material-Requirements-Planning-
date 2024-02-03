@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_vatarget_tree" model="ir.ui.view">
+		<field name="name">simrp.vatarget.tree</field>
+		<field name="model">simrp.vatarget</field>
+		<field name="arch" type="xml">
+			<tree editable="bottom">
+				<field name="item_" options='{"no_open": True, "no_create": True}' />
+				<field name="qty"/>
+				<field name="m4"/>
+				<field name="m24"/>
+				<field name="week1"/>
+				<field name="week2"/>
+				<field name="week3"/>
+				<field name="week4"/>
+				<field name="week5"/>
+				<field name="orders"/>
+				<field name="total"/>
+				<field name="balance"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_vatarget_search" model="ir.ui.view">
+		<field name="name">simrp.vatarget.search</field>
+		<field name="model">simrp.vatarget</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="item_"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_vatarget_action" model="ir.actions.act_window">
+		<field name="name">VA Target</field>
+		<field name="res_model">simrp.vatarget</field>
+		<field name="view_mode">tree</field>
+	</record>
+
+	<menuitem action="simrp_vatarget_action" id="simrp_vatarget_menu" name="VA Target" parent="simrp_menu_ppc" sequence="" groups="group_simrp_user"/>
+
+</odoo>

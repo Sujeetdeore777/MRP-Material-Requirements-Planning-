@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_tbank_form" model="ir.ui.view">
+		<field name="name">simrp.tbank.form</field>
+		<field name="model">simrp.tbank</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="reset" type="object" class="oe_stat_button" icon="fa-undo" string="Back" groups="simrp.group_simrp_user" attrs="{'invisible': [('state','!=','c')]}"/>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<div style="text-align:center;font: bold 4vh Arial">Bank Statement Report</div>
+				<group>
+					<group>
+						<field name="fundaccount_" domain="[ ( 'type', '=', 'fund' ) ]" widget="selection" attrs="{'readonly': [('state','=','c')]}" options='{"no_open": True, "no_create": True}'/>
+						<field name="sdate" attrs="{'readonly': [('state','=','c')]}"/>
+						<field name="edate" attrs="{'readonly': [('state','=','c')]}"/>
+					</group>
+					<group>
+						<!-- <field name="type"/> -->
+						<field name="drperiod" attrs="{'invisible': [('state','=','c')]}"/>
+						<button name="generate" type="object" class="oe_stat_button" icon="fa-check-circle" string="Generate" groups="simrp.group_simrp_user" attrs="{'invisible': [('state','!=','d')]}" colspan="2" style="width:94%"/>
+						<field name="opbalance"  attrs="{'invisible': [('state','!=','c')]}"/>
+						<field name="clbalance"  attrs="{'invisible': [('state','!=','c')]}"/>
+							<field name="ledclbalance" attrs="{'invisible': [('state','!=','c')]}"/>
+					</group>
+				</group>
+				<notebook>
+					<page name="p0" string="Attention Transactions">
+						<group col="4">
+							<div>Unmarked</div>
+							<field name="fundtransaction_s_um" nolabel="1" colspan="4">
+								<tree limit="3000" >
+									<field name="name"/>
+									<field name="id" invisible="1"/>
+									<field name="statementid"/>
+									<field name="des" invisible="1"/>
+									<field name="fundaccline_" invisible="1"/>
+									<field name="ftdate"/>
+									<field name="type"/>
+	<button name="%(simrp_fthelper_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="Mark Account" groups="simrp.group_simrp_user" context="{'default_ft_':id, 'default_statementid': statementid, 'default_party_':party_, 'default_type':type, 'default_amount': amount, 'default_des':des, 'default_v':1 }" attrs="{'invisible': ['|',('party_','&gt;',0),('state','not in',['d'])]}"/>
+	<field name="party_" invisible="1"/>
+	<field name="amount" invisible="1"/>
+
+									<field name="wa" sum="T:"  attrs="{'invisible': [('wa','=',0)]}"/>
+									<field name="da" sum="T:" attrs="{'invisible': [('da','=',0)]}"/>
+									<field name="state"/>
+								</tree>
+							</field>
+							<div>Uncleared</div>
+							<field name="fundtransaction_s_uc" nolabel="1" colspan="4"/>
+						</group>
+					</page>
+					<page name="p0" string="Unallocated Transactions">
+						<group col="4">
+							<field name="fundtransaction_s_ua" nolabel="1" colspan="4"/>
+						</group>
+					</page>
+					<page name="p1" string="All Fund Transactions">
+						<group col="4">
+							<field name="fundtransaction_s" nolabel="1" colspan="4" class="small">
+								<tree limit="3000" >
+									<field name="name"/>
+									<field name="id" invisible="1"/>
+									<field name="statementid"/>
+									<field name="des" invisible="1"/>
+									<field name="fundaccline_" invisible="1"/>
+									<field name="ftdate"/>
+									<field name="type"/>
+	<button name="%(simrp_fthelper_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="Mark Account" groups="simrp.group_simrp_user" context="{'default_ft_':id, 'default_statementid': statementid, 'default_party_':party_, 'default_type':type, 'default_amount': amount, 'default_des':des, 'default_v':1 }" attrs="{'invisible': ['|',('party_','&gt;',0),('state','not in',['d'])]}"/>
+	<field name="party_"/>
+	<field name="amount" invisible="1"/>
+
+									<field name="wa" sum="T:"  attrs="{'invisible': [('wa','=',0)]}"/>
+									<field name="da" sum="T:" attrs="{'invisible': [('da','=',0)]}"/>
+									<field name="state"/>
+								</tree>
+							</field>
+							<field name="create_date"/>
+						</group>
+					</page>
+					<page name="p2" string="Filter Transactions">
+						<group col="4">
+							<field name="filterstring"/>
+							<button name="generatefilter" type="object" class="oe_stat_button" icon="fa-check-circle" string="Generate Filter" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','=','d')]}" colspan="2"/>
+							<field name="commonparty_" options='{"no_open": True, "no_create": True}'/>
+							<button name="markparty" type="object" class="oe_stat_button" icon="fa-check-circle" string="Mark Party" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','=','d')]}" colspan="2"/>
+							<field name="fundtransaction_s_filter" nolabel="1" colspan="4">
+								<tree limit="3000" >
+									<field name="name"/>
+									<field name="id" invisible="1"/>
+									<field name="statementid"/>
+									<field name="des" invisible="1"/>
+									<field name="fundaccline_" invisible="1"/>
+									<field name="ftdate"/>
+									<field name="type"/>
+									<field name="party_"/>
+									<field name="wa" sum="T:"  attrs="{'invisible': [('wa','=',0)]}"/>
+									<field name="da" sum="T:" attrs="{'invisible': [('da','=',0)]}"/>
+									<field name="state"/>
+								</tree>
+							</field>
+						</group>
+					</page>
+				</notebook>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_tbank_action" model="ir.actions.act_window">
+		<field name="name">Tbank</field>
+		<field name="res_model">simrp.tbank</field>
+		<field name="view_mode">form</field>
+	</record>
+	<menuitem action="simrp_tbank_action" id="simrp_tbank_menu" name="Bank Statement" parent="simrp_menu_finance" sequence="10" groups="group_simrp_works"/>
+</odoo>
+		

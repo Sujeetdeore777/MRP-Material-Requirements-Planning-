@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_shopio_form" model="ir.ui.view">
+		<field name="name">simrp.shopio.form</field>
+		<field name="model">simrp.shopio</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+				<sheet string="Shopio">
+
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group col="4">
+						<field name="item_" required="1"  domain="[('state', '=', 'a')]" options='{"no_create": True}'/>
+						<field name="recdate"/>
+						<field name="itemtype"/>
+						<field name="itemuom_"/>
+						<field name="remarks"/>
+						<field name="employee_"  domain="[('active', '=', True)]" widget="selection"/>
+						<hr colspan="4"/>
+						<separator string="Out Material" colspan="4"/>
+						<field name="okoutqty"/>
+						<field name="rejoutqty"/>
+						<hr colspan="4"/>
+						<separator string="In Material" colspan="4"/>
+						<field name="okinqty"/>
+						<field name="rejinqty"/>
+						<hr colspan="4"/>
+					</group>
+
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_shopio_tree" model="ir.ui.view">
+		<field name="name">simrp.shopio.tree</field>
+		<field name="model">simrp.shopio</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name" />
+				<field name="recdate"/>
+				<field name="item_"/>
+						<field name="itemtype"/>
+				<field name="okoutqty"/>
+				<field name="rejoutqty"/>
+				<field name="okinqty"/>
+				<field name="rejinqty"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_shopio_search" model="ir.ui.view">
+		<field name="name">simrp.shopio.search</field>
+		<field name="model">simrp.shopio</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name" />
+				<field name="recdate"/>
+				<field name="item_"/>
+						<field name="itemtype"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_shopio_action" model="ir.actions.act_window">
+		<field name="name">Shop InOut</field>
+		<field name="res_model">simrp.shopio</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_shopio_action" id="simrp_shopio_menu" name="Shop InOut" parent="simrp_menu_material_internal" sequence="" groups="group_simrp_user"/>
+
+</odoo>

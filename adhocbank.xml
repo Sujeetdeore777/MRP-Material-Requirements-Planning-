@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="simrp_adhocbank_tree" model="ir.ui.view">
+<field name="name">simrp.adhocbank.tree</field>
+<field name="model">simrp.adhocbank</field>
+<field name="arch" type="xml">
+<tree editable="top" >
+    <field name="date"/>
+    <field name="party_" options='{"no_create": True}' attrs="{'readonly': [('state','!=','n')]}"/>
+    <field name="reason" attrs="{'readonly': [('state','!=','n')]}"/>
+    <field name="amount" attrs="{'readonly': [('state','!=','n')]}"/>
+                    <button name="bankfilegen" type="object" class="oe_stat_button" icon="fa-print" string="Generate Bank File" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','!=','n')]}"/>
+
+						<field name="bankfile" filename="bankfilename" readonly="1"/>
+						<field name="bankfilename" invisible="1"/>
+                    <button name="done" type="object" class="oe_stat_button" icon="fa-check" string="Done" groups="simrp.group_simrp_works" attrs="{'invisible': [('state','!=','g')]}"/>
+    <field name="state" />
+</tree>
+</field>
+</record>
+
+<record id="simrp_adhocbank_search" model="ir.ui.view">
+<field name="name">simrp.adhocbank.search</field>
+<field name="model">simrp.adhocbank</field>
+<field name="arch" type="xml">
+<search>
+    <field name="date"/>
+    <field name="party_"/>
+    <field name="reason"/>
+</search>
+</field>
+</record>
+
+<record id="simrp_adhocbank_action" model="ir.actions.act_window">
+<field name="name">Adhoc Bank Pay</field>
+<field name="res_model">simrp.adhocbank</field>
+<field name="view_mode">tree</field>
+</record>
+
+<menuitem action="simrp_adhocbank_action" id="simrp_adhocbank_menu" name="Adhoc Bank Pay" parent="simrp_menu_finance" sequence="120" groups="group_simrp_works"/>
+
+
+		
+		</odoo>
+		

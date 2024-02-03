@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_incident_form" model="ir.ui.view">
+		<field name="name">simrp.incident.form</field>
+		<field name="model">simrp.incident</field>
+		<field name="arch" type="xml">
+		<form>
+				<header>
+					<field name="state" widget="statusbar"/>
+					<button name="rework" type="object" class="oe_stat_button" icon="fa-folder-open" string="Re-open" attrs="{'invisible': [('state','!=',('c'))]}" groups="simrp.group_simrp_ceo" />
+				</header>
+			
+			<sheet string="Incident Record">
+
+			<div attrs="{'invisible': ['|',('type','=','Yellow'),('type','=','Red')] }" style="background-color:lightgreen;">
+				<div class="oe_button_box" name="button_box">
+					<button name="confirm" type="object" class="oe_stat_button" icon="fa-folder-open" string="Confirmed" attrs="{'invisible': [('state','!=','d')]}" groups="simrp.group_simrp_ceo" />
+				</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group col="6">
+						<group colspan="6" col="6">
+							<field name="employee_" options='{"no_create": True, "no_open": True}' domain="[('active','=','True')]" attrs="{'readonly': [('state','=','c')]}" colspan="3" />
+							<field name="datetime" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+							
+							<field name="short_des" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+							<field name="type" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+
+							<field name="des" colspan="6" attrs="{'readonly': [('state','=','c')]}"/>	
+						
+							<hr colspan="6"/>
+							
+							<field name="cost" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+							<field name="penalty" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+
+							<hr colspan="6"/>
+
+							<field name="file1" widget="download_link" filename="storename1" attrs="{'readonly': [('state','=','c')]}" colspan="3"/>
+							<field name="file2" widget="download_link" filename="storename2" attrs="{'readonly': [('state','=','c')]}" colspan="3"/>
+							<field name="file3" widget="download_link" filename="storename3" attrs="{'readonly': [('state','=','c')]}" colspan="3"/>
+							
+							<field name="storename1" invisible="1"/>
+							<field name="storename2" invisible="1"/>
+							<field name="storename3" invisible="1"/>
+						</group>
+					</group>
+				</div>
+				<div attrs="{'invisible': ['|',('type','=','Green'),('type','=','Yellow')] }" style="background-color:pink;">
+				<div class="oe_button_box" name="button_box">
+					<button name="confirm" type="object" class="oe_stat_button" icon="fa-folder-open" string="Confirmed" attrs="{'invisible': [('state','!=','d')]}" groups="simrp.group_simrp_ceo" />
+				</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group col="6">
+						<group colspan="6" col="6">
+							<field name="employee_" options='{"no_create": True}' attrs="{'readonly': [('state','=','c')]}" domain="[('active','=','True')]" colspan="3"/>
+							<field name="datetime" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+							
+							<field name="short_des" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+							<field name="type" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+
+							<field name="des" colspan="6" attrs="{'readonly': [('state','=','c')]}"/>	
+						
+							<hr colspan="6"/>
+							
+							<field name="cost" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+							<field name="penalty" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+
+							<hr colspan="6"/>
+
+							<field name="file1" widget="download_link" filename="storename1" attrs="{'readonly': [('state','=','c')]}" colspan="3"/>
+							<field name="file2" widget="download_link" filename="storename2" attrs="{'readonly': [('state','=','c')]}" colspan="3"/>
+							<field name="file3" widget="download_link" filename="storename3" attrs="{'readonly': [('state','=','c')]}" colspan="3"/>
+							<field name="storename1" invisible="1"/>
+							<field name="storename2" invisible="1"/>
+							<field name="storename3" invisible="1"/>
+						</group>
+					</group>
+				</div>
+				
+				<div attrs="{'invisible':['|',('type','=','Green'),('type','=','Red')] }" style="background-color:yellow;">
+				<div class="oe_button_box" name="button_box">
+					<button name="confirm" type="object" class="oe_stat_button" icon="fa-folder-open" string="Confirmed" attrs="{'invisible': [('state','!=','d')]}" groups="simrp.group_simrp_ceo" />
+				</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group col="6">
+						<group colspan="6" col="6">
+							<field name="employee_" options='{"no_create": True}' widget="selection" domain="[('active','=','True')]" colspan="3"/>
+							<field name="datetime" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+							
+							<field name="short_des" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+							<field name="type" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+
+							<field name="des" colspan="6" attrs="{'readonly': [('state','=','c')]}"/>	
+						
+							<hr colspan="6"/>
+							
+							<field name="cost" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+							<field name="penalty" colspan="3" attrs="{'readonly': [('state','=','c')]}"/>
+
+							<hr colspan="6"/>
+
+							<field name="file1" widget="download_link" filename="storename1" attrs="{'readonly': [('state','=','c')]}" colspan="3"/>
+							<field name="file2" widget="download_link" filename="storename2" attrs="{'readonly': [('state','=','c')]}" colspan="3"/>
+							<field name="file3" widget="download_link" filename="storename3" attrs="{'readonly': [('state','=','c')]}" colspan="3"/>
+							
+							<field name="storename1" invisible="1"/>
+							<field name="storename2" invisible="1"/>
+							<field name="storename3" invisible="1"/>
+						</group>
+					</group>
+				</div>
+				
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_incident_tree" model="ir.ui.view">
+		<field name="name">simrp.incident.tree</field>
+		<field name="model">simrp.incident</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="type=='Green'" decoration-danger="type=='Red'" decoration-warning="type=='Yellow'" decoration-info="state=='d'">
+				<field name="datetime"/>
+				<field name="name"/>
+				<field name="employee_"/>
+				<field name="type"/>
+				<field name="short_des"/>
+				<field name="cost"/>
+				<field name="penalty"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_incident_search" model="ir.ui.view">
+		<field name="name">simrp.incident.search</field>
+		<field name="model">simrp.incident</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="datetime"/>
+				<field name="employee_"/>
+				<field name="type"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_incident_action" model="ir.actions.act_window">
+		<field name="name">Incident Records</field>
+		<field name="res_model">simrp.incident</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_incident_action" id="simrp_incident_menu" name="Incident Records" parent="simrp_menu_hr_appraisal" sequence="" groups="group_simrp_user"/>
+
+</odoo>

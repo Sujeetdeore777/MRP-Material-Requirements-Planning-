@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="prprintdemo" >
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+<style>
+
+body {
+  margin: 0;
+  margin-left: -120px;
+  background: #999;
+}
+
+div.landscape {
+  width: 355mm;
+  height: 255mm;
+  margin: 10px auto;
+  padding: 10mm;
+  border: solid 1px black;
+  overflow: hidden;
+  page-break-after: always;
+  background: white;
+  transform: scale(0.95);
+}
+
+.bgp {
+  background-color: #000 !important;
+  color: #FFF;
+}
+
+@media print {
+
+	body {
+		background: none;
+		margin-left: 25px;
+	}
+	div.landscape {
+		margin: 0;
+		padding: 0;
+		border: none;
+		background: none;
+	}
+	div.landscape {
+		transform: rotate(270deg) translate(-350mm, 0);
+		transform-origin: 0 0;
+	}
+	  
+	.bgp {
+		background-color: #000 !important;
+	}
+	.table td {
+		background-color: transparent !important;
+	}  
+}
+</style>
+	<t t-foreach="doc.itemprocess_s" t-as="docs">
+			<div class="page">
+				<div class="landscape">
+					<table width="100%" >
+						<tr>
+							<td width="85%" height="100%">
+							
+								<table class="bgp" style="width: 100%; ">
+									<tr>
+										<td width="30%"><b>JIA Industries</b></td>
+										<td width="50%">Production Process Report</td>
+									</tr>
+									<tr>
+										<td>
+											<t t-esc="docs.name"/>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<t t-foreach="docs.setupinst" t-as="qap">
+									<t t-esc="qap.name"/>
+					</t>
+					<t t-foreach="docs.operinst" t-as="qap">
+									<t t-esc="qap.name"/>
+					</t>
+					<t t-foreach="docs.qadetails" t-as="qap">
+									<t t-esc="qap.param"/>
+					</t>
+					<br/>
+				</div>
+			</div>
+	</t>
+			</t>
+		</t>
+	</template>
+
+	<report 
+		id="action_report_prprintdemo"
+		string="Production Process Report"
+		model="simrp.item" 
+		report_type="qweb-html"
+		file="simrp.prprintdemo" 
+		name="simrp.prprintdemo"
+		print_report_name="'%s' % (object.name)"
+	/>
+
+</odoo>

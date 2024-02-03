@@ -1,0 +1,53 @@
+<odoo>
+
+<report
+        id="simrp_salereport"
+        model="simrp.salereport"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="simrp.salereport"
+        file="s1"
+        attachment_use="False"
+    />
+
+	<record id="simrp_salesreport_form" model="ir.ui.view">
+		<field name="name">simrp.salereport.form</field>
+		<field name="model">simrp.salereport</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="downloadreport" type="object" class="oe_stat_button" icon="fa-folder-open" string="Download" groups="simrp.group_simrp_user" />
+					<button name="generate" type="object" class="oe_stat_button" icon="fa-folder-open" string="Generate" groups="simrp.group_simrp_user" />
+					<button name="reportprod" type="object" class="oe_stat_button" icon="fa-folder-open" string="HTML" groups="simrp.group_simrp_user" />
+				</header>
+				<group>
+					<group>
+						<field name="fromdate" />
+						<field name="todate" />
+						<field name="period"/>
+					</group>
+					<group>
+					</group>
+				</group>
+				<notebook>
+					<page string="HTML View">
+						<field name="reporthtml" nolabel="1" widget="html" />
+					</page>
+					<page string="HTML">
+						<field name="reporthtm" nolabel="1" widget="html" />
+					</page>
+				</notebook>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_salesreport_action" model="ir.actions.act_window">
+		<field name="name">Sales Summary</field>
+		<field name="res_model">simrp.salereport</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_salesreport_action" id="simrp_salesreport_menu" name="Sales Summary" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/>
+
+</odoo>

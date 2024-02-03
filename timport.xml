@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_timport_form" model="ir.ui.view">
+		<field name="name">simrp.timport.form</field>
+		<field name="model">simrp.timport</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet string="Timport">
+					<group>
+						<field name="ifile" filename="ifilename"/>
+						<field name="ifilename" invisible="1"/>
+						<field name="fundaccount_" domain="[ ( 'type', '=', 'fund' ) ]" options='{"no_create": True}' widget="selection"/>
+						<field name="trial"/>
+						<button name="bankimport" type="object" class="oe_stat_button" icon="fa-fast-forward" string="Bank Import" groups="simrp.group_simrp_works" colspan="4"/>
+						<field name="log" colspan="4" widget="html"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_timport_action" model="ir.actions.act_window">
+		<field name="name">Timport</field>
+		<field name="res_model">simrp.timport</field>
+		<field name="view_mode">form</field>
+	</record>
+	<menuitem action="simrp_timport_action" id="simrp_timport_menu" name="Import Bank St." parent="simrp_menu_finance" sequence="100" groups="group_simrp_iuser"/>
+</odoo>
+		

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_auditlog_tree" model="ir.ui.view">
+		<field name="name">simrp.auditlog.tree</field>
+		<field name="model">simrp.auditlog</field>
+		<field name="arch" type="xml">
+			<tree decoration-warning="state=='i'" decoration-danger="state=='m'" decoration-success="state=='s'" create="false" edit="false" editable="bottom" class="small">
+				<field name="create_date" string="Time"/>
+				<field name="create_uid" string="User"/>
+				<field name="ref" class="medium"/>
+				<field name="auditlog" widget="html"/>
+				<button name="mark" type="object" class="badge badge-danger" string="Problem" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','in',['m','s'])]}" />
+				<button name="seen" type="object" class="badge badge-success" string="Seen" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','in',['m','s'])]}" />
+				<button name="info" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" string="Mark" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','in',['i','s'])]}" />
+				<field name="state" invisible="1"/>
+			</tree>
+		</field>
+	</record>
+	<record id="simrp_auditlog_search" model="ir.ui.view">
+		<field name="name">simrp.auditlog.search</field>
+		<field name="model">simrp.auditlog</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="auditlog"/>
+				<field name="ref"/>
+				<field name="create_date" string="Time"/>
+				<field name="create_uid" string="User"/>
+				<field name="state"/>
+				<field name="active"/>
+			</search>
+		</field>
+	</record>
+	<record id="simrp_auditlog_action" model="ir.actions.act_window">
+		<field name="name">Audit Log</field>
+		<field name="res_model">simrp.auditlog</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+	<menuitem action="simrp_auditlog_action" id="simrp_auditlog_menu" name="Audit Log" parent="simrp_menu_report" sequence="1000" groups="group_simrp_iuser"/>
+</odoo>
+		

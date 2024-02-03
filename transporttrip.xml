@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_transporttrip_form" model="ir.ui.view">
+		<field name="name">simrp.transporttrip.form</field>
+		<field name="model">simrp.transporttrip</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Transport Trip">
+				
+					<div class="oe_button_box" name="button_box">
+						<button name="accept" type="object" class="oe_stat_button" icon="fa-folder-open" string="Post / Accept" attrs="{'invisible': [('state','!=','s')]}" groups="simrp.group_simrp_works" />
+					</div>
+					
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+					
+					<group colspan="6" col="6">
+						<field name="party_" colspan="2" domain="[('associate','=','lt')]" attrs="{'readonly': [('state','=','c')]}" widget="selection"/>
+						<field name="date" colspan="2" attrs="{'readonly': [('state','=','c')]}"/>
+						<field name="starttime" colspan="2" attrs="{'readonly': [('state','=','c')]}"/>
+					</group>
+					
+					<group colspan="4">
+						<label for="tripdetail_s" string="Transport Trip"/>
+						<field name="tripdetail_s" nolabel="1" colspan="4" attrs="{'readonly': [('state','=','c')]}">
+							<tree editable="bottom">
+								<field name="transporttrip_" invisible="1"/>
+								<field name="location"/>
+								<field name="tadetail_" options='{"no_open": True, "no_create": True}' domain="[('transportagreement_.party_','=',parent.party_ )]"/>
+								<field name="rate" sum="Total"/>
+							</tree>
+						</field>
+					</group>
+					<group colspan="4" col="4">
+					  <group colspan="2">
+						<field name="amount" colspan="2"/>
+					  </group>
+					  <group colspan="2">
+						<div class="oe_button_box" name="button_box">
+							<button name="submit" colspan="2" type="object" class="oe_right oe_button_box" icon="fa-folder-open" string="Submit" attrs="{'invisible': [('state','!=','d')]}" groups="simrp.group_simrp_works" />
+						</div>
+					  </group>
+					</group>
+					<field name="accline_s" nolabel="1" colspan="4" attrs="{'invisible': [('state','!=','c')]}"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_transporttrip_tree" model="ir.ui.view">
+		<field name="name">simrp.transporttrip.tree</field>
+		<field name="model">simrp.transporttrip</field>
+		<field name="arch" type="xml">
+			<tree>
+							<field name="name" />
+				<field name="date"/>
+						<field name="starttime"/>
+				<field name="party_"/>
+				<field name="amount"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_transporttrip_search" model="ir.ui.view">
+		<field name="name">simrp.transporttrip.search</field>
+		<field name="model">simrp.transporttrip</field>
+		<field name="arch" type="xml">
+			<search>
+							<field name="name" />
+				<field name="date"/>
+				<field name="party_"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_transporttrip_action" model="ir.actions.act_window">
+		<field name="name">Transport Trip Records</field>
+		<field name="res_model">simrp.transporttrip</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_transporttrip_action" id="simrp_transporttrip_menu" name="Transport Trip Entry"   parent="simrp_menu_ppc" sequence="" groups="group_simrp_user"/>
+
+</odoo>
+

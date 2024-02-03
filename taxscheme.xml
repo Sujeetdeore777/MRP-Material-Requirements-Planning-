@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_taxscheme_form" model="ir.ui.view">
+		<field name="name">simrp.taxscheme.form</field>
+		<field name="model">simrp.taxscheme</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet string="Taxscheme">
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group colspan="4">
+					    <field name="gstcheck"/>
+						<field name="account_"/>
+					</group>
+					<notebook>
+						<page name="p1" string="Tax Lines">
+							<group col="4">
+								<field name="taxline_s" nolabel="1" colspan="4">
+									<tree editable="bottom">
+										<field name="sequence"/>
+										<field name="name"/>
+										<field name="taxclass"/>
+										<field name="rate"/>
+										<field name="on"/>
+										<field name="account_" domain="[('type','=','tax')]"/>
+									</tree>
+								</field>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_taxscheme_tree" model="ir.ui.view">
+		<field name="name">simrp.taxscheme.tree</field>
+		<field name="model">simrp.taxscheme</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+				<field name="gstcheck"/>
+				<field name="account_"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_taxscheme_search" model="ir.ui.view">
+		<field name="name">simrp.taxscheme.search</field>
+		<field name="model">simrp.taxscheme</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_taxscheme_action" model="ir.actions.act_window">
+		<field name="name">Tax Scheme</field>
+		<field name="res_model">simrp.taxscheme</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_taxscheme_action" id="simrp_taxscheme_menu" name="Tax Scheme" parent="simrp_Mlist" sequence="" groups="group_simrp_user"/>
+
+</odoo>

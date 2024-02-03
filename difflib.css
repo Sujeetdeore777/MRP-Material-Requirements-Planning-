@@ -1,0 +1,18 @@
+        table.diff {
+			font: 1.3vh Courier; 
+			border:medium;
+			border-collapse: collapse;
+			}
+        .diff_header {background-color:#e0e0e0}
+        td.diff_header {text-align:right}
+        .diff_next {background-color:#c0c0c0}
+        .diff_add {background-color:#aaffaa}
+        .diff_chg {background-color:#ffff77}
+        .diff_sub {background-color:#ffaaaa}
+		
+		.custom-control {     
+			position: relative;
+			display: block;
+			min-height: 0rem;
+			padding-left: 1.5rem;
+		}

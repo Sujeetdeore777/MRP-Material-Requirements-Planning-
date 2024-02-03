@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+        id = "simrp_opperformance"
+        model="simrp.opperformance"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="simrp.opperformance"
+        file="r2"
+        attachment_use="False"
+    />
+
+	<record id="simrp_opperformance_form" model="ir.ui.view">
+		<field name="name">simrp.opperformance.form</field>
+		<field name="model">simrp.opperformance</field>
+		<field name="arch" type="xml">
+			<form>
+                <div class="oe_button_box" name="button_box">
+					<!-- <button name="action_open_url" string="Print" type="object"/> -->
+                    <button name="generateNew" type="object" class="oe_stat_button" icon="fa-folder-open" string="Generate" groups="simrp.group_simrp_user" />
+                    <button name="opreporthtml" type="object" class="oe_stat_button" icon="fa-folder-open" string="HTML" groups="simrp.group_simrp_user" />
+					<button name="download" type="object" class="oe_stat_button" icon="fa-folder-open" string="Download" groups="simrp.group_simrp_user" />
+                </div>
+				<div style="text-align:center;font: bold 4vh Arial">Operator Performance Sheet</div>
+				<group>
+					<field name="sdate" />
+				</group>
+				<notebook>
+					<page string="HTML View">
+						<field name="htmltext" nolabel="1" widget="html" />
+					</page>
+				</notebook>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_opperformance_action" model="ir.actions.act_window">
+		<field name="name">Employee Performance Sheet</field>
+		<field name="res_model">simrp.opperformance</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_opperformance_action" id="simrp_opperformance_menu" name="Employee Performance" parent="simrp_menu_master_process" sequence="" groups="group_simrp_user"/>
+</odoo>

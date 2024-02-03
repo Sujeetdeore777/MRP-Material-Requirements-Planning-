@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_jtransaction_form" model="ir.ui.view">
+		<field name="name">simrp.jtransaction.form</field>
+		<field name="model">simrp.jtransaction</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="reset" type="object" class="oe_stat_button" icon="fa-folder-open" string="Reset Accounting" groups="simrp.group_simrp_ceo" />
+				</header>
+				<sheet string="Jtransaction">
+
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="jdate"/>
+							<field name="amount"/>
+							<field name="des"/>
+						</group>
+						<group>
+							<field name="draccount_" options="{'no_create': True}"/>
+							<field name="craccount_" options="{'no_create': True}"/>
+							<button name="addline" type="object" class="oe_stat_button" icon="fa-check" string="Add Account Line" groups="simrp.group_simrp_works" />
+						</group>
+					</group>
+
+					<notebook>
+						<page name="p1" string="Account Postings">
+							<group col="4">
+								<field name="accline_s" nolabel="1" colspan="4"/>
+							</group>
+						</page>
+						<page name="Info" string="">
+							<group col="4">
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_jtransaction_tree" model="ir.ui.view">
+		<field name="name">simrp.jtransaction.tree</field>
+		<field name="model">simrp.jtransaction</field>
+		<field name="arch" type="xml">
+			<tree >
+				<field name="name"/>
+				<field name="jdate"/>
+				<!-- <field name="draccount_"/> -->
+				<!-- <field name="craccount_"/> -->
+				<field name="des"/>
+				<field name="jamount"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_jtransaction_search" model="ir.ui.view">
+		<field name="name">simrp.jtransaction.search</field>
+		<field name="model">simrp.jtransaction</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="jdate"/>
+				<field name="des"/>
+				<!-- <field name="draccount_"/> -->
+				<!-- <field name="craccount_"/> -->
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_jtransaction_action" model="ir.actions.act_window">
+		<field name="name">Journal transaction</field>
+		<field name="res_model">simrp.jtransaction</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_jtransaction_action" id="simrp_jtransaction_menu" name="Journal Transaction" parent="simrp_menu_account_transact" sequence="" groups="group_simrp_user"/>
+</odoo>

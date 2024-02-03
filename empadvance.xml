@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="simrp_empadvance_tree" model="ir.ui.view">
+<field name="name">simrp.empadvance.tree</field>
+<field name="model">simrp.empadvance</field>
+<field name="arch" type="xml">
+<tree decoration-success="amount &gt; 0" editable="bottom">
+    <field name="employee_"  attrs="{'readonly': [('salaryrecord_','!=',False)]}" options="{'no_create': True, 'no_open': True}"/>
+    <field name="docdate"  attrs="{'readonly': [('salaryrecord_','!=',False)]}"/>
+    <field name="amount" attrs="{'readonly': [('salaryrecord_','!=',False)]}" sum="tot"/>
+    <field name="des" attrs="{'readonly': [('salaryrecord_','!=',False)]}"/>
+    <field name="salaryrecord_" invisible="1"/>
+    <field name="monthempsalary_" options="{'no_create': True, 'no_open': True}" string="Linked Salary Record"/>
+	<field name="write_uid"/>
+</tree>
+</field>
+</record>
+
+<record id="simrp_empadvance_search" model="ir.ui.view">
+<field name="name">simrp.empadvance.search</field>
+<field name="model">simrp.empadvance</field>
+<field name="arch" type="xml">
+<search>
+    <field name="employee_"/>
+    <field name="docdate"/>
+    <field name="monthempsalary_"/>
+    <field name="des"/>
+</search>
+</field>
+</record>
+
+<record id="simrp_empadvance_action" model="ir.actions.act_window">
+<field name="name">Advance Record</field>
+<field name="res_model">simrp.empadvance</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+</record>
+
+<menuitem action="simrp_empadvance_action" id="simrp_empadvance_menu" name="Advance Record" parent="simrp_menu_hr_utilities" sequence="200" groups="group_simrp_user"/>
+
+
+		
+		</odoo>
+		

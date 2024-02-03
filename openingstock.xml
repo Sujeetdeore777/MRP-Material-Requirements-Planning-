@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_openingstock_tree" model="ir.ui.view">
+		<field name="name">simrp.openingstock.tree</field>
+		<field name="model">simrp.openingstock</field>
+		<field name="arch" type="xml">
+			<tree editable="bottom" decoration-success="state=='a'" >
+				<field name="name"/>
+				<field name="item_" domain="[('state', '=', 'a')]" options='{"no_create": True, "no_edit": True}'/>
+				<field name="okqty"/>
+				<field name="rejqty"/>
+				<field name="rate"/>
+				<field name="value"/>
+				<field name="state"/>
+
+				<button name="approve" type="object" class="oe_stat_button" icon="fa-fast-forward" string="Approve" groups="simrp.group_simrp_ceo"  attrs="{'invisible': [('state','!=','d')]}"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_openingstock_search" model="ir.ui.view">
+		<field name="name">simrp.openingstock.search</field>
+		<field name="model">simrp.openingstock</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="item_" domain="[('state', '=', 'a')]" options='{"no_create": True, "no_edit": True}'/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_openingstock_action" model="ir.actions.act_window">
+		<field name="name">opening Stock</field>
+		<field name="res_model">simrp.openingstock</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_openingstock_action" id="simrp_openingstock_menu" name="Opening Stock" parent="simrp_Mopen" sequence="" groups="group_simrp_user"/>
+
+</odoo>

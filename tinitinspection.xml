@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_tinitinspection_form" model="ir.ui.view">
+		<field name="name">simrp.tinitinspection.form</field>
+		<field name="model">simrp.tinitinspection</field>
+		<field name="arch" type="xml">
+			<form>
+				<div><h1>Inspection Record Creation</h1></div>
+					<group colspan="4">
+						<field name="item_" options='{"no_open": True, "no_create": True}' />
+						<field name="itemprocess_" domain="[ ( 'item_', '=', item_ ) ]" options='{"no_open": True, "no_create": True}'/>
+						<field name="stage"/>
+						<field name="lotqty"/>
+					</group>
+
+						<div><h1>Optional: Inprocess rejection only. Without Supplier Accounting Impact:</h1></div>
+					<group colspan="4">
+
+						<field name="processqap_"  domain="[ ( 'itemprocess_','=',itemprocess_ ) ]" widget="selection"/>
+						<field name="remarks"/>
+
+					</group>
+				<footer>
+					<button string="Record" name="initz" type="object" class="btn-primary" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Cancel" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+
+	<record id="simrp_tinitinspection_action" model="ir.actions.act_window">
+		<field name="name">Init QC Inspection</field>
+		<field name="res_model">simrp.tinitinspection</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_tinitinspection_action" id="simrp_tinitinspection_menu" name="Init QC Inspection" parent="simrp_menu_qc_tr" sequence="" groups="group_simrp_user"/>
+
+</odoo>

@@ -1,0 +1,78 @@
+<odoo>
+
+    <report
+        id="simrp_reportm"
+        model="report.simrp.reportm"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="simrp.reportm"
+        file="r1"
+        attachment_use="False"
+    />
+
+	<record id="simrp_reportm_form" model="ir.ui.view">
+		<field name="name">report.simrp.reportm.form</field>
+		<field name="model">report.simrp.reportm</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<group>
+					<group>
+						<field name="fromdate"/>
+						<field name="todate"/>
+					</group>
+					<group>
+						<field name="type"/>
+						<button name="generate" type="object" class="oe_stat_button" icon="fa-folder-open" attrs="{'invisible': [('state','!=',('p'))]}" string="Generate Report" groups="simrp.group_simrp_user" />
+						<button name="download" type="object" class="oe_stat_button" icon="fa-folder-open" attrs="{'invisible': [('state','!=',('g'))]}" string="Download Report" groups="simrp.group_simrp_user" />
+					</group>
+				</group>
+				<group col="4">
+					<field name="reportdetails_s" colspan="4" nolabel="1">
+						<tree>
+							<field name="rmtype" invisible="1"/>
+							<field name="ss_item"/>
+							<field name="ss_itemtype"/>
+							<field name="ss_itemcat"/>
+							<field name="ss_oprate"/>
+							<field name="ss_opstock"/>
+							<field name="ss_itemuom"/>
+							<field name="ss_opval"/>
+
+							<field name="ss_pogrnq"/>
+							<field name="ss_sjournalq"/>
+							<field name="ss_womfgq"/>
+							<field name="ss_dispatchq"/>
+							<field name="ss_debitq"/>
+							<field name="ss_physicalstockq"/>
+							<field name="ss_subcongrnq"/>
+							<field name="ss_subcondcq"/>
+							<field name="ss_subconstockq"/>
+							
+							<field name="ss_closingstock"/>
+							<field name="ss_clrate"/>
+							<field name="ss_clvalue"/>
+						</tree>
+						<search>
+							<field name="ss_item"/>
+							<field name="ss_itemtype"/>
+							<field name="ss_itemcat"/>
+						</search>
+					</field>
+				</group>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_reportm_action" model="ir.actions.act_window">
+		<field name="name">Report Generation 2</field>
+		<field name="res_model">report.simrp.reportm</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_reportm_action" id="simrp_report2_menu" name="Reports Stock" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/>
+
+</odoo>

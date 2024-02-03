@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="printpr"  >
+		<t t-call="web.basic_layout">
+			<t t-foreach="docs" t-as="doc">
+<style>
+
+body {
+  margin: 0;
+  margin-left: -120px;
+  background: #999;
+}
+
+div.landscape {
+  width: 355mm;
+  height: 255mm;
+  margin: 10px auto;
+  padding: 10mm;
+  border: solid 1px black;
+  overflow: hidden;
+  page-break-after: always;
+  background: white;
+  transform: scale(0.95);
+}
+
+.bgp {
+  background-color: #000 !important;
+  color: #FFF;
+}
+.bggray {
+  background-color: #777 !important;
+  color: #FFF;
+}
+.bgl {
+  background-color: #AAA !important;
+  color: #000;
+}
+	.bggreen {
+		background-color: LawnGreen !important;
+	}
+	.bgorange {
+		background-color: Orange !important;
+	}
+	.bgyellow {
+		background-color: Yellow !important;
+	}
+	.bgcoral {
+		background-color: LightCoral !important;
+	}
+	
+
+@media print {
+
+	body {
+		background: none;
+		margin-left: 25px;
+	}
+	div.landscape {
+		margin: 0;
+		padding: 0;
+		border: none;
+		background: none;
+	}
+	div.landscape {
+		transform: rotate(270deg) translate(-350mm, 0);
+		transform-origin: 0 0;
+	}
+	  
+	.bgp {
+		background-color: #000 !important;
+	}
+	.bgl {
+		background-color: #AAA !important;
+	}
+	.bggray {
+		background-color: #777 !important;
+	}
+	.bggreen {
+		background-color: LawnGreen !important;
+	}
+	.bgorange {
+		background-color: Orange !important;
+	}
+	.bgcoral {
+		background-color: LightCoral !important;
+	}
+	.bgyellow {
+		background-color: LightYellow !important;
+	}
+	.table td {
+		background-color: transparent !important;
+	}  
+}
+</style>
+				<div class="landscape">
+					<table width="100%" >
+						<tr>
+							<td width="85%" height="100%">
+
+								<table class="bgp" style="width: 100%; ">
+									<tr>
+										<td width="32%"><b>JIA Industries</b></td>
+										<td width="3%" class="small" valign="bottom" align="right" >M/c:</td>
+										<td width="17%" style="background-color:lightgray;color:black;"><t t-esc="doc.machine_.name"/></td>
+										<td width="45%" align="right"><b><t t-esc="doc.item_.name"/></b></td>
+									</tr>
+								</table>
+								<table class="bggray" style="width: 100%; ">
+									<tr>
+										<td width="35%" align="left">
+											<b>
+												[<t t-esc="doc.pmodestr"/>] <t t-esc="doc.name"/>
+											</b>
+											/ <t t-esc="doc.wo_.name"/>
+										</td>
+										<td width="17%"  style="background-color:lightgray;color:black;"><b><t t-esc="doc.employee_.name"/></b></td>
+										<td width="45%" align="right"><t t-esc="doc.itemprocess_.name"/></td>
+									</tr>
+								</table>
+								<table border="1" style="width: 100%; height: 355px">
+									<thead class="bgl small">
+										<tr>
+											<th class="text-left" width="20%">Parameter</th>
+											<th class="text-left" width="10%">Limits</th>
+											<th class="text-left" width="10%">Frequency</th>
+											<th class="text-left" width="20%">Method</th>
+											<th class="text-right" width="3.5%">FPA</th>
+											<th class="text-right" width="3.5%">1</th>
+											<th class="text-right" width="3.5%">2</th>
+											<th class="text-right" width="3.5%">3</th>
+											<th class="text-right" width="3.5%">4</th>
+											<th class="text-right" width="3.5%">5</th>
+											<th class="text-right" width="3.5%">6</th>
+											<th class="text-right" width="3.5%">7</th>
+											<th class="text-left" width="12%">Reaction</th>
+										</tr>
+									</thead>
+									<tbody>
+										<t t-raw="doc.itemprocess_.qadetails15html()"/>	
+									</tbody>
+								</table>
+								<table width="100%" height="350px" border="0">
+									<tr>
+										<td width="30%">
+											<table border="1" style="width: 100%; height:100%">
+												<thead class="bggreen small">
+													<tr>
+														<th class="text-left" width="70%">Setup Checklist</th>
+														<th class="text-left" width="30%">Set Value</th>
+													</tr>
+												</thead>
+												<tbody>
+													<t t-foreach="doc.itemprocess_.setupinst" t-as="qap">
+														<tr class="small">					
+															<td class="text-left">
+																<t t-esc="qap.name"/>
+																<t t-if="qap.type == a">
+																	[ Ok / Not ok ]
+																</t>
+																<t t-if="qap.type != a">
+																	[ <t t-esc="qap.low"/> / <t t-esc="qap.high"/> ]
+																</t>
+															</td>
+															<td class="text-right"></td>
+														</tr>
+													</t>
+												</tbody>
+											</table>
+										</td>
+										<td width="35%">
+											<table border="0" style="width: 100%; height:100%">
+												<tr height="55%">
+													<td width="100%">
+														<table border="1" style="width: 100%; height:100%">
+															<thead class="bggreen small">
+																<tr>
+																	<th class="text-left" width="50%">Tool Name</th>
+																	<th class="text-right" width="20%">Life / edge</th>
+																	<th class="text-left" width="30%">Change numbers</th>
+																</tr>
+															</thead>
+															<tbody>
+																<t t-foreach="doc.wotoolconsume_s" t-as="wt">
+																	<tr class="small">					
+																		<td class="text-left"><t t-esc="wt.item_.name"/></td>
+																		<td class="text-right"><t t-esc="wt.expectedlife"/></td>
+																		<td class="text-right bgyellow"></td>
+																	</tr>
+																</t>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+												<tr height="45%">
+													<td width="100%" height="100%">
+														<table border="1" style="width: 100%; height:100%">
+															<thead class="bgorange small">
+																<tr>
+																	<th class="text-left" width="100%">Operator Instructions</th>
+																</tr>
+															</thead>
+															<tbody>
+																<t t-foreach="doc.itemprocess_.operinst" t-as="qap">
+																	<tr class="small">					
+																		<td class="text-left"><t t-esc="qap.name"/>
+																		</td>
+																	</tr>
+																</t>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td width="35%">
+											<table border="1" width="100%" height="100%" class="bgyellow">
+												<tr class="small">
+													<td valign="top">Start Time:</td>
+													<td colspan="2" valign="top" >FPA By:</td>
+												</tr>
+												<tr class="small">
+													<td valign="top">End Time:</td>
+													<td colspan="2" valign="top" >QC By:</td>
+												</tr>
+												<tr class="small">
+													<td valign="top">Ok Qty:</td>
+													<td valign="top" colspan="2" height="80px" class="bgl">
+														<b>Target Speed:<br/>
+														<span style="font-size:45px"><t t-esc="round( doc.itspeed, 1 )"/></span> / hour<br/>
+														</b>
+													</td>
+												</tr>
+												<tr class="small">
+													<td width="30%" valign="top">Rej Qty:</td>
+													<td width="35%" height="80px"  valign="top" class="bgl">Mc Time (120%):<br/><b>
+														<span style="font-size:25px"><t t-esc="doc.woprocess_.itemprocess_.cycletime"/></span></b></td>
+													<td width="35%" height="80px"   valign="top" class="bgl">Load Time:<br/><b>
+														<span style="font-size:25px"><t t-esc="doc.woprocess_.itemprocess_.loadtime"/></span></b></td>
+												</tr>
+												<tr class="small">
+													<td colspan="3" valign="top" height="40px">By-product (scrap) kg:</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+
+							</td>
+							<td width="15%" height="100%">
+								<table  width="100%" height="700px">
+									<tr>
+										<td style="border: 3px solid white;" valign="top" class="m-0 p-0" height="100px">
+											<div class="bggreen" width="100%">
+												<b><u><t t-esc="doc.item_.dwg_no"/></u></b><br/>
+												<t t-esc="doc.name"/><br/>
+												<span class="small">[<t t-esc="doc.itemprocess_.seq"/> - <t t-esc="doc.itemprocess_.processtype.name"/>] Ok Qty 1:</span>
+											</div>
+											<br/>
+											<br/>
+											<br/>
+											<br/>
+											<div class="small small bggreen" width="100%">
+												<t t-esc="doc.wo_.name"/>, <t t-esc="doc.employee_.name"/><br/>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="border: 3px solid white;" valign="top" class="m-0 p-0" height="100px">
+											<div class="bggreen" width="100%">
+												<b><u><t t-esc="doc.item_.dwg_no"/></u></b><br/>
+												<t t-esc="doc.name"/><br/>
+												<span class="small">[<t t-esc="doc.itemprocess_.seq"/> - <t t-esc="doc.itemprocess_.processtype.name"/>] Ok Qty 2:</span>
+											</div>
+											<br/>
+											<br/>
+											<br/>
+											<br/>
+											<div class="small small bggreen" width="100%">
+												<t t-esc="doc.wo_.name"/>, <t t-esc="doc.employee_.name"/><br/>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="border: 3px solid white;" valign="top" class="m-0 p-0" height="100px">
+											<div class="bggreen" width="100%">
+												<b><u><t t-esc="doc.item_.dwg_no"/></u></b><br/>
+												<t t-esc="doc.name"/><br/>
+												<span class="small">[<t t-esc="doc.itemprocess_.seq"/> - <t t-esc="doc.itemprocess_.processtype.name"/>] Ok Qty 3:</span>
+											</div>
+											<br/>
+											<br/>
+											<br/>
+											<div class="small small bggreen" width="100%">
+												<t t-esc="doc.wo_.name"/>, <t t-esc="doc.employee_.name"/><br/>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="border: 3px solid white;" valign="top" class="m-0 p-0" height="100px">
+											<div class="bgcoral" width="100%">
+												<b><u><t t-esc="doc.item_.dwg_no"/></u></b><br/>
+												<t t-esc="doc.name"/><br/>
+												<span class="small">[<t t-esc="doc.itemprocess_.seq"/> - <t t-esc="doc.itemprocess_.processtype.name"/>] Rej Qty:</span>
+											</div>
+											<br/>
+											<br/>
+											<br/>
+											<div class="small small bgcoral" width="100%">
+												<t t-esc="doc.wo_.name"/>, <t t-esc="doc.employee_.name"/><br/>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="border: 3px solid white;" valign="top" class="m-0 p-0" height="100px">
+											<div class="bgcoral" width="100%">
+												<b><u><t t-esc="doc.item_.dwg_no"/></u></b><br/>
+												<t t-esc="doc.name"/><br/>
+												<span class="small">[<t t-esc="doc.itemprocess_.seq"/> - <t t-esc="doc.itemprocess_.processtype.name"/>] Setup Rej:</span>
+											</div>
+											<br/>
+											<br/>
+											<br/>
+											<div class="small small bgcoral" width="100%">
+												<t t-esc="doc.wo_.name"/>, <t t-esc="doc.employee_.name"/><br/>
+											</div>
+										</td>
+									</tr>
+
+
+								</table>
+							</td>
+						</tr>
+					</table>
+				
+				
+				
+
+					<br/>
+				</div>
+			</t>
+		</t>
+	</template>
+
+	<report 
+		id="action_report_printpr"
+		string="Production Process Report"
+		model="simrp.woproduction" 
+		report_type="qweb-html"
+		file="simrp.printpr" 
+		name="simrp.printpr"
+		print_report_name="'%s' % (object.name)"
+	/>
+		<!--paperformat="simrp.a4ls"
+
+<record id="a4ls" model="report.paperformat">
+    <field name="name">A4LS</field>
+    <field name="default" eval="False"/>
+    <field name="format">A4</field>
+    <field name="orientation">Landscape</field>
+    <field name="margin_top">3</field>
+    <field name="margin_bottom">3</field>
+    <field name="margin_left">3</field>
+    <field name="margin_right">3</field>
+    <field name="header_line" eval="False"/>
+    <field name="header_spacing">3</field>
+    <field name="dpi">100</field>
+</record>
+
+<div style=" height: 500px; border: 1px solid black;">
+
+style="width: 108%; margin-left: -100mm; margin-top: 500px; transform: rotateZ(-90deg);" 
+
+-->
+
+</odoo>

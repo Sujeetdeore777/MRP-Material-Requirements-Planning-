@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_cmdc_form" model="ir.ui.view">
+		<field name="name">simrp.cmdc.form</field>
+		<field name="model">simrp.cmdc</field>
+		<field name="arch" type="xml">
+			<form create="false" edit="false" delete="false">
+				<header>
+				</header>
+				<sheet string="Cmdc">
+
+					<div class="oe_button_box" name="button_box">
+						<button name="print" type="object" class="oe_stat_button" icon="fa-fast-forward" string="Print DC" groups="simrp.group_simrp_user"/>
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="dcdate"/>
+							<field name="csubcondc_"/>
+
+							<field name="party_" options='{"no_create": True}'/>
+							<field name="itemdci_"/>
+							<field name="itemdcb_"/>
+							<field name="inputuom_"/>
+							<field name="byproductuom_"/>
+
+						</group>
+						<group>
+							<field name="balanceqtydci"/>
+							<field name="balanceqtydcb"/>
+
+							<field name="qtyi"/>
+							<field name="qtyb"/>
+							<field name="phycounter"/>
+						</group>
+					</group>
+
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_cmdc_tree" model="ir.ui.view">
+		<field name="name">simrp.cmdc.tree</field>
+		<field name="model">simrp.cmdc</field>
+		<field name="arch" type="xml">
+			<tree create="false" edit="false" delete="false">
+				<field name="name"/>
+				<field name="dcdate"/>
+				<field name="csubcondc_"/>
+
+				<field name="party_"/>
+				<field name="itemdci_"/>
+				<field name="itemdcb_"/>
+
+				<field name="qtyi"/>
+				<field name="qtyb"/>
+
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_cmdc_search" model="ir.ui.view">
+		<field name="name">simrp.cmdc.search</field>
+		<field name="model">simrp.cmdc</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="dcdate"/>
+				<field name="csubcondc_"/>
+
+				<field name="party_"/>
+				<field name="itemdci_"/>
+				<field name="itemdcb_"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_cmdc_action" model="ir.actions.act_window">
+		<field name="name">Customer Material DC</field>
+		<field name="res_model">simrp.cmdc</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_cmdc_action" id="simrp_cmdc_menu" name="Customer Material DC" parent="simrp_menu_material_records" sequence="20" groups="group_simrp_user"/>
+
+</odoo>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="printpo"  >
+		<t t-call="web.basic_layout">
+			<t t-foreach="docs" t-as="doc">
+
+				<div class="page">
+					<div class="oe_structure"/>
+
+					<style type="text/css">
+                        .bgp {
+                          background-color: #000 !important;
+                          color: #FFF;
+                        }
+
+                      @media print {
+                        .bgp {
+                          background-color: #000 !important;
+                        }
+                        .table td {
+                          background-color: transparent !important;
+                        }
+                      }
+					</style> 
+					<table class="table bgp mb-0" width="100%">
+						<tr>
+							<td>
+								<img src='/web/binary/company_logo' />
+							</td>
+							<td align="center" class="align-bottom" style="color: GreenYellow">
+								<t t-esc="res_company.website"/>
+							</td>
+							<td align="right" class="h1 align-bottom">Purchase Order [M]</td>
+						</tr>
+					</table>
+					<table class="table mb-0" height="10%" width="100%">
+						<tr>
+							<td class="h6 small" width="64%">
+								<span class="h6 font-weight-bold">
+									<t t-esc="res_company.name"/>
+								</span>
+								<br/>
+								<t t-esc="res_company.street"/>, <t t-esc="res_company.street2"/>
+								<br/>
+						City: <t t-esc="res_company.city"/>, <t t-esc="res_company.zip"/>
+								<br/>
+						State: <t t-esc="res_company.state_id.name"/>, Code: <t t-esc="res_company.state_id.code"/>
+								<br/>
+						E-mail: <t t-esc="res_company.email"/>
+								<br/>
+								<span class="font-weight-bold">GST No.: <t t-esc="res_company.company_registry"/>
+								</span>
+							</td>
+							<td class="m-0 p-0" >
+								<table class="table" border="0">
+									<tr>
+										<td class="h6 small text-right font-weight-bold" width="24%">PO. No.:</td>
+										<td class="h2 text-right font-weight-bold">
+											<t t-esc="doc.name"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">PO. Date:</td>
+										<td class="h5 text-right font-weight-bold">
+											<t t-esc="doc.podate.strftime('%d.%m.%Y')"/>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<table class="table table-bordered" border="1" height="100">
+						<tr >
+							<td width="60%" class="h6 small m-0 p-0">
+								<table width="100%">
+									<tr>
+										<td>
+											<span class="font-weight-bold">ORDER TO: </span>
+											<b><t t-esc="doc.party_.name"/></b>, GST No.: <t t-esc="doc.party_.gstno"/><br/>
+											<t t-esc="doc.party_.address1"/>, <t t-esc="doc.party_.address2"/>, <t t-esc="doc.party_.address3"/>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<span class="font-weight-bold">DELIVER TO: </span>
+											<t t-if="doc.deliveryparty_">
+												<span class="">
+													<t t-esc="doc.deliveryparty_.name"/>
+												</span>
+												<br/>
+												<t t-esc="doc.deliveryparty_.address1"/>, <t t-esc="doc.deliveryparty_.address2"/>, <t t-esc="doc.deliveryparty_.address3"/>
+											</t>
+											<t t-if="not doc.deliveryparty_">
+												<t t-esc="res_company.name"/>, as per details mentioned in the header of PO
+											</t>
+											<br/>
+											<br/>
+											<span class="font-weight-bold">INVOICE TO: </span>
+											<t t-esc="res_company.name"/>, as per details mentioned in the header of PO
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td class="m-0 p-0">
+								<table class="table m-0 p-0" height="100%" border="1" width="100%">
+									<tr>
+										<td class="h6 small text-right" width="30%">Payment Terms:</td>
+										<td class="h6 text-right">
+											<t t-esc="doc.party_.creditperiod"/> days
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">Transport:</td>
+										<td class="h6 small text-right">
+											<t t-esc="dict(doc._fields['transport'].selection)[ doc.transport ]"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right"><t t-if="doc.advance != ''">Advance Paid:</t></td>
+										<td class="h6 small text-right">
+											<t t-if="doc.advance != ''">
+												<t t-esc="doc.advance"/>
+											</t>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<table class="table table-sm o_main_table" height="200" border="1">
+						<thead>
+							<tr height="5%">
+								<th class="text-left" width="45%">Item Description</th>
+								<th class="text-left" width="10%">HSN/SAC</th>
+								<th class="text-right" width="10%">Quantity</th>
+								<th class="text-right" width="10%">Rate</th>
+								<th class="text-left" width="7%">/ unit</th>
+								<th class="text-right">Amount</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody">
+							<tr>
+								<td class="text-left pt-1">
+									<b><t t-esc="doc.item_.name"/></b><br/>
+									<t t-esc="doc.des"/>
+								</td>
+								<td class="text-left pt-1" >
+									<t t-esc="doc.item_.hsnsac"/>
+								</td>
+								<td class="text-right pt-1">
+									<t t-esc="'{:.2f}'.format( doc.poqty )"/>
+								</td>
+								<td class="text-right pt-1">
+									<t t-esc="'{:.2f}'.format( doc.rate )"/>
+								</td>
+								<td class="text-left pt-1">/ <t t-esc="doc.uom_.name"/>
+								</td>
+								<td class="text-right pt-1">
+									<t t-esc="'{:.2f}'.format( doc.rate * doc.poqty )"/>
+								</td>
+							</tr>
+							<t t-if="doc.loadrate > 0">
+								<tr>
+									<td class="text-left pt-1">Loading Charges</td>
+									<td class="text-left pt-1" ></td>
+									<td class="text-right pt-1"></td>
+									<td class="text-right pt-1"><t t-esc="'{:.2f}'.format( doc.loadrate )"/></td>
+									<td class="text-left pt-1">/ lot</td>
+									<td class="text-right pt-1"><t t-esc="'{:.2f}'.format( doc.loadrate )"/></td>
+								</tr>
+							</t>
+							<t t-if="doc.testrate > 0">
+								<tr>
+									<td class="text-left pt-1">Testing Charges</td>
+									<td class="text-left pt-1" ></td>
+									<td class="text-right pt-1"></td>
+									<td class="text-right pt-1"><t t-esc="'{:.2f}'.format( doc.testrate )"/></td>
+									<td class="text-left pt-1">/ lot</td>
+									<td class="text-right pt-1"><t t-esc="'{:.2f}'.format( doc.testrate )"/></td>
+								</tr>
+							</t>
+							<t t-if="doc.transportrate > 0">
+								<tr>
+									<td class="text-left pt-1">Transport Charges</td>
+									<td class="text-left pt-1" ></td>
+									<td class="text-right pt-1"></td>
+									<td class="text-right pt-1"><t t-esc="'{:.2f}'.format( doc.transportrate )"/></td>
+									<td class="text-left pt-1">/ lot</td>
+									<td class="text-right pt-1"><t t-esc="'{:.2f}'.format( doc.transportrate )"/></td>
+								</tr>
+							</t>
+							<tr>
+								<td class="text-left pt-1 h6 small" colspan="3">
+									<b>Important Requirements and terms:</b><br/>
+									1. The Material has to be delivered to the [DELIVER TO] Address.<br/>
+									2. Ensure that our GST No., PO No. and HSN/SAC is mentioned on your invoice.<br/>
+									3. All test cerificates as mentioned in the acceptance plan should be present along with delivery.<br/>
+									4. Ensure that the material satisfies all the acceptance criteria and special notes before delivery.<br/>
+									5. We MAY NOT check the material 100% before use. It is supplier's responsibility to ensure compliance.<br/>
+									6. Any rejected material cost, material handling, transport and testing charges will be debited to you with taxes.<br/>
+								</td>
+								<td class="text-right pt-1"></td>
+								<td class="text-left pt-1"></td>
+								<td class="text-right pt-1"></td>
+							</tr>					
+							<tr height="9%">
+								<td colspan="5" class="text-right pt-1">Max Basic Amount (Rs.):</td>
+								<td class="text-right pt-1 h5" style="background-color: silver !important;">
+									<t t-esc="'{:.2f}'.format( doc.ordervalue )"/>
+								</td>
+							</tr>
+							<t t-set="t_" t-value="doc.taxscheme_.compute( doc.ordervalue )"/>
+							<t t-foreach="t_[ 'printTaxes' ]" t-as="taxline">
+								<tr height="7%">
+									<td colspan="3" class="text-left pt-1">
+										<t t-esc="taxline[ 'name' ]"/>
+									</td>
+									<td class="text-right pt-1">
+										<t t-esc="taxline['rate']"/>
+									</td>
+									<td class="text-left pt-1">%</td>
+									<td class="text-right pt-1" >
+										<t t-esc="'{:.2f}'.format( taxline['taxamount'] )"/>
+									</td>
+								</tr>
+							</t>
+							<tr height="9%">
+								<td colspan="5" class="text-right pt-1">Max Billing Amount (Rs.):</td>
+								<td class="text-right pt-1 h5" style="background-color: gray !important;">
+									<t t-esc="'{:.2f}'.format( doc.netvalue )"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<t t-if="doc.itemprocess_">
+					Acceptance Criteria - <t t-esc="doc.itemprocess_.name"/><br/>
+					<table class="table table-sm o_main_table" width="100%" border="1">
+						<thead>
+							<tr height="5%">
+								<th class="text-left" width="50%">Parameter</th>
+								<th class="text-right" width="10%">LL</th>
+								<th class="text-right" width="10%">UL</th>
+								<th class="text-left" width="30%">Instrument / Method</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody">
+							<t t-foreach="doc.itemprocess_.qadetails" t-as="qap">
+								<tr>					
+									<td class="text-left pt-1"><t t-esc="qap.param"/></td>
+									<td class="text-right pt-1"><t t-esc="qap.low"/></td>
+									<td class="text-right pt-1"><t t-esc="qap.high"/></td>
+									<td class="text-left pt-1"><t t-esc="qap.instrumentcategory_.name"/></td>
+								</tr>
+							</t>
+						</tbody>
+					</table>
+					</t>
+					<table width="100%" height="30" border="1">
+						<tr height="50">
+							<td width="100%" class="text-right align-bottom">For, <b>
+									<t t-esc="res_company.name"/>
+								</b>, Authorised Signatory. Computer Generated E-document
+							</td>
+						</tr>
+					</table>
+					<br/>
+				</div>
+			</t>
+		</t>
+	</template>
+
+	<report 
+		id="action_report_printpo"
+		string="Purchase Order"
+		model="simrp.porder" 
+		report_type="qweb-html"
+		file="simrp.printpo" 
+		name="simrp.printpo"
+		print_report_name="'%s' % (object.name)"
+	/>
+
+</odoo>

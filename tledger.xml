@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <report
+        id="simrp_tledger"
+        model="simrp.tledger"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="simrp.tledger"
+        file="r2"
+        attachment_use="False"
+    />
+
+
+	<record id="simrp_tledger_form" model="ir.ui.view">
+		<field name="name">simrp.tledger.form</field>
+		<field name="model">simrp.tledger</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="makeroundingoffjv" type="object" class="oe_stat_button" icon="fa-check-circle" string="Round off JV" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','!=','c')]}"/>
+					<button name="downloadreport" type="object" class="oe_stat_button" icon="fa-download" string="Download XL" groups="simrp.group_simrp_works" attrs="{'invisible': [('state','!=','c')]}"/>
+					<field name="state" widget="statusbar" />
+				</header>
+			<sheet>
+					<div style="text-align:center;font: bold 4vh Arial">Ledger Report</div>
+					<group>
+						<group>
+							<field name="account_" attrs="{'readonly': [('state','=','c')]}" options='{"no_open": True, "no_create": True}'/>
+							<field name="sdate" attrs="{'readonly': [('state','=','c')]}"/>
+							<field name="edate" attrs="{'readonly': [('state','=','c')]}"/>
+						</group>
+						<group>
+							<!-- <field name="type"/> -->
+							<field name="drperiod"  attrs="{'readonly': [('state','=','c')]}"/>
+							<button name="generate" type="object" class="oe_stat_button" icon="fa-check-circle" string="Generate" groups="simrp.group_simrp_user" attrs="{'invisible': [('state','!=','d')]}"/>
+							<button name="reset" type="object" class="oe_stat_button" icon="fa-undo" string="Back" groups="simrp.group_simrp_user" attrs="{'invisible': [('state','!=','c')]}"/>
+							<field name="clbalance" style="font-weight:bold; color:blue"/>
+						</group>
+					</group>
+
+					<group colspan="4" col="6">
+						<field name="taccline_s" nolabel="1" colspan="6">
+							<tree create="false" delete="false" limit="1000" default_order="docdate" editable="bottom">
+								<field name="docdate"/>
+								<field name="ref_"/>
+								<!-- <field name="account_"/> -->
+								<field name="docdesc"/>
+								<field name="accounttype" invisible="1"/>
+								<field name="amountdr" sum="Dr" attrs="{'invisible': [('amountdr','=',0)]}"/>
+								<field name="amountcr" sum="Cr" attrs="{'invisible': [('amountcr','=',0)]}"/>
+								<!-- <field name="baladjAmount" sum="ba" attrs="{'invisible': [('baladjAmount','=',0)]}"/> -->
+								<!-- <field name="newrefname" attrs="{'invisible': [('accounttype','!=','p')]}"/> -->
+							</tree>
+						</field>
+						<field name="create_date" colspan="4"/>
+						<field name="clbalance"/>
+					</group>
+					</sheet>
+			</form>
+		</field>
+	</record>
+
+
+	<record id="simrp_tledger_action" model="ir.actions.act_window">
+		<field name="name">Ledger view</field>
+		<field name="res_model">simrp.tledger</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_tledger_action" id="simrp_tledger_menu" name="Ledger view" parent="simrp_menu_postings" sequence="10" groups="group_simrp_user"/>
+
+</odoo>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_tinitrejection_form" model="ir.ui.view">
+		<field name="name">simrp.tinitrejection.form</field>
+		<field name="model">simrp.tinitrejection</field>
+		<field name="arch" type="xml">
+			<form>
+				<div><h1>Inprocess rejection only. Without Supplier Accounting Impact</h1></div>
+				<group colspan="4">
+					<field name="item_" options='{"no_open": True, "no_create": True}'/>
+					<field name="itemprocess_" domain="[ ( 'item_','=',item_ ) ]" options='{"no_open": True, "no_create": True}'/>
+					<field name="processqap_"  domain="[ ( 'itemprocess_','=',itemprocess_ ) ]" widget="selection"/>
+					
+					<field name="rqty"/>
+					<field name="remarks"/>
+					<field name="stage"/>
+				</group>
+				<footer>
+					<button string="Record" name="initz" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Cancel" class="btn-secondary" special="cancel"/>
+				</footer>
+
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_tinitrejection_action" model="ir.actions.act_window">
+		<field name="name">Record Rejection</field>
+		<field name="res_model">simrp.tinitrejection</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_tinitrejection_action" id="simrp_tinitrejection_menu" name="Record Rejection" parent="simrp_menu_qc_record" sequence="" groups="group_simrp_user"/>
+
+</odoo>

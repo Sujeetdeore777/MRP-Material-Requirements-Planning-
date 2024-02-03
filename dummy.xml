@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+	<record id="simrp_dummy_tree" model="ir.ui.view">
+		<field name="name">simrp.dummy.tree</field>
+		<field name="model">simrp.dummy</field>
+		<field name="arch" type="xml">
+			<tree editable="bottom" >
+    <field name="name"/>
+    <field name="rate"/>
+    <field name="seen1"/>
+    <field name="log1"/>
+						<button name="mark" type="object" class="oe_stat_button" icon="fa-folder-open" string="Mark" groups="simrp.group_simrp_user" />
+				
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_dummy_search" model="ir.ui.view">
+		<field name="name">simrp.dummy.search</field>
+		<field name="model">simrp.dummy</field>
+		<field name="arch" type="xml">
+			<search>
+    <field name="name"/>
+    <field name="rate"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_dummy_action" model="ir.actions.act_window">
+		<field name="name">Dummy</field>
+		<field name="res_model">simrp.dummy</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_type">form</field>
+	</record>
+
+	<menuitem action="simrp_dummy_action" id="simrp_dummy_menu" name="Dummy" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/>
+
+</odoo>

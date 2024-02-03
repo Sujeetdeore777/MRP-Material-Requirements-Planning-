@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_accline_form" model="ir.ui.view">
+		<field name="name">simrp.accline.form</field>
+		<field name="model">simrp.accline</field>
+		<field name="arch" type="xml">
+			<form create="false" delete="false">
+				<header>
+					<button name="modifyaccount" type="object" class="oe_stat_button" icon="fa-check-circle" string="Modify Account" groups="simrp.group_simrp_ceo" />
+				</header>
+				<sheet string="Accounting Entry">
+
+					<field name="id" invisible="1"/>
+
+					<group col="4">
+						<field name="ref_"/>
+						<field name="newrefname"/>
+
+						<field name="docdate"/>
+						<field name="duedate"/>
+
+						<field name="account_"/>
+						<field name="refamount"/>
+
+						<field name="amountdr"/>
+						<field name="amountcr"/>
+
+						<field name="adjAmount"/>
+						<field name="baladjAmount"/>
+
+						<field name="refadj_s" colspan="2" nolabel="1">
+							<tree editable="bottom">
+								<field name="agstaccline_" domain="[('account_','=',parent.account_), ('baladjAmount','!=',0), ('id','!=',parent.id), ('newrefname','!=','')]" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+								<field name="adjAmount" sum="Amount"/>
+							</tree>
+						</field>
+						<field name="refadjo_s" colspan="2" nolabel="1">
+							<tree editable="bottom">
+								<field name="accline_" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+								<field name="adjAmount" sum="Amount"/>
+								<button name="unlink" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" string="Delete Record" groups="simrp.group_simrp_ceo" />
+							</tree>
+						</field>
+						<field name="tdate"/>
+						<field name="modaccount_" groups="simrp.group_simrp_ceo"  options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+
+					</group>
+
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+
+	<record id="simrp_accline_tree" model="ir.ui.view">
+		<field name="name">simrp.accline.tree</field>
+		<field name="model">simrp.accline</field>
+		<field name="arch" type="xml">
+			<tree create="false" edit="false" limit="200">
+				<field name="tdate"/>
+				<field name="docdate"/>
+				<!-- <button name="docdateupdate" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" string="Update Docdate" groups="simrp.group_simrp_ceo" /> -->
+
+				<field name="ref_"/>
+				<!-- <field name="account_"/> -->
+				<field name="docdesc"/>
+				<field name="accounttype" invisible="1"/>
+				<field name="amountdr" sum="Dr" attrs="{'invisible': [('amountdr','=',0)]}"/>
+				<field name="amountcr" sum="Cr" attrs="{'invisible': [('amountcr','=',0)]}"/>
+				<field name="newrefname" attrs="{'invisible': [('accounttype','!=','p')]}"/>
+				<field name="baladjAmount" attrs="{'invisible': ['|',('accounttype','!=','p'),('baladjAmount','=',0)]}" sum="Balance"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_accline_search" model="ir.ui.view">
+		<field name="name">simrp.accline.search</field>
+		<field name="model">simrp.accline</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="tdate"/>
+				<field name="docdate"/>
+				<field name="ref_"/>
+				<field name="account_"/>
+				<field name="amountdr"/>
+				<field name="amountcr"/>
+				<field name="newrefname"/>
+				<field name="baladjAmount"/>
+				<filter string="Un Adjusted Fund Transaction" domain="[('ref_','ilike','fund'),('accounttype','=','p'),('baladjAmount', '!=', 0)]" name="unadjftn"></filter>
+				<filter string="Pending References" domain="[('accounttype','=','p'),('baladjAmount', '!=', 0)]" name="pendingref"></filter>
+				
+				<filter string="Pending References Due Today" domain="[('accounttype','=','p'),('baladjAmount', '!=', 0),('duedate', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]" name="pendingrefduetoday"/>
+				
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_accline_action" model="ir.actions.act_window">
+		<field name="name">Account Postings</field>
+		<field name="res_model">simrp.accline</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_accline_action" id="simrp_accline_menu" name="Account Postings" parent="simrp_menu_postings" sequence="" groups="group_simrp_user"/>
+
+
+	<!-- <record id="simrp_accline_action1" model="ir.actions.act_window"> -->
+		<!-- <field name="name">Account Postings</field> -->
+		<!-- <field name="res_model">simrp.accline</field> -->
+		<!-- <field name="view_type">form</field> -->
+		<!-- <field name="view_mode">tree,form</field> -->
+		<!-- <field name="context">{'search_default_unadjftn': 1}</field>  -->
+	<!-- </record> -->
+
+	<!-- <menuitem action="simrp_accline_action1" id="simrp_accline_menu1" name="Unadjusted FTNs" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/> -->
+
+	<!-- <record id="simrp_accline_tree2" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.accline.tree2</field> -->
+		<!-- <field name="model">simrp.accline</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <tree create="false" delete="false"> -->
+				<!-- <field name="tdate"/> -->
+				<!-- <field name="ref_"/> -->
+				<!-- <field name="account_"/> -->
+				<!-- <field name="accounttype" invisible="1"/> -->
+				<!-- <field name="amountdr" sum="Dr"/> -->
+				<!-- <field name="amountcr" sum="Cr"/> -->
+				<!-- <field name="newrefname" attrs="{'invisible': [('accounttype','!=','p')]}"/> -->
+				<!-- <field name="baladjAmount" attrs="{'invisible': ['|',('accounttype','!=','p'),('baladjAmount','=',0)]}" sum="Balance"/> -->
+				<!-- <field name="duedate" attrs="{'invisible': ['|',('accounttype','!=','p'),('baladjAmount','=',0)]}"/> -->
+			<!-- </tree> -->
+		<!-- </field> -->
+	<!-- </record> -->
+	<!-- <record id="simrp_accline_action2" model="ir.actions.act_window"> -->
+		<!-- <field name="name">Pending References</field> -->
+		<!-- <field name="res_model">simrp.accline</field> -->
+		<!-- <field name="view_type">form</field> -->
+		<!-- <field name="view_mode">tree,form</field> -->
+		<!-- <field name="context">{'search_default_unadjftn': 0, 'search_default_pendingrefduetoday': 1}</field>  -->
+	<!-- </record> -->
+	<!-- <record id="simrp_accline_action2_tree" model="ir.actions.act_window.view"> -->
+		<!-- <field name="view_mode">tree</field> -->
+		<!-- <field name="view_id" ref="simrp_accline_tree2"/> -->
+		<!-- <field name="act_window_id" ref="simrp_accline_action2"/> -->
+	<!-- </record> -->
+
+	<!-- <menuitem action="simrp_accline_action2" id="simrp_accline_menu2" name="Pending References" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/> -->
+
+</odoo>

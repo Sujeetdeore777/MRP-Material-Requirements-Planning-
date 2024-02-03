@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="action_itemfgbook" model="ir.actions.server">
+		<field name="name">Zero FG</field>
+		<field name="model_id" ref="model_simrp_item"/>
+		<field name="binding_model_id" ref="model_simrp_item"/>
+		<field name="binding_view_types">list</field>
+		<field name="state">code</field>
+		<field name="code">
+if records.env['res.users'].has_group('simrp.group_simrp_ceo'):
+	records.bookzerofg()
+		</field>
+	</record>	
+	<record id="action_itemarchive" model="ir.actions.server">
+		<field name="name">Archive Item</field>
+		<field name="model_id" ref="model_simrp_item"/>
+		<field name="binding_model_id" ref="model_simrp_item"/>
+		<field name="binding_view_types">list</field>
+		<field name="state">code</field>
+		<field name="code">
+if records.env['res.users'].has_group('simrp.group_simrp_ceo'):
+	records.archive()
+		</field>
+	</record>	
+
+
+	<record id="itemf" model="ir.ui.view">
+		<field name="name">simrp.item.form</field>
+		<field name="model">simrp.item</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<!-- <button name="submit" type="object"  -->
+								<!-- class="oe_stat_button" icon="fa-check-circle" string="Submit"  -->
+								<!-- attrs="{'invisible': [('state','!=',('d'))]}"  -->
+								<!-- groups="simrp.group_simrp_works" /> -->
+					<button name="modify" type="object" 
+								class="oe_stat_button" icon="fa-check-circle" string="Modify" 
+								attrs="{'invisible': [('state','!=','a')]}" 
+								groups="simrp.group_simrp_works" />
+					<button name="approve" type="object" 
+								class="oe_stat_button" icon="fa-check-circle" string="Approve" 
+								attrs="{'invisible': [('state','!=','d')]}" 
+								groups="simrp.group_simrp_works" />
+					<!-- <button name="modify" type="object"  -->
+								<!-- class="oe_stat_button" icon="fa-folder-open" string="Modify"  -->
+								<!-- attrs="{'invisible': ['|',('state','!=',('a')),('active','=',False)]}"  -->
+								<!-- groups="simrp.group_simrp_ceo" /> -->
+					<button name="archive" type="object" 
+								class="oe_stat_button" icon="fa-folder-open" string="Archive" 
+								attrs="{'invisible': [('active','=',False)]}" 
+								groups="simrp.group_simrp_ceo" />
+					<button name="reactivate" type="object" 
+								class="oe_stat_button" icon="fa-undo" string="Re-activate" 
+								attrs="{'invisible': [('active','=',True)]}" 
+								groups="simrp.group_simrp_ceo" />
+							<field name="name" style="color:#006600;font: bold 3vh arial"/>
+					<field name="id" invisible="1"/>
+					<field name="state" widget="statusbar" />
+				</header>
+
+					<group col="6" style="position:relative;top:-4vh;">
+						<group colspan="2">
+							<field name="type" attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="category" widget="selection" options='{"no_open": True}' attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="code" attrs="{'readonly': [('state','not in',['d'])]}" readonly="1" invisible="1"/>
+							<field name="hsnsac" attrs="{'readonly': [('state','not in',['d'])]}"/>
+						</group>
+						<group  colspan="2">
+							<field name="des" placeholder="Size / Part Desc / Cat No / etc..." attrs="{'readonly': [('state','not in',['d'])]}"/>
+							<field name="dwg_no" attrs="{'invisible': [('type','not in',['fg','equipment','instrument'])], 'readonly': [('state','not in',['d'])]}" />
+							<field name="rev" attrs="{'invisible': [('type','not in',['fg'])], 'readonly': [('state','not in',['d'])]}"/>
+						</group>
+						<group  colspan="2">
+							<field name="brand" attrs="{'invisible': [('type','not in',['bo','equipment','instrument','cons','insert'])], 'readonly': [('state','not in',['d'])]}"/>
+							<field name="lc" attrs="{'invisible': [('type','not in',['instrument'])], 'readonly': [('state','not in',['d'])]}"/>
+							<field name="range" attrs="{'invisible': [('type','not in',['instrument'])], 'readonly': [('state','not in',['d'])]}"/>
+							<field name="shortcode" />
+							<field name="net_wt" attrs="{'invisible': [('type','not in',['fg'])], 'readonly': [('state','not in',['d'])]}"/>
+							<field name="uom_" widget="selection" options='{"no_open": True, "no_create": True}' attrs="{'readonly': [('state','not in',['d'])]}"/>
+						</group>
+					</group>
+
+					<group colspan="4" col="12" class="small"  style="position:relative;top:-8vh;">
+                        <group colspan="6">
+						<!-- <label for="bom_s" string="BOM"/> -->
+						<field name="bom_s" nolabel="1"  attrs="{'invisible': [('type','not in',['rmb','bo','fg'])], 'readonly': [('state','not in',['d'])]}" style="background-color:green">
+							<tree editable="bottom">
+								<field name="item_" invisible="1"/>
+								<field name="bomitem_" domain="[('state','=','a')]" options='{"no_open": True, "no_create": True}'/>
+								<field name="bomuom_"/>
+								<field name="t"/>
+								<button name="help" type="object" class="oe_stat_button" icon="fa-question-circle" string="Help" groups="simrp.group_simrp_user" />
+								<field name="bomqty" string="Qty/fg"/>
+								<!-- <field name="bomqtyold" string="Old"/> -->
+								<field name="active" string="Act"/>
+							</tree>
+						</field> 
+                            <field name="iofile_s" nolabel="1" colspan="6" class="small" attrs="{'invisible': [('type','not in',['rmb','bo','fg'])], 'readonly': [('state','not in',['d'])]}" style="background-color:blue">
+                                <tree editable="bottom">
+                                    <field name="item_" invisible="1"/>
+                                    <field name="name"/> 
+                                    <field name="type"/>
+                                    <field name="store" widget="download_link" filename="storename"/>
+                                    <field name="storename" invisible="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group colspan="6">
+						<!-- <label for="itemprocess_s" string="Processes"/> -->
+						<field name="itemprocess_s" nolabel="1"  attrs="{'invisible': [('type','not in',['rmb','bo','fg'])], 'readonly': [('state','not in',['d'])]}"  style="background-color:red">
+						<tree>
+								<field name="seq" invisible="1"/>
+								<field name="name" string="Process Name"/>
+								<field name="allowsubcon" string="Subc"/>
+								<field name="speed" string="spd/hr"/>
+								<field name="qaplandate" string="QA Date"/>
+								<field name="active" string="Act"/>
+							</tree>
+						</field>
+                        </group>
+					</group>
+					<group col="4"  style="position:relative;top:-11vh;">
+							<field name="active" class="mr-3"/>
+							<button name="prprint" type="object" class="oe_stat_button" icon="fa-print" string="Print Process Approval" groups="simrp.group_simrp_user" />
+							<field name="okstock" groups="simrp.group_simrp_ceo"/>
+							<field name="rejstock" groups="simrp.group_simrp_ceo"/>
+							<field name="fgtemp" groups="simrp.group_simrp_ceo"/>
+							<button name="bookfg" type="object" class="oe_stat_button" icon="fa-print" string="Book FG, RM Consume" groups="simrp.group_simrp_ceo" />
+					</group>
+					<notebook  style="position:relative;top:-15vh;">
+						<page name="p1" string=" Value Addition " >
+							<group col="4">
+								<field name="costrm"/>
+								<field name="scrapweight"/>
+								<field name="costout"/>
+								<field name="valuescrap"/>
+								<field name="useinsales"/>
+							</group>
+						</page>
+					</notebook>
+					<group colspan="4" col="4">
+						<field name="log" colspan="4" widget="html"/>
+					</group>
+				<!-- </sheet> -->
+			</form>
+		</field>
+	</record>
+
+	<record id="itemt" model="ir.ui.view">
+		<field name="name">simrp.item.tree</field>
+		<field name="model">simrp.item</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='a'">
+				<field name="name"/>
+				<field name="type"/>
+				<field name="category"/>
+				<field name="okstock"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="items" model="ir.ui.view">
+		<field name="name">simrp.item.search</field>
+		<field name="model">simrp.item</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="type"/>
+				<field name="category"/>
+				<field name="state"/>
+				<field name="active"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="itema" model="ir.actions.act_window">
+		<field name="name">Items</field>
+		<field name="res_model">simrp.item</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="itema" id="mitem" name="Items" parent="simrp_menu_master_process" sequence="1" groups="group_simrp_user"/>
+
+</odoo>

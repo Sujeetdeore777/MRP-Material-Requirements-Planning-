@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="simrp_trans_tree" model="ir.ui.view">
+        <field name="name">simrp.trans.tree</field>
+        <field name="model">simrp.trans</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="invoice_"/>
+                
+            </tree>
+          
+
+        </field>
+    </record>
+
+
+    <record id="simrp_trans_action1" model="ir.actions.act_window">
+        <field name="name">trans</field>
+        <field name="res_model">simrp.trans</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="simrp_trans_action1" id="simrp_trans_menu" name="trans info" parent="simrp_menu_report" sequence="50" groups="group_simrp_user"/>
+</odoo>

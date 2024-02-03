@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<!-- <record id="dispatch_tdispatchsend_action" model="ir.actions.act_window"> -->
+		<!-- <field name="name">Send Dispatch</field> -->
+		<!-- <field name="res_model">simrp.tdispatchsend</field> -->
+		<!-- <field name="view_type">form</field> -->
+		<!-- <field name="view_mode">form</field> -->
+		<!-- <field name="target">new</field> -->
+	<!-- </record> -->
+	<record id="dispatch_tdispatchupdate_action" model="ir.actions.act_window">
+		<field name="name">Update Dispatch</field>
+		<field name="res_model">simrp.tdispatchupdate</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	<record id="dispatch_tqtyupdate_action" model="ir.actions.act_window">
+		<field name="name">Update Qty</field>
+		<field name="res_model">simrp.tqtyupdate</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<record id="simrp_dispatch_form" model="ir.ui.view">
+		<field name="name">simrp.dispatch.form</field>
+		<field name="model">simrp.dispatch</field>
+		<field name="arch" type="xml">
+			<form create="false" edit="false" delete="false">
+				<header>
+					<button name="cancel" type="object" class="oe_stat_button" icon="fa-cross" string="Cancel Dispatch" attrs="{'invisible': [('state','not in',['s'])]}" groups="simrp.group_simrp_ceo" />
+					<button name="refreshItemRate" type="object" class="oe_stat_button" icon="fa-check-circle" string="Refresh Item Rate" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','not in',['s'])]}"/>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Dispatch">
+
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+						<button name="%(dispatch_tdispatchupdate_action)d" type="action" class="oe_stat_button" icon="fa-check" string="Eway ASN" attrs="{'invisible': [('state','not in',['s'])]}" groups="simrp.group_simrp_iuser" context="{'default_dispatch_':id,'default_pack':pack,'default_transport':transport,'default_asn':asn,'default_eway':eway,'default_transportparty_':transportparty_,'default_distance':distance,'default_vehicle':vehicle}"/>
+						<button name="printdc" type="object" class="oe_stat_button" icon="fa-print" string="View DC" attrs="{'invisible': [('state','not in',['s'])]}" groups="simrp.group_simrp_iuser" />
+						<button name="printdcpdf" type="object" class="oe_stat_button" icon="fa-print" string="Print DC" attrs="{'invisible': [('state','not in',['s'])]}" groups="simrp.group_simrp_iuser" />
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<label for="name" string="DC No. "/>
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="party_" readonly="1"/>
+							<field name="shipparty_"/>
+							<field name="saleorder_"/>
+							<field name="item_" readonly="1"/>
+							<field name="okoutqty"/>
+						</group>
+						<group>
+							<field name="rate"/>
+							<field name="invdate"/>
+							<field name="invoice_"/>
+							<!-- <field name="invamt"/> -->
+							<!-- <field name="duedate"/> -->
+							<field name="group"/>
+						</group>
+					</group>
+					<group>
+						<group>
+							<field name="pack"/>
+							<field name="asn"/>
+							<field name="transport"/>
+							<!-- <field name="signurl" colspan="4" class="small" widget="url"/> -->
+							<!-- <field name="shippingcharge"/> -->
+						</group>
+						<group>
+							<field name="eway"/>
+    <field name="distance"/>
+    <field name="transportparty_"/>
+    <field name="vehicle"/>
+	<field name="filename" invisible="1"/>
+    <field name="ewayfile" filename="filename"  attrs="{'invisible': [ '|', ( 'transportparty_','=', False ), ( 'distance','=', 0 ) ]}" />
+    <!-- <field name="printed"/> -->
+						</group>
+					</group>
+
+					<!-- <notebook> -->
+						<!-- <page name="p1" string="Account Postings"> -->
+							<!-- <group col="4"> -->
+								<!-- <field name="accline_s" nolabel="1" colspan="4"/> -->
+							<!-- </group> -->
+						<!-- </page> -->
+						<!-- <page name="Info" string=""> -->
+							<!-- <group col="4"> -->
+							<!-- </group> -->
+						<!-- </page> -->
+					<!-- </notebook> -->
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_dispatch_tree" model="ir.ui.view">
+		<field name="name">simrp.dispatch.tree</field>
+		<field name="model">simrp.dispatch</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state in ['i']" decoration-warning="state in ['c']" decoration-danger="state in ['s']"  create="false" edit="false" delete="false" default_order='id desc' class="small">
+				<field name="id" invisible="1"/>
+				<field name="name"/>
+				<field name="recdate" widget="date"/>
+				<field name="party_"/>
+				<field name="item_"/>
+				<field name="okoutqty" sum="Qty"/>
+				<field name="pono"/>
+				<field name="invdate"/>
+				<field name="invoice_"/>
+				<field name="state"/>
+				<field name="group"/>
+			</tree>
+		</field>
+	</record>
+
+
+	<record id="simrp_dispatch_search" model="ir.ui.view">
+		<field name="name">simrp.dispatch.search</field>
+		<field name="model">simrp.dispatch</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="recdate"/>
+				<field name="item_"/>
+				<field name="saleorder_"/>
+				<field name="party_"/>
+				<field name="state"/>
+				<field name="invdate"/>
+				<field name="invoice_"/>
+				<field name="group"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_dispatch_action" model="ir.actions.act_window">
+		<field name="name">Dispatch</field>
+		<field name="res_model">simrp.dispatch</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_dispatch_action" id="simrp_dispatch_menu" name="Dispatches" parent="simrp_menu_material_out" sequence="40" groups="group_simrp_user"/>
+
+	<record id="simrp_dispatchv_action" model="ir.actions.act_window">
+		<field name="name">V Invoices</field>
+		<field name="res_model">simrp.invoice</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('group','=','v')]</field>
+	</record>
+
+	<menuitem action="simrp_dispatchv_action" id="simrp_dispatchv_menu" name="V Invoices" parent="simrp_menu_account_transact_v" sequence="50" groups="group_simrp_iuser"/>
+
+
+	<!-- <record id="dispatch_tdispatchsend_form" model="ir.ui.view"> -->
+		<!-- <field name="name">dispatch_tdispatchsend_action</field> -->
+		<!-- <field name="model">simrp.tdispatchsend</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <form string="formstring"> -->
+				<!-- <field name="state" invisible="1"/> -->
+				<!-- <group> -->
+					<!-- <group> -->
+						<!-- <field name="dispatch_"/> -->
+						<!-- <field name="pack"/> -->
+						<!-- <field name="transport"/> -->
+					<!-- </group> -->
+					<!-- <group> -->
+						<!-- <field name="state"/> -->
+    <!-- <field name="transportparty_"/> -->
+    <!-- <field name="vehicle"/> -->
+					<!-- </group> -->
+				<!-- </group> -->
+				<!-- <footer> -->
+					<!-- <button string="Send W/o Invoice" name="update" type="object"  -->
+						<!-- class="btn-primary o_open_tasks" icon="fa-plus"  -->
+						<!-- attrs="{'invisible': [('state','=',('s'))]}"  -->
+						<!-- groups="simrp.group_simrp_user" -->
+						<!-- context="{'buttontype':'s'}"/> -->
+					<!-- <button string="Generate Invoice" name="update" type="object"  -->
+						<!-- class="btn-primary o_open_tasks" icon="fa-check"  -->
+						<!-- groups="simrp.group_simrp_user" -->
+						<!-- context="{'buttontype':'i'}"/> -->
+					<!-- <button string="Discard" class="btn-secondary" special="cancel"/> -->
+				<!-- </footer> -->
+			<!-- </form> -->
+		<!-- </field> -->
+	<!-- </record>		 -->
+
+	<record id="dispatch_tdispatchupdate_form" model="ir.ui.view">
+		<field name="name">dispatch_tdispatchupdate_action</field>
+		<field name="model">simrp.tdispatchupdate</field>
+		<field name="arch" type="xml">
+			<form string="formstring">
+				<group>
+					<group>
+						<field name="pack"/>
+						<field name="asn"/>
+						<field name="transport"/>
+					</group>
+					<group>
+						<field name="eway"/>
+    <field name="distance"/>
+    <field name="transportparty_" options='{"no_open": True, "no_create": True}'/>
+    <field name="vehicle"/>
+					</group>
+				</group>
+				<footer>
+					<button string="Update Info" name="update" type="object" 
+						class="btn-primary o_open_tasks" icon="fa-plus" 
+						groups="simrp.group_simrp_iuser" />
+					<button string="Cancel" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>		
+
+	<record id="dispatch_tqtyupdate_form" model="ir.ui.view">
+		<field name="name">dispatch_tqtyupdate_action</field>
+		<field name="model">simrp.tqtyupdate</field>
+		<field name="arch" type="xml">
+			<form string="formstring">
+				<group col="4">
+					<field name="qty"/>
+				</group>
+				<footer>
+					<button string="Update Qty" name="qtyupdate" type="object" 
+						class="btn-primary o_open_tasks" icon="fa-plus" 
+						groups="simrp.group_simrp_iuser" />
+					<button string="Cancel" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>		
+
+	<record id="dispatch_tinvoice_form" model="ir.ui.view">
+		<field name="name">dispatch_tinvoice_action</field>
+		<field name="model">simrp.tinvoice</field>
+		<field name="arch" type="xml">
+			<form string="Invoice Generation">
+				<group colspan="4">
+					<field name="itemrate_" colspan="4" domain="[('group','=',group)]" options='{"no_open": True, "no_create": True}' attrs="{'readonly': [('saleorder_','!=',False)]}"/>
+				</group>
+				<field name="group" invisible="1"/>
+				<field name="saleorder_" invisible="1"/>
+				<group>
+					<group>
+						<field name="party_" options='{"no_create": True}'/>
+						<field name="item_"/>
+
+						<field name="rate"/>
+						<field name="dqty"/>
+						<field name="pack"/>
+						<field name="transport"/>
+						<field name="transport_charges"/>
+					</group>
+					<group>
+						<field name="taxscheme_"/>
+						<field name="hsnsac"/>
+						<field name="cname"/>    
+						<field name="customerpo"/>
+						<field name="customerpodate"/>
+    <field name="distance"/>
+    <field name="transportparty_"/>
+    <field name="vehicle"/>
+						<field name="ratecheck"/>
+						<field name="newrate" attrs="{'invisible': [('ratecheck','=',False)]}"/>
+						<button string="Update Rate" name="updaterate" type="object" class="oe_stat_button" icon="fa-check" attrs="{'invisible': [('ratecheck','=',False)]}" groups="simrp.group_simrp_iuser"/>
+						<field name="dispmode"/>
+						<field name="singleinvoice" attrs="{'invisible': [('dispmode','=','inv')]}"/>
+						<!-- <field name="invoicereplace"/> -->
+						<!-- <field name="replacedispatch_" attrs="{'invisible': [('invoicereplace','=',False)]}" options='{"no_create": True}'  domain="[('state','=','c')]"/> -->
+						<!-- <button string="Replace Document" name="replaceinvoicefn" type="object" class="oe_stat_button" icon="fa-check" attrs="{'invisible': [('invoicereplace','=',False)]}" groups="simrp.group_simrp_ceo"/> -->
+					</group>
+				</group>
+				<footer>
+					<button string="Generate Dispatch" name="update" type="object" class="btn-primary o_open_tasks" icon="fa-check" groups="simrp.group_simrp_iuser" attrs="{'invisible': [('ratecheck','=',True)]}"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>	
+
+
+	<record id="simrp_dispatchi_action" model="ir.actions.act_window">
+		<field name="name">Generate V invoice</field>
+		<field name="res_model">simrp.tinvoice</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+		<field name="context">{'default_group':'v'}</field>
+	</record>
+
+	<menuitem action="simrp_dispatchi_action" id="simrp_dispatchi_menu" name="Generate V Invoice" parent="simrp_menu_account_transact_v" sequence="50" groups="group_simrp_iuser"/>
+
+	<record id="action_cdate" model="ir.actions.server">
+		<field name="name">Retro DN Generate (Careful)</field>
+		<field name="model_id" ref="model_simrp_invoice"/>
+		<field name="binding_model_id" ref="model_simrp_invoice"/>
+		<field name="binding_view_types">list</field>
+		<field name="state">code</field>
+		<field name="code">
+if records.env['res.users'].has_group('simrp.group_simrp_ceo'):
+	records.tdebitshortcut()
+		</field>
+	</record>
+
+</odoo>

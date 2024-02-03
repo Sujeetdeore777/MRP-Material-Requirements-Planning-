@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="qcinspection_update_action" model="ir.actions.act_window">
+		<field name="name">Update QC Infomation</field>
+		<field name="res_model">simrp.tqcinspectionupdate</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	<record id="qcinspection_recover_action" model="ir.actions.act_window">
+		<field name="name">Post Recovery</field>
+		<field name="res_model">simrp.tqcinspectionrecover</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	<record id="qcinspection_decide_action" model="ir.actions.act_window">
+		<field name="name">Decision</field>
+		<field name="res_model">simrp.tqcinspectiondecide</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<record id="simrp_qcinspection_form" model="ir.ui.view">
+		<field name="name">simrp.qcinspection.form</field>
+		<field name="model">simrp.qcinspection</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="reset" type="object" class="oe_stat_button" icon="fa-undo" string="Reset Inspection" groups="simrp.group_simrp_user"/>
+					<field name="name" />
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Qcinspection">
+
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+						<button name="submit" type="object" class="oe_stat_button" icon="fa-check" string="Submit Inspection" attrs="{'invisible': [('state','not in',['p'])]}" groups="simrp.group_simrp_user"/>
+						<button name="%(qcinspection_update_action)d" type="action" class="oe_stat_button" icon="fa-check" string="Update Progress" attrs="{'invisible': [('state','!=',('i'))]}" groups="simrp.group_simrp_user" context="{'default_qcinspection_':id}"/>
+						<button name="%(qcinspection_decide_action)d" type="action" class="oe_stat_button" icon="fa-check" string="Final Decision" attrs="{'invisible': [('state','!=',('i'))]}" groups="simrp.group_simrp_user" context="{'default_qcinspection_':id}"/>
+						<button name="%(qcinspection_update_action)d" type="action" class="oe_stat_button" icon="fa-check" string="Update Progress" attrs="{'invisible': [('accstate','!=',('r'))]}" groups="simrp.group_simrp_works" context="{'default_qcinspection_':id}"/>
+						<button name="norecover" type="object" class="oe_stat_button" icon="fa-check" string="Clear w/o Recovery" attrs="{'invisible': [('accstate','!=',('r'))]}" groups="simrp.group_simrp_works"/>
+						<button name="%(qcinspection_recover_action)d" type="action" class="oe_stat_button" icon="fa-check" string="Post Recovery" attrs="{'invisible': [('accstate','!=',('r'))]}" groups="simrp.group_simrp_works" context="{'default_qcinspection_':id}"/>
+					</div>
+
+					<group col="4">
+						<group colspan="2">
+							<field name="item_"/>
+							<field name="itemprocess_" string="Process"/>
+							<field name="party_" attrs="{'readonly': ['|',('grn_','!=',False),('accstate','in',['ne','rd'])]}"/>
+						</group>
+						<group>
+							<field name="stage"/>
+							<field name="grn_"/>
+							<field name="lotqty"/>
+						</group>
+						<group>
+							<field name="okqty"/>
+							<field name="rejqty"/>
+							<field name="debit_" string="Debit:"/>
+						</group>
+						<field name="qcidetails_s" nolabel="1" colspan="4" context="{'qcistate': state}">
+							<tree decoration-success="result==True" decoration-danger="result==False" editable="bottom" create="false" delete="false">
+								<field name="param"/>
+								<field name="method"/>
+								<field name="result" attrs="{'readonly': [('parent.state','!=',('p'))]}"/>
+                                <button name="resultstatus" type="object" class="oe_stat_button" icon="fa-check-circle" string="Select" groups="simrp.group_simrp_user" attrs="{'invisible': ['|',('rejectcount','!=',0),('result','=',True)]}" />
+								<field name="remarks" attrs="{'readonly': [('parent.state','!=',('p'))]}"/>
+								<field name="rejectcount" attrs="{'readonly': ['|',('parent.state','not in',['p','i']),('result','=','True')]}"/>
+							</tree>
+						</field>
+					</group>
+					<group col="4">
+						<field name="sampleqty" colspan="2"/>
+						<field name="accstate" colspan="2"/>
+						<field name="log" colspan="4"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_qcinspection_tree" model="ir.ui.view">
+		<field name="name">simrp.qcinspection.tree</field>
+		<field name="model">simrp.qcinspection</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='a'" >
+				<field name="name" string="Code"/>
+				<field name="idate" string="Date" widget="date"/>
+				<field name="item_"/>
+				<field name="party_"/>
+				<field name="lotqty" string="Lot"/>
+				<field name="okqty" string="Ok" attrs="{'invisible': [('okqty','=',0)]}"/>
+				<field name="rejqty" string="Rej" attrs="{'invisible': [('rejqty','=',0)]}"/>
+				<field name="state"/>
+				<field name="accstate" string="Account"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_qcinspection_search" model="ir.ui.view">
+		<field name="name">simrp.qcinspection.search</field>
+		<field name="model">simrp.qcinspection</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="idate"/>
+				<field name="item_"/>
+				<field name="party_"/>
+				<field name="itemprocess_"/>
+				<field name="stage"/>
+				<field name="state"/>
+				<field name="accstate"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_qcinspection_action" model="ir.actions.act_window">
+		<field name="name">QC Inspections</field>
+		<field name="res_model">simrp.qcinspection</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_qcinspection_action" id="simrp_qcinspection_menu" name="QC Inspection" parent="simrp_menu_qc_tr" sequence="" groups="group_simrp_user"/>
+
+
+	<record id="simrp_tqcinspectionupdate_form" model="ir.ui.view">
+		<field name="name">simrp.tqcinspectionupdate.form</field>
+		<field name="model">simrp.tqcinspectionupdate</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+				<sheet string="g">
+
+					<group colspan="4">
+						<field name="log" colspan="4"/>
+						<field name="addremarks" colspan="4"/>
+					</group>
+				</sheet>
+				<footer>
+					<button string="Update QC Progress" name="update" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_tqcinspectionrecover_form" model="ir.ui.view">
+		<field name="name">simrp.tqcinspectionrecover.form</field>
+		<field name="model">simrp.tqcinspectionrecover</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+				<sheet string="g">
+
+					<field name="qcinspection_" invisible="1"/>
+					<group colspan="4">
+						<field name="log" colspan="4"/>
+						<field name="addremarks" colspan="4"/>
+					</group>
+				</sheet>
+				<footer>
+					<button string="Update QC Progress" name="update" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_tqcinspectiondecide_form" model="ir.ui.view">
+		<field name="name">simrp.tqcinspectiondecide.form</field>
+		<field name="model">simrp.tqcinspectiondecide</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+				<sheet string="g">
+					<field name="qcinspection_" invisible="1"/>
+					<group>
+						<group>
+							<field name="item_"/>
+							<field name="itemprocess_"/>
+						</group>
+						<group>
+							<field name="lotqty"/>
+						</group>
+					</group>
+					<group colspan="4">
+						<field name="log" colspan="4"/>
+						<field name="addremarks" colspan="4"/>
+					</group>
+					<group>
+						<group>
+							<field name="state"/>
+						</group>
+						<group>
+							<field name="okqty" attrs="{'invisible': [('state','!=','dok')]}"/>
+							<field name="rejqty" attrs="{'invisible': [('state','!=','dok')]}"/>
+						</group>
+					</group>
+				</sheet>
+				<footer>
+					<button string="Update QC Progress" name="update" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+</odoo>

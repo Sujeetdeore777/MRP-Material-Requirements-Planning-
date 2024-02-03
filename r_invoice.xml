@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="paperformat_inv" model="report.paperformat">
+    <field name="name">A4 Sale Order</field>
+    <field name="default" eval="True" />
+    <field name="format">A4</field>
+    <field name="page_height">0</field>
+    <field name="page_width">0</field>
+    <field name="orientation">Portrait</field>
+    <field name="margin_top">8</field>
+    <field name="margin_bottom">0</field>
+    <field name="margin_left">5</field>
+    <field name="margin_right">5</field>
+    <field name="header_line" eval="False" />
+    <field name="header_spacing">5</field>
+    <field name="dpi">96</field>
+</record>
+
+
+	<template id="printinv">
+		<t t-call="web.basic_layout">
+			<t t-foreach="docs" t-as="doc">
+
+			<t t-foreach="range(1,doc.tcopies)" t-as="copyno">
+
+				<div class="page" style="page-break-after: always;">
+					<div class="oe_structure"/>
+
+					<h2>
+					</h2>
+
+					<style type="text/css">
+	.bgp {
+	  background-color: #000 !important;
+	  color: #FFF;
+	}
+
+
+  @media print {
+    .bgp {
+      background-color: #000 !important;
+    }
+    .table td {
+      background-color: transparent !important;
+    }
+
+  }
+					</style>
+					<table class="table bgp mb-0" >
+						<tr>
+							<td>
+								<img src='/web/binary/company_logo' />
+							</td>
+							<td align="center" class="align-bottom" style="color: GreenYellow">
+								<t t-esc="res_company.website"/>
+							</td>
+							<td align="right" class="align-bottom m-0" style="padding: 0px 10px 0px 0px"><span class="small">
+							<t t-if="copyno==1">Original for Buyer</t>
+							<t t-if="copyno==2">Duplicate for Transporter</t>
+							<t t-if="copyno&gt;2">Duplicate for Supplier</t>
+							</span><br/><span class="h1">Tax Invoice</span></td>					
+						</tr>
+					</table>
+					<table class="table mb-0" height="10%">
+						<tr>
+							<td class="h6 small" width="64%">
+								<span class="h6 font-weight-bold">
+									<t t-esc="res_company.name"/>
+								</span>
+								<br/>
+								<t t-esc="res_company.street"/>, <t t-esc="res_company.street2"/>
+								<br/>
+						City: <t t-esc="res_company.city"/>, <t t-esc="res_company.zip"/>
+								<br/>
+						State: <t t-esc="res_company.state_id.name"/>, Code: <t t-esc="res_company.state_id.code"/>
+								<br/>
+						E-mail: <t t-esc="res_company.email"/>
+								<br/>
+								<span class="font-weight-bold">GST No.: <t t-esc="res_company.company_registry"/>
+								</span>
+							</td>
+							<td class="m-0 p-0" >
+								<table class="table" border="0">
+									<tr>
+										<td class="h6 small text-right font-weight-bold" width="24%">Inv. No.:</td>
+										<td class="h2 text-right font-weight-bold">
+											<t t-esc="doc.name"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">Date:</td>
+										<td class="h5 text-right font-weight-bold">
+											<t t-esc="doc.invdate.strftime('%d.%m.%Y')"/>
+										</td>
+									</tr>
+								</table>
+							</td>					
+						</tr>
+					</table>
+					<table class="table table-bordered m-0" >
+						<tr >
+							<td rowspan="4" class="h6 tdb" width="33%" style="border-color: black">
+								<span class="font-weight-bold">Bill To</span>
+								<br/>
+								<br/>
+								<span class="">
+									<t t-esc="doc.party_.name"/>
+								</span>
+								<br/>
+								<t t-esc="doc.party_.address1"/>
+								<br/>
+								<t t-esc="doc.party_.address2"/> <t t-esc="doc.party_.address3"/>
+								<br/>
+								State: <t t-esc="doc.party_.state_.name"/>, Code: <t t-esc="doc.party_.state_.gstcode"/>
+								<br/>
+								<span class="font-weight-bold">GST No.: <t t-esc="doc.party_.gstno"/>
+								</span>
+							</td>
+							<td rowspan="4" class="tdb h6"  width="33%" style="border-color: black">
+								<t t-set="t_ship" t-value="doc.party_"/>
+								<t t-if="doc.shipparty_">
+									<t t-set="t_ship" t-value="doc.shipparty_"/>
+								</t>
+
+								<span class="font-weight-bold">Ship To</span>
+								<br/>
+								<br/>
+								<span class="">
+									<t t-esc="t_ship.name"/>
+								</span>
+								<br/>
+								<t t-esc="t_ship.address1"/>
+								<br/>
+								<t t-esc="t_ship.address2"/>
+								<br/>
+								<t t-esc="t_ship.address3"/>
+								<br/>
+							</td>
+							<td class="h5 small text-right tdb p-0" style="border-color: black"  width="10%">Vendor:</td>
+							<td class="text-right tdb  pt-0" style="border-color: black" width="24%">
+								<t t-esc="doc.party_.vcode"/>
+							</td>
+						</tr>
+									<tr>
+										<td class="h5 small text-right tdb p-0" style="border-color: black">PO. No.:</td>
+										<td class=" text-right tdb pt-0" style="border-color: black; font-size: 10pt">
+											<t t-esc="doc.saleorder_.pono"/> dt. <t t-esc="doc.saleorder_.podate.strftime('%d.%m.%Y')"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="h5 small text-right tdb p-0 m-0" style="border-color: black">Transport:</td>
+										<td class=" text-right tdb m-0" style="border-color: black; font-size: 10pt; padding: 0px 10px 0px 0px">
+											<t t-if="doc.transportparty_"><t t-esc="doc.transportparty_.name"/><br/></t><span style="font-size:9pt"><t t-esc="doc.transport"/></span>
+										</td>
+									</tr>
+									<tr>
+										<td class="h5 small text-right tdb p-0 m-0" style="border-color: black"><t t-if="doc.eway">Eway:</t></td>
+										<td class=" text-right tdb m-0" style="border-color: black; font-size: 10pt; padding: 0px 10px 0px 0px">
+											<t t-esc="doc.eway"/><br/><span style="font-size:9pt"><t t-esc="doc.vehicle"/></span>
+										</td>
+									</tr>
+					</table>
+					<table class="table table-sm m-0" height="500">
+						<thead>
+							<tr height="7%"  style="font-size:9pt; background-color: lightgray">
+								<th class="text-left" width="12%">DC Details</th>
+								<th class="text-left" width="40%">Item Description</th>
+								<th class="text-left" width="8%" ><t t-if="not doc.asn">ASN</t></th>
+								<th class="text-right" width="8%" >HSN/SAC</th>
+								<th class="text-right" width="8%">Quantity</th>
+								<th class="text-right" width="8%">Rate</th>
+								<th class="text-left" width="5%">/ unit</th>
+								<th class="text-right">Amount</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody">
+							<tr><td style="font-size:7pt">.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+	<t t-foreach="doc.dispatch_s" t-as="disp" >
+
+							<tr t-att-style="'height:' + str(400 / int(doc.invlines)) + 'pt'">
+								<td class="text-left pt-0"  style="font-size:8pt">
+									<t t-esc="disp.invdate.strftime('%d.%m.%y')"/> / <t t-esc="disp.name"/>
+								</td>
+								<td class="text-left pt-0" t-att-colspan="2 if not disp.asn else 1" style="font-size:11pt">
+									<t t-if="disp.saleorder_.itemrate_.cname">
+										<b><t t-esc="disp.saleorder_.itemrate_.cname"/></b> 
+									</t>
+									<t t-esc="disp.item_.name"/>
+								</td>
+								<t t-if="disp.asn">
+									<td class="text-left pt-0"  style="font-size:9pt">
+										<t t-esc="disp.asn" />
+									</td>
+								</t>
+								<td class="text-right pt-0"  style="font-size:9pt">
+									<t t-esc="disp.saleorder_.itemrate_.item_.hsnsac"/>
+								</td>
+								<td class="text-right pt-0" style="font-size:9pt">
+									<t t-esc="'{:.2f}'.format( disp.okoutqty )"/>
+								</td>
+								<td class="text-right pt-0"  style="font-size:11pt">
+									<t t-esc="'{:.2f}'.format( disp.rate )"/>
+								</td>
+								<td class="text-left pt-0" style="font-size:9pt">/ <t t-esc="disp.item_.uom_.name"/>
+								</td>
+								<td class="text-right pt-0"  style="font-size:11pt">
+									<t t-esc="'{:.2f}'.format( disp.rate * disp.okoutqty )"/>
+								</td>
+							</tr>
+	</t>
+			<t t-foreach="range(len(doc.dispatch_s),int(doc.invlines))" t-as="x">
+							<tr t-att-style="'height:' + str(400 / int(doc.invlines)) + 'pt'">
+								<td colspan="8" class="text-left pt-0" style="font-size:11pt">
+									.
+								</td>
+							</tr>
+			</t>
+							<tr class="m-0">
+								<td colspan="4" class="text-left pt-0 m-0">
+									<t t-if="doc.pack">
+										<b>&#160;&#160;Packing:</b> <t t-esc="doc.pack"/>        
+									</t>
+								</td>
+								<td colspan="3" class="text-right pt-0" style="font-size:10pt">
+									<b>Transport Charges:</b>
+								</td>
+								<td class="text-right pt-0"  style="font-size:11pt">
+									 <t t-esc="'{:.2f}'.format( doc.shippingcharge )"/>
+								</td>							
+							</tr>
+
+								<t t-set="t_" t-value="doc.saleorder_.taxscheme_.compute(  doc.basicamt )"/>
+								<t t-set="tlines" t-value="t_[ 'printTaxes' ]"/>
+							
+							<tr>
+								<td t-att-rowspan="len(tlines)+2" colspan="2" class="table-bordered p-1" style="text-align: center; vertical-align: middle;">
+									<t t-if="doc.asn">
+										<b>Invoice No:</b> <t t-esc="doc.name"/><br/>
+										<img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Standard39', doc.asn, 400, 50)" /><br/>
+										<b>Customer ASN:</b> <t t-esc="doc.asn"/><br/>
+									</t>
+								</td>
+							</tr>							
+							
+							
+							<tr height="8%" style="background-color: lightgray">
+								<td></td>
+								<td  class="text-right">Qty:</td>
+								<td class="text-right"><t t-esc="doc.tempqty"/></td>								
+								<td colspan="3" class="text-right pt-3 h5" style="background-color: silver !important;">
+									<t t-esc="'{:.2f}'.format( doc.basicamt )"/>
+								</td>
+							</tr>
+
+
+							<t t-foreach="t_[ 'printTaxes' ]" t-as="taxline">
+								<tr height="7%" class="table-bordered">
+									<td colspan="3" class="text-right pt-2">
+										<t t-esc="taxline[ 'name' ]"/>
+									</td>
+									<td class="text-right pt-2">
+										<t t-esc="taxline['rate']"/>
+									</td>
+									<td class="text-left pt-2">%</td>
+									<td class="text-right pt-2" >
+										<t t-esc="'{:.2f}'.format( taxline['taxamount'] )"/>
+									</td>
+								</tr>
+							</t>
+							<tr height="9%" style="background-color: silver">
+								<td colspan="2" class="m-0 p-1" style="font-size: 10pt"><b>Amount in words: </b> Rs. <t t-esc="doc.a2w()"/> only.</td>
+								<td colspan="3" class="text-right pt-3 table-bordered">Net Amount (Rs.):</td>
+								<td colspan="3" class="text-right pt-3 h5" style="background-color: gray !important;">
+									<t t-esc="'{:.2f}'.format( doc.invamt )"/>
+								</td>
+							</tr>
+						<tr class="align-top table-bordered">
+							<td colspan="2" width="30%" class="align-top text-justify" style="font-size: 7pt">
+								<b>Declaration:</b>
+								<br/>
+						We confirm that we are a registered tax payer as per the Indian GST Act and that we will remit the GST amount reflected in this invoice to the Govt. of India on or before the due date as per the law.<br/>
+
+								<b>Important Terms and Conditions:</b>
+								<br/>
+						1. You agree to remit the payment of this invoice to us on or before the due date. Any delay of payment after the duedate will be charged an additional penal interest of 24% per year on pro-rata basis.<br/>
+						2. No quality complaint / goods return or debit will be entertained after 7 calender days of the receipt of goods.<br/>
+						3. It will be your responsibility for the safety and maintenance of uninsured goods once the material leaves our factory</td>
+							<td colspan="3" class="text-right align-bottom" style="font-size:9pt;" >
+								<b>Qty OK Received</b><br/>
+								Customer Acknowledgement
+							</td>
+										<td colspan="3" class="text-right align-bottom" style="font-size: 10pt">For, <b>
+												<t t-esc="res_company.name"/></b>,<br/> Authorised Signatory.</td>
+						</tr>
+						<tr style="background-color: silver">
+							<td colspan="2" style="font-size: 9pt; padding: 0px 0px 0px 5px">
+								<b>Our Bank: </b> <t t-esc='doc.env["ir.config_parameter"].sudo().get_param( "inv.bankname") ' /><br/>
+								<b>Bank A/c: </b> <t t-esc='doc.env["ir.config_parameter"].sudo().get_param( "inv.bankacno") ' />, <b>IFSC: </b> <t t-esc='doc.env["ir.config_parameter"].sudo().get_param( "inv.bankifsc") ' /><br/>
+							</td>
+							<td colspan="3"></td>
+							<td colspan="4" style="font-size: 9pt; padding: 0px 10px 0px 0px" class="text-right">
+								<b>IEC Code: </b> <t t-esc='doc.env["ir.config_parameter"].sudo().get_param( "inv.iec") ' /><br/>
+								<b>PAN No: </b> <t t-esc='res_company.vat' /><br/>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+					<p/>
+				</div>
+			</t>
+			</t>
+		</t>
+
+	</template>
+
+	<report 
+		id="action_report_printinv"
+		string="Invoice"
+		model="simrp.invoice" 
+		report_type="qweb-html"
+		file="simrp.printinv" 
+		name="simrp.printinv"
+		paperformat="simrp.paperformat_inv"
+		print_report_name="'%s_%s_%s' % (object.party_.vcode, object.name, object.invdate.strftime('%d%m%Y'))"
+	/>
+	<report 
+		id="action_report_printinvpdf"
+		string="Invoice"
+		model="simrp.invoice" 
+		report_type="qweb-pdf"
+		file="simrp.printinv" 
+		name="simrp.printinv"
+		paperformat="simrp.paperformat_inv"
+		print_report_name="'%s_%s_%s' % (object.party_.vcode, object.name, object.invdate.strftime('%d%m%Y'))"
+	/>
+
+</odoo>

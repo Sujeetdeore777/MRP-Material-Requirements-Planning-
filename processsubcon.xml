@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record model="ir.ui.view" id="simrp_processsubcon_form">
+            <field name="name">simrp.processsubcon.form</field>
+            <field name="model">simrp.processsubcon</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml" >
+                <form string="Subcontracting Process" create="false" delete="false" edit="false">
+                    <header>
+                        <button name="reactivate" type="object" class="oe_stat_button" icon="fa-undo" string="Re-activate" 
+							attrs="{'invisible': [('active','=',True)]}" groups="simrp.group_simrp_ceo" />
+                        <button name="unactivate" type="object" class="oe_stat_button" icon="fa-undo" string="Un-activate" 
+							attrs="{'invisible': [('active','=',False)]}" groups="simrp.group_simrp_ceo" />
+                    </header>
+                    <sheet>
+                	    <group col="6">
+    <field name="active" colspan="6"/>
+    <field name="party_" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+    <field name="code"/>
+    <field name="since"/>
+
+    <field name="itemprocess_" />
+    <field name="inputitem_" colspan="3" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+    <field name="inputuom_" nolabel="1" colspan="1" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+	<hr colspan="6"/>
+
+    <field name="opconv"/>	
+    <field name="item_" colspan="3" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+    <field name="outputuom_" nolabel="1" colspan="1" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+
+    <field name="byconv"/>
+    <field name="byproductitem_" colspan="3" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+    <field name="byproductuom_" nolabel="1" colspan="1" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+	<hr colspan="6"/>
+
+    <field name="rate"/>
+    <field name="rateuom_" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+    <field name="uomconv"/>
+
+    <field name="moq"/>
+    <field name="scrappolicy"/>
+    <field name="write_uid"/>
+    <field name="transport" colspan="2"/>	
+    <field name="taxscheme_" colspan="2" options="{'no_create': True, 'no_edit': True, 'no_open': True}" widget="selection" domain="[('account_.type','=','purc')]"/>
+	<field name="value"/>
+	<hr colspan="6"/>
+	
+    <field name="explain" colspan="6"/>
+    <field name="log" colspan="6"/>
+
+	                    </group>
+	                    
+                	</sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+	<record id="simrp_processsubcon_tree" model="ir.ui.view">
+		<field name="name">simrp.processsubcon.tree</field>
+		<field name="model">simrp.processsubcon</field>
+		<field name="arch" type="xml">
+			<tree create="false" delete="false">
+				<field name="code" readonly="1" string="Code"/>
+				<field name="party_" readonly="1"/>
+				<field name="inputitem_" readonly="1"/>
+				<field name="item_" readonly="1"/>
+				<field name="itemprocess_" readonly="1"/>
+				<!-- <field name="moq" readonly="1"/> -->
+				<field name="rateuom_" readonly="1" string="rateUOM"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_processsubcon_search" model="ir.ui.view">
+		<field name="name">simrp.processsubcon.search</field>
+		<field name="model">simrp.processsubcon</field>
+		<field name="arch" type="xml">
+			<search>
+    <field name="code"/>
+    <field name="party_"/>
+    <field name="inputitem_"/>
+    <field name="item_"/>
+    <field name="byproductitem_"/>
+    <field name="scrappolicy"/>
+    <field name="transport"/>
+    <field name="itemprocess_"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_processsubcon_action" model="ir.actions.act_window">
+		<field name="name">Process Subcon List</field>
+		<field name="res_model">simrp.processsubcon</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_processsubcon_action" id="simrp_processsubcon_menu" name="Process Subcon List" parent="simrp_menu_oper_p" sequence="20" groups="group_simrp_works"/>
+
+	<!-- <record id="simrp_processsubcon_treesdc" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.processsubcon.treesdc</field> -->
+		<!-- <field name="model">simrp.processsubcon</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <tree editable="bottom" create="false" edit="false" delete="false"> -->
+				<!-- <field name="code" readonly="1"/> -->
+				<!-- <field name="party_" readonly="1"/> -->
+				<!-- <field name="inputitem_" readonly="1"/> -->
+				<!-- <field name="item_" readonly="1"/> -->
+				<!-- <field name="itemprocess_" readonly="1"/> -->
+				<!-- <field name="moq" readonly="1"/> -->
+				<!-- <field name="rateuom_" readonly="1"/> -->
+				<!-- <button name="generatesubcondc" type="object" class="oe_stat_button" icon="fa-fast-forward" string="start DC" groups="simrp.group_simrp_user" /> -->
+			<!-- </tree> -->
+		<!-- </field> -->
+	<!-- </record> -->
+
+	<!-- <record id="simrp_processsubconsdc_action" model="ir.actions.act_window"> -->
+		<!-- <field name="name">Generate Subcon DC</field> -->
+		<!-- <field name="res_model">simrp.processsubcon</field> -->
+		<!-- <field name="view_type">form</field> -->
+		<!-- <field name="view_mode">tree,form</field> -->
+		<!-- <field name="view_id" ref="simrp_processsubcon_treesdc"/> -->
+	<!-- </record> -->
+
+	<!-- <menuitem action="simrp_processsubconsdc_action" id="simrp_processsubconsdc_menu" name="Generate Subcon DC" parent="simrp_menu_material_out" sequence="10" groups="group_simrp_user"/> -->
+
+</odoo>

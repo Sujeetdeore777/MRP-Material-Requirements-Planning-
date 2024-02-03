@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_stock_tree" model="ir.ui.view">
+		<field name="name">simrp.stock.tree</field>
+		<field name="model">simrp.stock</field>
+		<field name="arch" type="xml">
+			<tree editable="bottom" create="false" edit="false" delete="false">
+				<field name="ref" readonly="1"/>
+				<field name="recdate" readonly="1"/>
+				<field name="party_" readonly="1"/>
+
+				<field name="item_" readonly="1"/>
+
+				<field name="itemtype" readonly="1"/>
+
+				<field name="okinqty" sum="OK In" readonly="1"/>
+				<field name="rejinqty" sum="Rej In" readonly="1"/>
+
+				<field name="okoutqty" sum="OK Out" readonly="1"/>
+				<field name="rejoutqty" sum="Rej Out" readonly="1"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_stock_search" model="ir.ui.view">
+		<field name="name">simrp.stock.search</field>
+		<field name="model">simrp.stock</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="ref"/>
+				<field name="recdate"/>
+
+				<field name="item_"/>
+
+				<field name="itemtype"/>
+
+				<field name="okinqty"/>
+				<field name="rejinqty"/>
+
+				<field name="okoutqty"/>
+				<field name="rejoutqty"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_stock_action" model="ir.actions.act_window">
+		<field name="name">Stock</field>
+		<field name="res_model">simrp.stock</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_stock_action" id="simrp_stock_menu" name="Stock" parent="simrp_menu_material_records" sequence="100" groups="group_simrp_user"/>
+
+</odoo>

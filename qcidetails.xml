@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="simrp_qcidetails_tree" model="ir.ui.view">
+<field name="name">simrp.qcidetails.tree</field>
+<field name="model">simrp.qcidetails</field>
+<field name="arch" type="xml">
+<tree editable="bottom" create="false" edit="false" delete="false" decoration-success="result==True" decoration-danger="result==False">
+    <field name="idate"/>
+    <field name="item_"/>
+    <field name="itemprocess_"/>
+	
+    <field name="qapparam"/>
+    <field name="lotqty"/>
+	<field name="result" readonly="1"/>
+    <field name="rejectcount" readonly="1"/>
+	<field name="qcinspection_"/>
+</tree>
+</field>
+</record>
+
+<record id="simrp_qcidetails_search" model="ir.ui.view">
+<field name="name">simrp.qcidetails.search</field>
+<field name="model">simrp.qcidetails</field>
+<field name="arch" type="xml">
+<search>
+    <field name="idate"/>
+    <field name="item_"/>
+    <field name="itemprocess_"/>
+    <field name="qapparam"/>
+	<field name="result"/>
+	<field name="qcinspection_"/>
+</search>
+</field>
+</record>
+
+<record id="simrp_qcidetails_action" model="ir.actions.act_window">
+<field name="name">Process Parameters Rejection History</field>
+<field name="res_model">simrp.qcidetails</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+<field name="domain">[('rejectcount','!=',0)]</field>
+</record>
+
+<menuitem action="simrp_qcidetails_action" id="simrp_qcidetails_menu" name="Process Parameters" parent="simrp_menu_qc_history" sequence="" groups="group_simrp_user"/>
+		
+		</odoo>
+		

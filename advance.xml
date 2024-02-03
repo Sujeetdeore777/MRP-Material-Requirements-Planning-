@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<!-- <record id="simrp_advance_form" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.advance.form</field> -->
+		<!-- <field name="model">simrp.advance</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <form> -->
+				<!-- <header> -->
+					<!-- <field name="status" widget="statusbar"/> -->
+				<!-- </header> -->
+				<!-- <sheet string="Advance Request"> -->
+							<!-- <div class="oe_title pr-0"> -->
+								<!-- <h1 class="d-flex flex-row "></h1> -->
+							<!-- </div> -->
+					<!-- <div class="oe_button_box" name="button_box">		 -->
+					<!-- <button name="close"  type="object" string="Close"   -->
+						<!-- attrs="{'invisible':[('status', 'in', [ 'c'])]}" icon="fa-times-circle" -->
+						<!-- groups="simrp.group_simrp_ceo" -->
+						<!-- class="oe_highlight" context="{'default_advance_id':id,'default_status':status}" /> -->
+					<!-- </div>	 -->
+					<!-- <field name="id" invisible="1"/> -->
+					<!-- <div class="oe_button_box" name="button_box"></div> -->
+					<!-- <div class="oe_title pr-0"> -->
+						<!-- <h1 class="d-flex flex-row "> -->
+							<!-- <field name="employee_" options='{"no_open": True, "no_create": True}' attrs="{'readonly': [('status','=','c')]}"/> -->
+						<!-- </h1> -->
+					<!-- </div> -->
+
+					<!-- <group col="4"> -->
+    <!-- <field name="date"/> -->
+                        <!-- <field name="payment_date" attrs="{'readonly': [('status','=','c')]}"/> -->
+                        <!-- <field name="amount" attrs="{'readonly': [('status','=','c')]}"/> -->
+                        <!-- <field name="bal_amount"/> -->
+
+                        <!-- <field name="reason" colspan="4" attrs="{'readonly': [('status','=','c')]}"/> -->
+                        <!-- <field name="deduction_argmnt" colspan="4" attrs="{'readonly': [('status','=','c')]}"/> -->
+					<!-- </group> -->
+                    <!-- <group colspan="4"> -->
+						<!-- <label for="advancededuction_s" string="Advance Deduction"/> -->
+						<!-- <field name="advancededuction_s" nolabel="1" colspan="4" attrs="{ 'readonly': [('status','not in',['o'])]}"> -->
+							<!-- <tree editable="bottom"> -->
+								<!-- <field name="advance_" invisible="1"/> -->
+								<!-- <field name="date"/> -->
+								<!-- <field name="amount" sum="Total"/> -->
+							<!-- </tree> -->
+						<!-- </field> -->
+					<!-- </group> -->
+				<!-- </sheet> -->
+			<!-- </form> -->
+		<!-- </field> -->
+	<!-- </record> -->
+
+	<!-- <record id="simrp_advance_tree" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.advance.tree</field> -->
+		<!-- <field name="model">simrp.advance</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <tree decoration-info="status=='o'" decoration-danger="status=='c'" > -->
+				<!-- <field name="employee_" /> -->
+				<!-- <field name="date"/> -->
+				<!-- <field name="payment_date"/> -->
+				<!-- <field name="deduction_argmnt"/> -->
+				<!-- <field name="amount"/> -->
+				<!-- <field name="reason"/> -->
+				<!-- <field name="close_date"/> -->
+				<!-- <field name="status"/> -->
+			<!-- </tree> -->
+		<!-- </field> -->
+	<!-- </record> -->
+
+	<!-- <record id="simrp_advance_search" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.advance.search</field> -->
+		<!-- <field name="model">simrp.advance</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <search> -->
+				<!-- <field name="employee_" /> -->
+				<!-- <field name="date"/> -->
+				<!-- <field name="payment_date"/> -->
+				<!-- <field name="deduction_argmnt"/> -->
+				<!-- <field name="amount"/> -->
+				<!-- <field name="reason"/> -->
+				<!-- <field name="close_date"/> -->
+				<!-- <field name="status"/> -->
+				<!-- <filter string="Open Records" name="open_adv" domain="[('status', '=', 'o')]"/> -->
+			<!-- </search> -->
+		<!-- </field> -->
+	<!-- </record> -->
+
+	<!-- <record id="simrp_advance_actions" model="ir.actions.act_window"> -->
+		<!-- <field name="name">Advance Request</field> -->
+		<!-- <field name="res_model">simrp.advance</field> -->
+		<!-- <field name="view_type">form</field> -->
+		<!-- <field name="view_mode">tree,form</field> -->
+		<!-- <field name="context">{'group_by':'employee_', 'search_default_open_adv': 1}</field> -->
+	<!-- </record> -->
+
+	<!-- <menuitem action="simrp_advance_actions" id="simrp_advance_menu" name="Advance Records" parent="simrp_menu_hr_utilities" sequence="" groups="group_simrp_works"/> -->
+</odoo>

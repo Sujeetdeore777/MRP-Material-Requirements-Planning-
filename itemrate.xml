@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_itemrate_form" model="ir.ui.view">
+		<field name="name">simrp.itemrate.form</field>
+		<field name="model">simrp.itemrate</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="archive" type="object" 
+								class="oe_stat_button" icon="fa-folder-open" string="Archive" 
+								attrs="{'invisible': [('active','=',False)]}" 
+								groups="simrp.group_simrp_ceo" />
+					<button name="reactivate" type="object" 
+								class="oe_stat_button" icon="fa-undo" string="Re-activate" 
+								attrs="{'invisible': [('active','=',True)]}" 
+								groups="simrp.group_simrp_ceo" />
+				</header>
+				<sheet string="Itemrate">
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="active" class="mr-3"/>
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="party_" options='{"no_open": True, "no_create": True}'/>
+							<field name="item_" options='{"no_open": True, "no_create": True}' domain="[('state', '=', 'a')]"/>
+							<field name="rate"/>
+    <field name="hsnsac"/>
+    <field name="cname"/>
+								<field name="customerpo"/>
+								<field name="customerpodate"/>
+						</group>
+						<group>
+							<field name="since"/>
+							<field name="taxscheme_" widget="selection" domain="[('account_.type','=','sale')]" options='{"no_open": True}'/>
+							<field name="transport"/>
+							<field name="moq"/>
+							<field name="outputuom_"/>
+							<field name="group"/>
+							<field name="shipparty_" options='{"no_open": True, "no_create": True}'/>
+						</group>
+					</group>
+
+
+
+					<notebook>
+						<page name="Info" string="Subcon Information">
+							<group col="4">
+							
+								<field name="itemprocess_" domain="[('item_','=',item_)]" options='{"no_open": True, "no_create": True}' widget="selection"/>
+								<field name="inputitem_" options='{"no_open": True, "no_create": True}'/>
+
+								<field name="byproductitem_" options='{"no_open": True, "no_create": True}'/>
+								<field name="scrappolicy"/>
+
+								<field name="inputuom_"/>
+								<field name="opconv"/>
+
+								<field name="byproductuom_"/>
+								<field name="byconv"/>
+							</group>
+						</page>
+						<page name="Info" string="Log Text">
+							<group col="4">
+								<field name="log" nolabel="1" colspan="4"/>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_itemrate_tree" model="ir.ui.view">
+		<field name="name">simrp.itemrate.tree</field>
+		<field name="model">simrp.itemrate</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name" />
+				<field name="party_"/>
+				<field name="item_"/>
+				<field name="rate"/>
+							<field name="group"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_itemrate_search" model="ir.ui.view">
+		<field name="name">simrp.itemrate.search</field>
+		<field name="model">simrp.itemrate</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name" />
+				<field name="party_"/>
+				<field name="item_"/>
+				<field name="rate"/>
+							<field name="group"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_itemrate_action" model="ir.actions.act_window">
+		<field name="name">Item Rate</field>
+		<field name="res_model">simrp.itemrate</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_itemrate_action" id="simrp_itemrate_menu" name="Item Rate" parent="simrp_menu_oper_s" sequence="30" groups="group_simrp_user"/>
+
+</odoo>

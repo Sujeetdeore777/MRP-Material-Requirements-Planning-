@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="paperformat_cheque" model="report.paperformat">
+    <field name="name">A4</field>
+    <field name="default" eval="True" />
+    <field name="format">A4</field>
+    <field name="page_height">0</field>
+    <field name="page_width">0</field>
+    <field name="orientation">Portrait</field>
+    <field name="margin_top">0</field>
+    <field name="margin_bottom">0</field>
+    <field name="margin_left">1</field>
+    <field name="margin_right">1</field>
+    <field name="header_line" eval="False" />
+    <field name="header_spacing">0</field>
+    <field name="dpi">96</field>
+</record>
+
+<template id="printcheque">
+    <t t-call="web.basic_layout">
+        <t t-foreach="docs" t-as="doc">
+        <style>
+        div.newpage {
+              width: 210mm;
+              height: 297mm;
+              margin: 1px auto;
+              padding: 10mm;
+              overflow: hidden;
+              page-break-after: always;
+              background: white;
+              transform: scale(0.95);
+            }
+        </style>
+            <t t-foreach="doc.tpayablerecords_s" t-as="d">
+                <t t-if="d.balance &lt; 0 " >
+                <div class="newpage">
+                    <div class="oe_structure"/>
+                    <div style="position:relative; top:-40px;left:615px;font-size:22px;letter-spacing:4px;"><t t-esc="doc.date.strftime('%d  %m %Y')"/></div>
+                    <div style="position:relative; top:-20px;left:5px;font-size: 18px;"><t t-esc="d.party_.name"/></div>
+                    <div style="position:relative; top:-13px;left:20px;font-size: 17px;"><t t-esc="d.a2w()"/></div>
+                    <div style="position:relative; top:6px;left:630px;font-size: 18px;"><t t-esc="abs(d.balance)"/></div>
+                </div>
+                </t>
+            </t>
+        </t>
+    </t>
+</template>
+
+<report
+	id="action_report_printcheque"
+	string="Cheque"
+	model="simrp.tpayable" 
+	report_type="qweb-pdf"
+	file="simrp.printcheque" 
+	name="simrp.printcheque"
+    paperformat="paperformat_cheque"
+	print_report_name="'%s' % (object.date.strftime('%d%m%Y'))"
+/>
+
+</odoo>

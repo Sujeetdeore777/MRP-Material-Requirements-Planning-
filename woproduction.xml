@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_twoproduction_action" model="ir.actions.act_window">
+		<field name="name">Manual Process Start</field>
+		<field name="res_model">simrp.twoproduction</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	
+
+	<record id="simrp_woproduction_form" model="ir.ui.view">
+		<field name="name">simrp.woproduction.form</field>
+		<field name="model">simrp.woproduction</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<field name="adate2"/>
+					<button name="replan" type="object" class="oe_stat_button" icon="fa-check-circle" string="RePlan" attrs="{'invisible': [('state','not in',['s'])]}" groups="simrp.group_simrp_works" />
+					<button name="resubmit" type="object" class="oe_stat_button" icon="fa-check-circle" string="ReSubmit" attrs="{'invisible': [('state','!=',('c'))]}" groups="simrp.group_simrp_works" />
+					<field name="state" widget="statusbar"/>
+				</header>
+
+				<field name="id" invisible="1"/>
+				<div class="oe_button_box" name="button_box">
+					<button name="iotschedulesync" type="object" class="oe_stat_button" icon="fa-sync" string="Manual PR-IoT Sync" attrs="{'invisible': [('state','in',['q','a','c'])]}" groups="simrp.group_simrp_ceo" />
+					<button name="cancelPR" type="object" class="oe_stat_button" icon="fa-cross" string="Cancel Document" attrs="{'invisible': [('state','not in',['d','p'])]}" groups="simrp.group_simrp_user" />
+					<button name="plan" type="object" class="oe_stat_button" icon="fa-check-circle" string="Confirm Plan" attrs="{'invisible': [('state','!=',('d'))]}" groups="simrp.group_simrp_user" />
+	<button name="%(simrp_twoproduction_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="Manual Start" groups="simrp.group_simrp_works" context="{'default_woproduction_':id }" attrs="{'invisible': [('state','not in',['p'])]}"/>
+					<button name="printpr" type="object" class="oe_stat_button" icon="fa-print" string="Print Blank PR" attrs="{'invisible': [('state','not in',['p','s'])]}" groups="simrp.group_simrp_user" />
+					<button name="submit" type="object" class="oe_stat_button" icon="fa-check-circle" string="Submit" attrs="{'invisible': [('state','!=',('s'))]}" groups="simrp.group_simrp_user" />
+					<button name="qc" type="object" class="oe_stat_button" icon="fa-check-circle" string="Data Update" attrs="{'invisible': [('state','!=',('q'))]}" groups="simrp.group_simrp_user" />
+					<button name="rca" type="object" class="oe_stat_button" icon="fa-check-circle" string="Update 8D/RCA" attrs="{'invisible': [('state','!=',('a'))]}" groups="simrp.group_simrp_works" />
+
+				</div>
+
+				<div class="oe_title pr-0">
+					<h1 class="d-flex flex-row ">
+						<field name="name" />-<field name="pmodestr"/>
+					</h1>
+				</div>
+
+				<group col="8" >
+					<field name="machine_" attrs="{'readonly': [('state','not in',['d'])]}"  options='{"no_create": True, "no_open": True}'/>
+					<field name="item_" colspan="4"/>
+					<field name="wo_"/>
+
+					<field name="employee_" attrs="{'readonly': [('state','not in',['d'])]}" options='{"no_create": True, "no_open": True}'/>
+					<field name="itemprocess_" colspan="4"/>
+					<field name="planqty" attrs="{'readonly': [('state','!=','d')]}"/>
+
+					<field name="fpaemployee_" options='{"no_create": True, "no_open": True}' attrs="{'invisible': [('state','not in',['d','p'])]}" />
+					<field name="planhrs"  attrs="{'invisible': [('state','!=','d')]}" colspan="2"/>
+					<field name="plantimestamp" attrs="{'readonly': [('state','not in',['d','p'])], 'invisible': [('state','not in',['p'])]}"/>
+
+					<field name="itspeed" string="Target / hr"  style="font-weight: bold"/>
+				</group>
+				<group col="8" attrs="{'invisible': [('state','in',['d','p'])]}">
+					<field name="fpaemployee_" options='{"no_create": True, "no_open": True}' attrs="{'readonly': [('state','in',['c','a'])] }"/>
+					<field name="pstime"/>
+					<field name="apdtime" attrs="{'readonly': [('state','in',['c','a'])]}"/>
+					<field name="aspeed" string="Achieved / hr" style="color: green"/>
+
+					<field name="qcemployee_" options='{"no_create": True, "no_open": True}' attrs="{'readonly': [('state','in',['c','a'])]}"/>
+					<field name="petime1" attrs="{'readonly': [('state','in',['c','a'])]}"/>
+					<field name="okqty" attrs="{'readonly': [('state','in',['c','a'])] }"/>
+					<field name="p" colspan="2" style="color: blue"/>
+
+
+					<field name="datamode"/>
+					<field name="prodtime"/>
+					<!-- <field name="submittime"/> -->
+					<field name="rejqty" attrs="{'readonly': [('state','in',['c','a'])] }"/>
+					<field name="q" style="color: red"/>
+
+					<field name="wobyproduct_s" colspan="3"  nolabel="1" class="small" attrs="{'readonly': [('state','in',['c','a'])] }">
+						<tree editable="bottom" create="false" delete="false">
+							<field name="item_" string="By-Product"/>
+							<field name="qtyper"/>
+							<field name="pqty"/>
+							<field name="aqty"/>
+						</tree>
+
+					</field>
+					<field name="wotoolconsume_s" colspan="5" nolabel="1" class="small" attrs="{'readonly': [('state','in',['c','a'])] }">
+						<tree editable="bottom"  create="false" delete="false">
+							<field name="item_" string="Tool Name"/>
+							<field name="expectedlife"/>
+							<field name="wotoolqty"/>
+						</tree>
+					</field>
+			</group>
+			<group col="8" colspan="8" attrs="{'invisible': [('state','in',['d','p','s','q'])]}">
+					<field name="timeloss"/>
+					<field name="topq"/>
+					<field name="copq"/>
+					<field name="cianotes" attrs="{'readonly': [('state','in',['c'])] }"/>
+			</group>
+
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_woproduction_tree" model="ir.ui.view">
+		<field name="name">simrp.woproduction.tree</field>
+		<field name="model">simrp.woproduction</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='c'" class="small">
+				<field name="name"/>
+					<!-- <field name="datamode"  attrs="{'invisible': [('datamode','=','a')]}"/> -->
+				<field name="processmode"/>
+				<field name="adate2"/>
+				<field name="machine_"/>
+				<field name="employee_"/>
+				<field name="item_"/>
+				<field name="itemprocess_"/>
+				<field name="okqty" sum="a"/>
+				<field name="rejqty" sum="a"/>
+				<field name="copq" sum="a"/>
+				<field name="plantimestamp" attrs="{'invisible': [('state','not in',['p'])]}"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_woproduction_search" model="ir.ui.view">
+		<field name="name">simrp.woproduction.search</field>
+		<field name="model">simrp.woproduction</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="processmode"/>
+				<field name="adate2"/>
+				<field name="item_"/>
+				<field name="itemprocess_"/>
+				<field name="machine_"/>
+				<field name="employee_"/>
+				<field name="state"/>
+				<field name="fpaemployee_"/>
+				<field name="qcemployee_"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_woproduction_action" model="ir.actions.act_window">
+		<field name="name">WO Production Records</field>
+		<field name="res_model">simrp.woproduction</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_woproduction_action" id="simrp_woproduction_menu" name="Production Records" parent="simrp_menu_ppc" sequence="" groups="group_simrp_user"/>	
+
+	<record id="simrp_woproduction_action1" model="ir.actions.act_window">
+		<field name="name">Major Internal Rejections</field>
+		<field name="res_model">simrp.woproduction</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('copq','&gt;',1000)]</field>
+		
+	</record>
+	<menuitem action="simrp_woproduction_action1" id="simrp_woproduction_menu1" name="Internal Rejection" parent="simrp_menu_qc_record" sequence="" groups="group_simrp_user"/>	
+
+
+	<record id="simrp_twoproduction_form" model="ir.ui.view">
+		<field name="name">simrp.twoproduction.form</field>
+		<field name="model">simrp.twoproduction</field>
+		<field name="arch" type="xml">
+			<form>
+				<group col="4">
+					<field name="stime"/>
+				</group>
+				<footer>
+					<button string="Manual Start" name="start" type="object" class="btn-primary" icon="fa-plus" groups="simrp.group_simrp_works"/>
+					<button string="Cancel" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+
+	
+</odoo>

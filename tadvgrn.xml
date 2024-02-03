@@ -1,0 +1,41 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<!-- <odoo> -->
+
+	<!-- <record id="simrp_tadvancegrn_form" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.tadvancegrn.form</field> -->
+		<!-- <field name="model">simrp.tadvancegrn</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <form> -->
+				<!-- <sheet string="Tool GRN"> -->
+
+					<!-- <group col="6"> -->
+						<!-- <group colspan="6" col="6"> -->
+							<!-- <field name="item_" options='{"no_create": True}' domain="[('type','=',['insert','cons'])]" colspan="4"/> -->
+							<!-- <field name="agrndatetime"/> -->
+							
+							<!-- <field name="party_" options='{"no_create": True}' colspan="4"/> -->
+
+							<!-- <field name="des" colspan="6"/>	 -->
+						
+							<!-- <hr colspan="6"/> -->
+							
+							<!-- <field name="receiveqty" /> -->
+							<!-- <field name="rate"/> -->
+							<!-- <field name="taxscheme_" widget="selection" domain="[('account_.type','=','purc')]"/> -->
+
+							<!-- <hr colspan="6"/> -->
+
+						<!-- </group> -->
+					<!-- </group> -->
+					<!-- </sheet> -->
+                    <!-- <footer> -->
+                        <!-- <button string="Submit" name="createline" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user"/> -->
+                        <!-- <button string="Discard" class="btn-secondary" special="cancel"/> -->
+                    <!-- </footer> -->
+			<!-- </form> -->
+		<!-- </field> -->
+	<!-- </record> -->
+
+<!-- </odoo> -->
+
+                                <button name="%(simrp_tadvancegrntool_action)d" type="action" class="oe_stat_button" icon="fa-folder-open" attrs="{'invisible': [('state','!=',('d'))]}" string="DT-GRN" groups="simrp.group_simrp_works" />

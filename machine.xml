@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_machine_form" model="ir.ui.view">
+		<field name="name">simrp.machine.form</field>
+		<field name="model">simrp.machine</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+				<sheet string="Machine">
+
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+                    <field name="viilinkcode" />
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_machine_tree" model="ir.ui.view">
+		<field name="name">simrp.machine.tree</field>
+		<field name="model">simrp.machine</field>
+		<field name="arch" type="xml">
+			<tree editable="bottom">
+				<field name="name" />
+				<field name="viilinkcode" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_machine_search" model="ir.ui.view">
+		<field name="name">simrp.machine.search</field>
+		<field name="model">simrp.machine</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name" />
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_machine_action" model="ir.actions.act_window">
+		<field name="name">Machine</field>
+		<field name="res_model">simrp.machine</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_machine_action" id="simrp_machine_menu" name="Machine" parent="simrp_menu_master_process" sequence="" groups="group_simrp_user"/>
+
+</odoo>

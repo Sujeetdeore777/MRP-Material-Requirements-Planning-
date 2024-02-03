@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="printdc">
+		<t t-call="web.basic_layout">
+			<t t-foreach="docs" t-as="doc">
+
+				<div class="page">
+					<div class="oe_structure"/>
+
+					<style type="text/css">
+	.bgp {
+	  background-color: #000 !important;
+	  color: #FFF;
+	}
+
+  @media print {
+    .bgp {
+      background-color: #000 !important;
+    }
+    .table td {
+      background-color: transparent !important;
+    }
+  }
+					</style>
+
+				<t t-foreach="[1,2]" t-as="copy">
+				
+					<table class="table bgp mb-0" >
+						<tr>
+							<td>
+								<img src='/web/binary/company_logo' />
+							</td>
+							<td align="center" class="align-bottom" style="color: GreenYellow">
+								<t t-esc="res_company.website"/>
+							</td>
+							<td align="right" class="h1 align-bottom">Delivery Challan [C]</td>					
+						</tr>
+					</table>
+					<table class="table mb-0" height="10%">
+						<tr>
+							<td class="h6 small" width="64%">
+								<span class="h6 font-weight-bold">
+									<t t-esc="res_company.name"/>
+								</span>
+								<br/>
+								<t t-esc="res_company.street"/>, <t t-esc="res_company.street2"/>
+								<br/>
+						City: <t t-esc="res_company.city"/>, <t t-esc="res_company.zip"/>
+								<br/>
+						State: <t t-esc="res_company.state_id.name"/>, Code: <t t-esc="res_company.state_id.code"/>
+								<br/>
+						E-mail: <t t-esc="res_company.email"/>
+								<br/>
+								<span class="font-weight-bold">GST No.: <t t-esc="res_company.company_registry"/>
+								</span>
+							</td>
+							<td class="m-0 p-0" >
+								<table class="table" border="0">
+									<tr>
+										<td class="h6 small text-right font-weight-bold" width="24%">DC. No.:</td>
+										<td class="h2 text-right font-weight-bold">
+											<t t-esc="doc.name"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right">DC. Date:</td>
+										<td class="h5 text-right font-weight-bold">
+											<t t-esc="doc.recdate.strftime('%d.%m.%Y')"/>
+										</td>
+									</tr>
+								</table>
+							</td>					
+						</tr>
+					</table>
+					<table class="table table-bordered" height="15%">
+						<tr >
+							<td width="64%" class="h5">
+								<span class="h6 font-weight-bold">Deliver To</span>
+								<br/>
+								<br/>
+								<t t-set="t_ship" t-value="doc.party_"/>
+								<t t-if="doc.shipparty_">
+									<t t-set="t_ship" t-value="doc.shipparty_"/>
+								</t>
+								<span class="">
+									<t t-esc="t_ship.name"/>
+								</span>
+								<br/>
+								<t t-esc="t_ship.address1"/>
+								<br/>
+								<t t-esc="t_ship.address2"/>
+								<br/>
+								<t t-esc="t_ship.address3"/>
+								<br/>
+							</td>
+
+							<td class="m-0 p-0">
+								<table class="table m-0 p-0" height="100%">
+									<tr>
+										<td class="h6 small text-right m-0 p-1" width="24%">PO. No.:</td>
+										<td class="h5 text-right m-0 p-1">
+											<t t-esc="doc.saleorder_.pono"/><br/>
+											<div style="font-size: 2.5vh"><t t-esc="doc.saleorder_.podate.strftime('%d.%m.%Y')"/></div>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right m-0 p-1">Transport:</td>
+										<td class="h6 text-right m-0 p-1">
+											<t t-esc="doc.transport"/><br/>
+											<div style="font-size: 2.5vh"><t t-esc="doc.transportparty_.name"/></div>
+										</td>
+									</tr>
+									<tr>
+										<td class="h6 small text-right m-0 p-1">Eway Bill:</td>
+										<td class="h6 text-right m-0 p-1">
+											<t t-esc="doc.eway"/><br/>
+											<div style="font-size: 2.5vh"><t t-esc="doc.vehicle"/></div>
+										</td>
+									</tr>
+								</table>
+							</td>					
+						</tr>
+					</table>
+					<table class="table table-sm o_main_table table-bordered" height="100" width="100%" border="1">
+						<thead style="background-color: lightgray">
+							<tr height="7%" >
+								<th class="text-left" width="43%">Item Description</th>
+								<th class="text-left" width="30%">ASN</th>
+								<th class="text-left" width="10%">HSN/SAC</th>
+								<th class="text-right" width="10%">Quantity</th>
+								<th class="text-left" width="7%">unit</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody">
+							<tr>
+								<td class="text-left">
+									<t t-if="doc.saleorder_.itemrate_.cname">
+										<b><t t-esc="doc.saleorder_.itemrate_.cname"/></b>
+										<br/>
+									</t>
+									<t t-esc="doc.item_.name"/>
+									<br/>
+									<t t-esc="doc.pack"/>
+									<br/>
+								</td>
+									<td class="text-left small m-0 p-1" style="border: none;">
+							<t t-if="doc.asn">
+										<img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1' % ('Code128', doc.asn, 300, 50)" /><br/>
+										<b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Customer ASN:</b> <t t-esc="doc.asn"/>
+							</t>
+									</td>
+								
+								<td class="text-left pt-4" >
+									<t t-esc="doc.saleorder_.itemrate_.hsnsac"/>
+								</td>
+								<td class="text-right pt-4">
+									<t t-esc="'{:.2f}'.format( doc.okoutqty )"/>
+								</td>
+								<td class="text-left pt-4"><t t-esc="doc.item_.uom_.name"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table width="100%" height="90" border="1" class="table-bordered">
+									<tr height="90">
+										<td width="50%" class="text-lift small align-bottom">Customer Receipt Acknowledgement</td>
+										<td width="50%" class="text-right align-bottom">For, <b>
+												<t t-esc="res_company.name"/>
+											</b>, Authorised Signatory.</td>
+									</tr>
+					</table>
+					---<br/>
+					<br/>
+				</t>
+				</div>
+			</t>
+		</t>
+
+	</template>
+
+	<report 
+		id="action_report_printdc"
+		string="Delivery Challan"
+		model="simrp.dispatch" 
+		report_type="qweb-html"
+		file="simrp.printdc" 
+		name="simrp.printdc"
+		paperformat="simrp.paperformat_inv"
+		print_report_name="'%s' % (object.name)"
+	/>
+	<report 
+		id="action_report_printdcpdf"
+		string="Delivery Challan"
+		model="simrp.dispatch" 
+		report_type="qweb-pdf"
+		file="simrp.printdc" 
+		name="simrp.printdc"
+		paperformat="simrp.paperformat_inv"
+		print_report_name="'%s' % (object.name)"
+	/>
+
+</odoo>

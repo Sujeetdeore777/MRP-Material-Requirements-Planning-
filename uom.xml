@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+	<record id="simrp_uom_tree" model="ir.ui.view">
+		<field name="name">simrp.uom.tree</field>
+		<field name="model">simrp.uom</field>
+		<field name="arch" type="xml">
+			<tree editable="bottom" >
+				<field name="name"/>
+				<field name="gstcode"/>
+				<field name="gstr1code"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_uom_search" model="ir.ui.view">
+		<field name="name">simrp.uom.search</field>
+		<field name="model">simrp.uom</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="gstcode"/>
+				<field name="gstr1code"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_uom_action" model="ir.actions.act_window">
+		<field name="name">Uom</field>
+		<field name="res_model">simrp.uom</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_uom_action" id="simrp_uom_menu" name="Uom" parent="simrp_Mlist" sequence="100" groups="group_simrp_user"/>
+	
+    <data noupdate="1">
+        <record id="uom1" model="simrp.uom">
+            <field name="id">1</field>
+            <field name="name">pc</field>
+			<field name="gstcode">PCS</field>
+        </record>
+        <record id="uom2" model="simrp.uom">
+            <field name="id">2</field>
+            <field name="name">kg</field>
+			<field name="gstcode">KGS</field>
+        </record>
+        <record id="uom3" model="simrp.uom">
+            <field name="id">3</field>
+            <field name="name">meter</field>
+			<field name="gstcode">MTR</field>
+        </record>
+        <record id="uom4" model="simrp.uom">
+            <field name="id">4</field>
+            <field name="name">liter</field>
+			<field name="gstcode">LTR</field>
+        </record>
+        <record id="uom5" model="simrp.uom">
+            <field name="id">5</field>
+            <field name="name">unit</field>
+			<field name="gstcode">UNT</field>
+        </record>
+    </data>
+	
+</odoo>

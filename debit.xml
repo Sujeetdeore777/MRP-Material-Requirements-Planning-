@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_debit_form" model="ir.ui.view">
+		<field name="name">simrp.debit.form</field>
+		<field name="model">simrp.debit</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="delete" type="object" class="oe_stat_button" icon="fa-folder-open" string="Delete Record" groups="simrp.group_simrp_ceo" />
+					<button name="redraft" type="object" class="oe_stat_button" icon="fa-print" string="Redraft" attrs="{'invisible': [('state','in',['p'])]}" groups="simrp.group_simrp_ceo" />
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Debit">
+					<div class="oe_button_box" name="button_box">
+						<button name="post" type="object" class="oe_stat_button" icon="fa-folder-open" string="Post Accouting" attrs="{'invisible': [('state','!=',('p'))]}" groups="simrp.group_simrp_works" />
+						<button name="prepareDC" type="object" class="oe_stat_button" icon="fa-print" string="Prepare DC" attrs="{'invisible': [('state','!=',('a'))]}" groups="simrp.group_simrp_user" />
+						<button name="printDC" type="object" class="oe_stat_button" icon="fa-print" string="Print DC" attrs="{'invisible': [('state','in',['p'])]}" groups="simrp.group_simrp_iuser" />
+						<button name="ack" type="object" class="oe_stat_button" icon="fa-folder-open" string="Acknowledge and Close" attrs="{'invisible': [('state','!=',('dc'))]}" groups="simrp.group_simrp_works" />
+						<button name="close" type="object" class="oe_stat_button" icon="fa-folder-open" string="Close w/o Material Movement" attrs="{'invisible': [('state','!=',('a'))]}" groups="simrp.group_simrp_works" />
+						<button name="printDCpdf" type="object" class="oe_stat_button" icon="fa-print" string="Download DN" attrs="{'invisible': [('state','in',['p'])]}" groups="simrp.group_simrp_iuser" />
+						
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group col="4">
+							<field name="rdate"  attrs="{'readonly': [('state','in',[ 'ack', 'mna' ])]}" />
+							<field name="qcinspection_" />
+
+							<field name="party_" options='{"no_create": True, "no_open": True}' attrs="{'readonly': ['|',('state','in',[ 'ack', 'mna' ]),('qcinspection_','!=',False)]}" colspan="4"/>
+							<field name="ar" colspan="4" attrs="{'readonly': [('state','in',[ 'ack', 'mna' ])]}"/>
+							<field name="gstreturn" attrs="{'readonly': [('state','in',[ 'ack', 'mna' ])]}"/>
+							<field name="taxscheme_"  options='{"no_open": True, "no_create": True}' attrs="{'readonly': [('state','in',[ 'ack', 'mna' ])]}"/>
+							<field name="basicamount"  attrs="{'readonly': [('state','in',[ 'ack', 'mna' ])]}"/>
+							<field name="netamount"/>
+							<hr colspan="4"/>
+							<field name="dndelivery" attrs="{'readonly': [('state','in',[ 'ack', 'mna' ])]}"/>
+							<field name="returntransport" attrs="{'readonly': [('state','in',[ 'ack', 'mna' ])]}"/>
+					</group>
+
+					<notebook>
+						<page name="p1" string="Account Postings">
+							<group col="4">
+								<field name="accline_s" nolabel="1" colspan="4"/>
+								<field name="group" attrs="{'readonly': [('state','in',[ 'ack', 'mna' ])]}"/>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_debit_tree" model="ir.ui.view">
+		<field name="name">simrp.debit.tree</field>
+		<field name="model">simrp.debit</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='a'" >
+				<field name="name" />
+				<field name="rdate"/>
+				<field name="party_"/>
+							<field name="netamount"/>
+				<field name="dndelivery"/>
+				<field name="returntransport"/>
+							<field name="gstreturn"/>
+				<field name="state"/>
+								<field name="group"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_debit_search" model="ir.ui.view">
+		<field name="name">simrp.debit.search</field>
+		<field name="model">simrp.debit</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name" />
+				<field name="rdate"/>
+				<field name="party_"/>
+				<field name="state"/>
+							<field name="gstreturn"/>
+								<field name="group"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_debit_action" model="ir.actions.act_window">
+		<field name="name">Debit Note</field>
+		<field name="res_model">simrp.debit</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_debit_action" id="simrp_debit_menu" name="Debit Note" parent="simrp_menu_account_transact" sequence="" groups="group_simrp_user"/>
+
+	<record id="simrp_debitv_action" model="ir.actions.act_window">
+		<field name="name">Debit Note</field>
+		<field name="res_model">simrp.debit</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('group','=','v')]</field>
+		<field name="context">{'default_group':'v'}</field>
+	</record>
+
+	<menuitem action="simrp_debitv_action" id="simrp_debitv_menu" name="V Debit Notes" parent="simrp_menu_account_transact_v" sequence="60" groups="group_simrp_iuser"/>
+
+
+</odoo>

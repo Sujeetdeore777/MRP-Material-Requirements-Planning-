@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="accentry" model="simrp.accentry">
+            <field name="id">1</field>
+            <field name="name">x</field>
+        </record>
+		
+        <record id="account1" model="simrp.account">
+            <field name="id">1</field>
+            <field name="name">TDS 94C Payable to Govt.</field>
+            <field name="type">tax</field>
+        </record>
+        <record id="account2" model="simrp.account">
+            <field name="id">2</field>
+            <field name="name">TDS 94C Deducted by Customer</field>
+            <field name="type">fund</field>
+        </record>
+        <record id="account3" model="simrp.account">
+            <field name="id">3</field>
+            <field name="name">[reserved]</field>
+            <field name="type">tax</field>
+        </record>
+        <record id="account4" model="simrp.account">
+            <field name="id">4</field>
+            <field name="name">[reserved]</field>
+            <field name="type">tax</field>
+        </record>
+        <record id="account5" model="simrp.account">
+            <field name="id">5</field>
+            <field name="name">[reserved]</field>
+            <field name="type">tax</field>
+        </record>
+        <record id="account6" model="simrp.account">
+            <field name="id">6</field>
+            <field name="name">[reserved]</field>
+            <field name="type">tax</field>
+        </record>
+        <record id="account7" model="simrp.account">
+            <field name="id">7</field>
+            <field name="name">[reserved]</field>
+            <field name="type">tax</field>
+        </record>
+        <record id="account8" model="simrp.account">
+            <field name="id">8</field>
+            <field name="name">[reserved]</field>
+            <field name="type">tax</field>
+        </record>
+        <record id="account9" model="simrp.account">
+            <field name="id">9</field>
+            <field name="name">[reserved]</field>
+            <field name="type">tax</field>
+        </record>
+        <record id="account10" model="simrp.account">
+            <field name="id">10</field>
+            <field name="name">[reserved]</field>
+            <field name="type">tax</field>
+        </record>
+    </data>
+
+</odoo>

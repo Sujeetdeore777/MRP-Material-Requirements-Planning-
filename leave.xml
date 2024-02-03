@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<!-- <record id="simrp_leave_form" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.leave_req.form</field> -->
+		<!-- <field name="model">simrp.leave_req</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <form> -->
+				  <!-- <header> -->
+                 <!-- <field name="status" widget="statusbar"/> -->
+                          
+                <!-- </header> -->
+				<!-- <sheet string="Leave Request"> -->
+							<!-- <div class="oe_title pr-0"> -->
+								<!-- <h1 class="d-flex flex-row "></h1> -->
+							<!-- </div> -->
+							<!-- <div class="oe_button_box" name="button_box"> -->
+							<!-- <button name="apprv" type="object"  -->
+									<!-- class="oe_stat_button" icon="fa-check-circle" string="Approved"  -->
+									<!-- attrs="{'invisible': [('status','in',['Approved'] )]}"  -->
+									<!-- groups="simrp.group_simrp_ceo" -->
+									<!-- context="{'default_leave_req_id':id,'default_status':status}"/> -->
+							<!-- </div> -->
+					<!-- <field name="id" invisible="1"/> -->
+					<!-- <div class="oe_button_box" name="button_box"> -->
+					<!-- </div> -->
+
+					<!-- <div class="oe_title pr-0"> -->
+						<!-- <h1 class="d-flex flex-row "> -->
+							<!-- <field name="employee_" /> -->
+						<!-- </h1> -->
+					<!-- </div> -->
+
+					<!-- <group col="4"> -->
+    <!-- <field name="from_date"/> -->
+    <!-- <field name="fromdate_half"/> -->
+
+    <!-- <field name="to_date"/> -->
+    <!-- <field name="todate_half"/> -->
+
+    <!-- <field name="reason" colspan="4"/> -->
+					<!-- </group> -->
+				<!-- </sheet> -->
+			<!-- </form> -->
+		<!-- </field> -->
+	<!-- </record> -->
+
+	<record id="simrp_leave_tree" model="ir.ui.view">
+		<field name="name">simrp.leave_req.tree</field>
+		<field name="model">simrp.leave_req</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="status=='Approved'" decoration-danger="status=='Unapproved'" editable="bottom">
+				<field name="employee_"  options='{"no_open": True, "no_create": True}' attrs="{'readonly': [('status','=','Approved')]}"/>
+				<field name="from_date" attrs="{'readonly': [('status','=','Approved')]}"/>
+				<field name="to_date" attrs="{'readonly': [('status','=','Approved')]}"/>
+				<field name="fromdate_half" attrs="{'readonly': [('status','=','Approved')]}"/>
+				<field name="reason" attrs="{'readonly': [('status','=','Approved')]}"/>
+				<field name="status"/>
+                <button name="apprv" type="object" class="oe_stat_button" icon="fa-folder-open" string="Approve" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('status','=','Approved')]}"/>
+                <button name="unapprove" type="object" class="oe_stat_button" icon="fa-folder-open" string="Cancel Approval" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('status','=','Unapproved')]}"/>
+			</tree>
+		</field>
+	</record>
+
+	<!-- <record id="simrp_leave_tree1" model="ir.ui.view"> -->
+		<!-- <field name="name">simrp.leave_req.tree</field> -->
+		<!-- <field name="model">simrp.leave_req</field> -->
+		<!-- <field name="arch" type="xml"> -->
+			<!-- <tree decoration-success="status=='Approved'" decoration-danger="status=='Unapproved'" > -->
+				<!-- <field name="employee_" /> -->
+				<!-- <field name="from_date"/> -->
+				<!-- <field name="to_date"/> -->
+				<!-- <field name="reason"/> -->
+				<!-- <field name="status"/> -->
+			<!-- </tree> -->
+		<!-- </field> -->
+	<!-- </record> -->
+
+
+	<record id="simrp_leave_search" model="ir.ui.view">
+		<field name="name">simrp.leave_req.search</field>
+		<field name="model">simrp.leave_req</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="employee_"/>
+				<field name="reason"/>
+				<field name="status"/>
+				<filter string="Unapproved Leaves" name="leaves_u" domain="[('status', '=', 'Unapproved')]"/>
+			</search>
+		</field>
+	</record>
+
+        <!-- <record model="ir.ui.view" id="l_kanban"> -->
+            <!-- <field name="name">simrp.leave_req.kanban</field> -->
+            <!-- <field name="model">simrp.leave_req</field> -->
+            <!-- <field name="arch" type="xml"> -->
+                <!-- <kanban class="o_kanban_mobile"> -->
+                    <!-- <field name="employee_"/> -->
+					<!-- <field name="from_date"/> -->
+					<!-- <field name="to_date"/> -->
+					<!-- <field name="status"/> -->
+                    <!-- <templates> -->
+                        <!-- <t t-name="kanban-box"> -->
+                            <!-- <div t-attf-class="oe_kanban_card oe_kanban_global_click"> -->
+                                <!-- <div class="o_kanban_record_top mb8"> -->
+                                    <!-- <strong> -->
+                                            <!-- <field name="employee_"/><br /> -->
+                                            <!-- Leave Date: -->
+                                            <!-- <field name="from_date"/> - <field name="to_date"/><br /> -->
+											<!-- Reason: -->
+                                            <!-- <field name="reason"/> -->
+                                    <!-- </strong> -->
+                                <!-- </div> -->
+                                <!-- <div class="o_kanban_record_bottom"> -->
+                                            <!-- <div class="oe_kanban_bottom_left"> -->
+                                                <!-- <field name="status" widget="label_selection" options="{'classes': { 'Approved': 'success'}}"/> -->
+                                            <!-- </div> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
+                        <!-- </t> -->
+                    <!-- </templates> -->
+                <!-- </kanban> -->
+            <!-- </field> -->
+        <!-- </record> -->
+
+
+
+	<record id="simrp_leave_action1" model="ir.actions.act_window">
+		<field name="name">Leave Request</field>
+		<field name="res_model">simrp.leave_req</field>
+		<field name="view_type">form</field>
+		<!-- <field name="view_mode">tree,form,kanban</field> -->
+		<field name="view_mode">tree,form</field>
+		<field name="context">{'search_default_leaves_u': 1}</field>
+		<!-- <field name="view_id" ref="simrp_leave_tree"/> -->
+		<!-- <field name="view_id" ref="simrp_leave_form"/> -->
+		<!-- <field name="view_id" ref="l_kanban"/> -->
+		<!-- <field name="context">{'group_by':'status'}</field> -->
+		<!-- <field name="domain">[('to_date', '&gt;', (context_today() - datetime.timedelta(days=2)).strftime('%Y-%m-%d') )]</field> -->
+	</record>
+
+	<!-- <record id="simrp_leave_actiontree" model="ir.actions.act_window"> -->
+		<!-- <field name="name">Leave Record History</field> -->
+		<!-- <field name="res_model">simrp.leave_req</field> -->
+		<!-- <field name="view_mode">tree</field> -->
+		<!-- <field name="view_id" ref="simrp_leave_tree1"/> -->
+	<!-- </record> -->
+
+	<menuitem action="simrp_leave_action1" id="simrp_leave_menu" name="Leaves Register" parent="simrp_menu_hr_salary" sequence="100" groups="group_simrp_user"/>
+
+	<!-- <menuitem action="simrp_leave_actiontree" id="simrp_leavetree_menu" name="Leave History" parent="simrp_menu_hr_salary" sequence="" groups="group_simrp_user"/> -->
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_treturnabledc_form" model="ir.ui.view">
+		<field name="name">simrp.treturnabledc.form</field>
+		<field name="model">simrp.treturnabledc</field>
+		<field name="arch" type="xml">
+			<form>
+
+				<group colspan="4">
+					<field name="item_" colspan="4" domain="[('state', '=', 'a')]" options='{"no_create": True}'/>
+					<field name="party_" colspan="4" options='{"no_create": True}'/>
+					<field name="qty" colspan="4"/>
+					<field name="crosscheck" colspan="4"/>
+				</group>
+				<footer>
+					<button string="Confirm and Send Material" name="createDC" type="object" 
+						class="btn-primary o_open_tasks" icon="fa-plus" 
+						groups="simrp.group_simrp_user"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+
+	<record id="simrp_treturnabledc_action" model="ir.actions.act_window">
+		<field name="name">Temporary Returnable DC</field>
+		<field name="res_model">simrp.treturnabledc</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_treturnabledc_action" id="simrp_treturnabledc_menu" name="Temporary Returnable DC" parent="simrp_menu_material_out" sequence="30" groups="group_simrp_user"/>
+</odoo>

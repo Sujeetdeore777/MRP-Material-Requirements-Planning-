@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_employee_form" model="ir.ui.view">
+		<field name="name">simrp.employee.form</field>
+		<field name="model">simrp.employee</field>
+		<field name="arch" type="xml">
+			<form>
+				<!-- <header> -->
+				<!-- <button name="lock" type="object" class="oe_stat_button" icon="fa-check-circle" string="Lock Record" attrs="{'invisible': [('state','=','l')]}" groups="simrp.group_simrp_ceo"/> -->
+				<!-- <button name="open" type="object" class="oe_stat_button" icon="fa-check-circle" string="UnLock Record" attrs="{'invisible': [('state','=','n')]}" groups="simrp.group_simrp_ceo"/> -->
+				<!-- <field name="state" widget="statusbar"/> -->
+				<!-- </header> -->
+				<sheet string="Employee">
+					<div class="oe_button_box" name="button_box">
+						<button name="unactivate" type="object" class="oe_stat_button" icon="fa-undo" string="In-activate" attrs="{'invisible': [('active','=',False)]}" groups="simrp.group_simrp_works"/>
+						<button name="salaryinactive" type="object" class="oe_stat_button" icon="fa-undo" string="Salary Deactivate" attrs="{'invisible': [('salaryactive','=',False)]}" groups="simrp.group_simrp_works"/>
+					</div>
+					<div class="oe_title pr-0" style="width:50%">
+						<h1 class="d-flex flex-row">
+							<field name="code" style="width:40%"/>
+							<field name="active"/>
+							<field name="salaryactive"/>
+							<field name="name"/>
+						</h1>
+					</div>
+					<group col="6"  style="background-color:#ffffe6">
+						<group colspan="2">
+							<field name="id" invisible="1"/>
+							<field name="bu_" widget="selection"/>
+							<field name="attcode"/>
+							<field name="dob"/>
+							<field name="gender"/>
+							<field name="doj"/>
+							<field name="type"/>
+						</group>
+						<group colspan="2">
+							<field name="aadhar_no"/>
+							<field name="panno"/>
+
+							<field name="uniform_category"/>
+							<field name="shirt_apron_size" />
+							<field name="shoe_size"/>
+							<field name="lastuniformissue"/>
+						</group>
+						<group colspan="2">
+							<field name="contractparty_" options='{"no_create": True}'/>
+							<field name="contractcost"/>
+							<field name="bankac"/>
+							<field name="bankifsc"/>
+							<field name="bankacname" placeholder="If different.." string="A/c Name"/>
+							<field name="bankphoto" filename="bankphotoname" target="_blank" />
+							<field name="bankphotoname" invisible="1"/>
+						</group>
+					</group>
+					<group col="8"  style="background-color:#e6ffe6">
+						<group style="width:25%">
+							<field name="salarytype"/>
+							<field name="salary" attrs="{'invisible': [('id','!=',False)]}" />
+							<field name="hourlybasis"/>
+							<field name="workhours"/>
+						</group>
+						<group style="width:25%">
+								<field name="espf"/>
+								<field name="bonus"/>
+								<field name="leaves"/>
+						</group>
+						<group style="width:25%">
+								<field name="esicacno"/>
+								<field name="pfacno"/>
+								<field name="basewage"/>
+						</group>
+						<group style="width:25%">
+							<field name="salary" attrs="{'invisible': [('id','=',False)]}" groups="simrp.group_simrp_ceo" string="Salary."/>
+										<field name="daycost8" groups="simrp.group_simrp_ceo"/>
+									<field name="daycost115"  groups="simrp.group_simrp_ceo"/>
+						</group>
+					</group>
+
+					<group col="8" style="background-color:#ffe6e6">
+							<field name="localaddress" colspan="6"/>
+								<field name="mobile"/>
+							<field name="homeaddress" colspan="6"/>
+								<field name="homecontact"/>
+							<!--<field name="shift_" widget="selection"/>-->
+							<field name="shahsyncid"/>
+					</group>
+					<field name="log" colspan="4"/>
+					
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="simrp_employee_tree" model="ir.ui.view">
+		<field name="name">simrp.employee.tree</field>
+		<field name="model">simrp.employee</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+				<field name="code"/>
+				<field name="bu_"/>
+				<field name="id"/>
+				<!--<field name="shift_"/>-->
+				<field name="type"/>
+					<field name="shahsyncid"/>
+				<field name="attcode"/>
+				<field name="doj"/>
+				<field name="salarytype"/>
+				<field name="hourlybasis" string="Hr. OT"/>
+				<field name="contractparty_"/>
+				<field name="espf"/>
+				<field name="active"/>
+				<field name="salaryactive" string="Slry"/>
+				<button name="salaryinactive" type="object" class="oe_stat_button" icon="fa-undo" string="Salary Deactivate" attrs="{'invisible': [('salaryactive','=',False)]}" groups="simrp.group_simrp_works"/>
+			</tree>
+		</field>
+	</record>
+	<record id="simrp_employee_search" model="ir.ui.view">
+		<field name="name">simrp.employee.search</field>
+		<field name="model">simrp.employee</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="code"/>
+				<field name="bu_"/>
+				<field name="attcode"/>
+				<!--<field name="shift_"/>-->
+				<field name="doj"/>
+				<field name="salarytype"/>
+					<field name="shahsyncid"/>
+				<field name="hourlybasis"/>
+				<field name="contractparty_"/>
+				<field name="espf"/>
+				<field name="active"/>
+				<field name="salaryactive"/>
+				<filter string="Active False" name="false_active" domain="[('active','=', False )]"/>
+			</search>
+		</field>
+	</record>
+	<record id="simrp_employee_action" model="ir.actions.act_window">
+		<field name="name">Employee</field>
+		<field name="res_model">simrp.employee</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+	<menuitem action="simrp_employee_action" id="simrp_employee_menu" name="Employee" parent="simrp_menu_master_process" sequence="" groups="group_simrp_user"/>
+</odoo>

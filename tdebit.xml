@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="tdebit_form" model="ir.ui.view">
+		<field name="name">tdebit_form</field>
+		<field name="model">simrp.tdebit</field>
+		<field name="arch" type="xml">
+			<form string="Retro Debit Amendment">
+				<group colspan="4">
+					<field name="invoice_" colspan="4" domain="[('saleorder_.itemrate_.group','=',group), ('state','in',['i'])]" options='{"no_open": True, "no_create": True}'/>
+					<field name="dispatch_" colspan="4" domain="[('invoice_','=',invoice_)]" options='{"no_open": True, "no_create": True}'/>
+				</group>
+				<field name="saleorder_" invisible="1"/>
+				<group>
+					<group>
+    <field name="party_" options='{"no_open": True}'/>
+    <field name="item_" options='{"no_open": True}'/>
+    <field name="okoutqty"/>
+    <field name="rate"/>
+    <field name="invdate"/>
+
+					</group>
+					<group>
+				<field name="group" readonly="1"/>
+    <field name="taxscheme_" options='{"no_open": True}'/>
+    
+    <field name="refno"/>
+    <field name="newrate"/>
+    <field name="autodesc"/>
+
+    <field name="basicamount"/>
+					</group>
+				</group>
+				<group colspan="4">
+    <field name="des" colspan="4"/>
+				</group>
+				<footer>
+					<button string="Generate DN" name="generate" type="object" class="btn-primary o_open_tasks" icon="fa-check" groups="simrp.group_simrp_iuser"/>
+					<button string="Discard" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>	
+
+	<record id="tdebit_action" model="ir.actions.act_window">
+		<field name="name">Retro Debit Amendment</field>
+		<field name="res_model">simrp.tdebit</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+		<field name="context">{'default_group':'v'}</field>
+	</record>
+
+	<menuitem action="tdebit_action" id="tdebit_menu" name="Generate V Retro Amendment" parent="simrp_menu_account_transact_v" sequence="55" groups="group_simrp_iuser"/>
+
+	<record id="tdebits_action" model="ir.actions.act_window">
+		<field name="name">Retro Debit Amendment</field>
+		<field name="res_model">simrp.tdebit</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+		<field name="context">{'default_group':'s'}</field>
+	</record>
+
+	<menuitem action="tdebits_action" id="tdebits_menu" name="Generate Retro Amendment" parent="simrp_menu_account_transact" sequence="55" groups="group_simrp_user"/>
+
+</odoo>

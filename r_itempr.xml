@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="prprint" >
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+<style>
+
+body {
+  margin: 0;
+  margin-left: 10px;
+  background: #999;
+}
+
+div.landscape {
+  width: 355mm;
+  height: 255mm;
+  margin: 10px auto;
+  padding: 10mm;
+  border: solid 1px black;
+  overflow: hidden;
+  page-break-after: always;
+  background: white;
+  transform: scale(0.95);
+}
+
+div.potrait {
+  width: 210mm;
+  height: 297mm;
+  margin: 10px auto;
+  padding: 10mm;
+  border: solid 1px black;
+  overflow: hidden;
+  page-break-after: always;
+  background: white;
+  transform: scale(0.95);
+}
+
+.bgp {
+  background-color: #000 !important;
+  color: #FFF;
+}
+.bggray {
+  background-color: #777 !important;
+  color: #FFF;
+}
+.bgl {
+  background-color: #AAA !important;
+  color: #000;
+}
+	.bggreen {
+		background-color: LawnGreen !important;
+	}
+	.bgorange {
+		background-color: Orange !important;
+	}
+	.bgyellow {
+		background-color: Yellow !important;
+	}
+	.bgcoral {
+		background-color: LightCoral !important;
+	}
+	
+
+@media print {
+
+	body {
+		background: none;
+		margin-left: 25px;
+	}
+	div.landscape {
+		margin: 0;
+		padding: 0;
+		border: none;
+		background: none;
+	}
+	div.landscape {
+		transform: rotate(270deg) translate(-350mm, 0);
+		transform-origin: 0 0;
+	}
+	  
+	.bgp {
+		background-color: #000 !important;
+	}
+	.bgl {
+		background-color: #AAA !important;
+	}
+	.bggray {
+		background-color: #FFF !important;
+	}
+	.bggreen {
+		background-color: LawnGreen !important;
+	}
+	.bgorange {
+		background-color: Orange !important;
+	}
+	.bgcoral {
+		background-color: LightCoral !important;
+	}
+	.bgyellow {
+		background-color: LightYellow !important;
+	}
+	.table td {
+		background-color: transparent !important;
+	}  
+}
+</style>
+		<table width="100%">
+			<tr>
+			<td width="85%" height="100%">
+				<table class="bgp" style="width: 100%; ">
+					<tr>
+						<td width="30%" class="h5"><b>JIA Industries</b></td>
+						<td width="50%"></td>
+					</tr>
+				</table>
+				<table class="bggray" style="width: 100%; ">
+					<tr>
+						<td width="55%" class="h4"><b><t t-esc="doc.name"/></b></td>
+					</tr>
+				</table>
+				<table border="1" style="width: 100%; height: 18%">
+					<thead class="bgl small">
+						<tr>
+							<th class="text-left" width="5%">Item Code</th>
+							<th class="text-left" width="16%">Item Type</th>
+							<th class="text-left" width="13%">Category</th>
+							<th class="text-left" width="20%">Discription</th>
+							<th class="text-left" width="5%">GST HSN/SAC</th>
+							<th class="text-left" width="6%">Base UOM</th>
+							<th class="text-left" width="20%">Dwg/ Sr.No</th>
+							<th class="text-left" width="5%">Revision</th>
+							<th class="text-left" width="10%">Weight(kg)</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><t t-esc="doc.code"/></td>
+							<td><t t-if="doc.type == 'fg'">
+									<p>Finished Goods (FG)</p>
+								</t>
+								<t t-elif="doc.type == 'rmb'">
+									<p>Raw Material (RM-Basic)</p>
+								</t>
+								<t t-elif="doc.type == 'bo'">
+									<p>BO Parts (Boughtout)</p>
+								</t>
+								<t t-else="doc.type == 'fg'">
+									<t t-esc="doc.type"/>
+								</t>
+								
+							</td>
+							<td><t t-esc="doc.category.name"/></td>
+							<td><t t-esc="doc.des"/></td>
+							<td><t t-esc="doc.hsnsac"/></td>
+							<td><t t-esc="doc.uom_.name"/></td>
+							<td><t t-esc="doc.dwg_no"/></td>
+							<td><t t-esc="doc.rev"/></td>
+							<td><t t-esc="doc.net_wt"/></td>
+						</tr>
+					</tbody>
+				</table>
+				<table border="1" style="width: 100%; height:100%">
+					<thead class="bgorange small">
+						<tr>
+							<th class="text-left" width="50%">BOM Input</th>
+							<th class="text-left" width="20%">UOM</th>
+							<th class="text-left" width="30%">BOM Qty/Product</th>
+						</tr>
+					</thead>
+					<tbody>
+						<t t-foreach="doc.bom_s" t-as="q">
+							<tr class="small">
+								<td class="text-left"><t t-esc="q.bomitem_.name" /></td>
+								<td class="text-left"><t t-esc="q.bomitem_.uom_.name" /></td>
+								<td class="text-left"><t t-esc="q.bomqty" /></td>
+							</tr>
+						</t>
+					</tbody>
+				</table>
+				<table border="1" style="width: 100%; height:100%">
+					<thead class="bgorange small">
+						<tr>
+							<th class="text-left" width="10%">Seq#</th>
+							<th class="text-left" width="50%">Process Name</th>
+							<th class="text-left" width="10%">Subcontract?</th>
+							<th class="text-left" width="15%">Speed/hour</th>
+							<th class="text-left" width="15%">QA Plan Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<t t-foreach="doc.itemprocess_s" t-as="q">
+							<t t-if="q.active == bool('TRUE') " >
+								<tr class="small">
+									<td class="text-left"><t t-esc="q.seq" /></td>
+									<td class="text-left"><t t-esc="q.name" /></td>
+									<td class="text-left"><t t-esc="q.allowsubcon" /></td>
+									<td class="text-left"><t t-esc="q.speed" /></td>
+									<td class="text-left"><t t-esc="q.qaplandate" /></td>
+								</tr>
+							</t>
+						</t>
+					</tbody>
+				</table>
+				<t t-foreach="doc.itemprocess_s" t-as="d">
+					<t t-if="d.allowsubcon == bool('TRUE')"><p>
+					<table border="1" style="width: 100%; height: 100px">
+						<thead class="bggreen small">
+											<tr>
+												<th width="30%">Subcontactor</th>
+												<th class="text-right" width="70%"><t t-esc="d.name"/></th>
+											</tr>
+						</thead>
+					</table>
+					<table border="1" style="width: 100%; height: 100px">
+						<thead class="bgl small">
+							<tr>
+								<th class="text-left" width="8%">SA Code</th>
+								<th class="text-left" width="12%">Subcontractor</th>
+								<th class="text-left" width="5%">x Conversion</th>
+								<th class="text-left" width="3%">MOQ</th>
+								<th class="text-left" width="3%">Rate</th>
+								<th class="text-right" width="3%">party uom</th>
+								<th class="text-right" width="3%">Qty uom</th>
+								<th class="text-left" width="56%">Explaination</th>
+								<th class="text-left" width="7%">Scrap Policy</th>
+							</tr>
+						</thead>
+						<tbody>
+							<t t-raw="d.subconhtml()"/>
+						</tbody>
+					</table>
+					</p>
+				</t>
+				</t>
+			</td>
+			</tr>
+		</table>
+
+		<t t-foreach="doc.itemprocess_s" t-as="d">
+			
+					<table width="100%" >
+						<tr>
+							<td width="85%" height="100%">
+								<table class="bggray" style="width: 100%; ">
+									<tr>
+										<td width="55%"><b><t t-esc="doc.name"/></b></td>
+										<td width="45%" align="right"><t t-esc="d.name"/></td>
+									</tr>
+								</table>
+								<table class="bggray" style="width: 100%; ">
+									<tr>
+										<td width="15%">Cycle Time:<t t-esc=" d.cycletime"/></td>
+										<td width="15%" align="left">Load Time:<t t-esc=" d.loadtime"/></td>
+										<td width="15%" align="left">Load Per:<t t-esc=" d.loadper"/></td>
+										<td width="15%" align="left"><t t-if="d.allowsubcon == bool('TRUE')"><p>Subcontractor</p></t></td>
+										<td width="20%" align="left">Target Speed:<t t-esc=" '{:.2f}'.format( d.speed )"/>/ hour</td>
+										<td width="20%" align="left">85% :<t t-esc="'{:.2f}'.format( d.speed * 0.85 )"/>/ hour</td>
+									</tr>
+								</table>
+								<table style="width: 100%; height:200px">
+									<tr>
+										<td width="50%">
+											<table border="0" style="width: 100%; height:100%">
+												<tr height="15%">
+													<td width="100%">
+														<table border="1" style="width: 100%; height:100%">
+															<thead class="bgl small">
+																<tr height="45%">
+																	<th class="text-left" width="30%">Parameter</th>
+																	<th class="text-left" width="15%">Limits</th>
+																	<th class="text-left" width="15%">Frequency</th>
+																	<th class="text-left" width="20%">Method</th>
+																	<th class="text-left" width="15%">Reaction</th>
+																</tr>
+															</thead>
+															<tbody>
+																<t t-raw="d.qadetailshtml()"/>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td width="25%">
+											<table border="0" style="width: 100%; height:100%">
+												<tr height="15%">
+													<td width="100%">
+														<table border="1" style="width: 100%; height:100%">
+															<thead class="bggreen small">
+																<tr>
+																	<th class="text-left" width="100%">Setup Checklist</th>
+																</tr>
+															</thead>
+															<tbody>
+																<t t-set="setc" t-value="4 - len( d.setupinst )"/>
+																<t t-foreach="d.setupinst" t-as="qap">
+																	<tr class="small">
+																		<td class="text-left">
+																			<t t-esc="qap.name"/>
+																			<t t-if="qap.type == a">
+																				[ Ok / Not ok ]
+																			</t>
+																			<t t-if="qap.type != a">
+																				[ <t t-esc="qap.low"/> / <t t-esc="qap.high"/> ]
+																			</t>
+																		</td>
+																	</tr>
+																</t>
+																<t t-foreach="range(1,setc)" t-as="qap">
+																	<tr class="small">
+																		<td class="text-left">.</td>
+																	</tr>
+																</t>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+												<tr height="30%">
+													<td width="100%" height="100%">
+														<table border="1" style="width: 100%; height:100%">
+															<thead class="bgorange small">
+																<tr>
+																	<th width="70%">Process By Product item</th>
+																	<th width="30%">Qty</th>
+																</tr>
+															</thead>
+															<tbody>
+																<t t-raw="d.byproducthtml()"/>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td width="25%">
+											<table border="0" style="width: 100%; height:100%">
+												<tr height="15%">
+													<td width="100%">
+														<table border="1" style="width: 100%; height:100%">
+															<thead class="bggreen small">
+																<tr>
+																	<th class="text-left" width="85%">Tool Name</th>
+																	<th class="text-right" width="15%">Life</th>
+																</tr>
+															</thead>
+															<tbody border="1">
+															<t t-set="tlc" t-value="3 - len( d.toollist )"/>
+															<t t-foreach="d.toollist" t-as="tool">
+																	<tr class="small">
+																		<td class="text-left"><t t-esc="tool.item_.name" /></td>
+																		<td class="text-right"><t t-esc="tool.expectedlife" /></td>
+																	</tr>
+															</t>
+															<t t-foreach="range(1,tlc)" t-as="tool">
+																	<tr class="small">
+																		<td class="text-left">.</td>
+																		<td class="text-right"></td>
+																	</tr>
+															</t>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+												<tr height="30%">
+													<td width="100%" height="100%">
+														<table border="1" style="width: 100%; height:100%">
+															<thead class="bgorange small">
+																<tr>
+																	<th class="text-left" width="100%">Operator Instructions</th>
+																</tr>
+															</thead>
+															<tbody>
+																<t t-set="olc" t-value="4 - len( d.operinst )"/>
+																<t t-foreach="d.operinst" t-as="qap">
+																	<tr class="small" border="1">
+																		<td class="text-left"><t t-esc="qap.name"/>
+																		</td>
+																	</tr>
+																</t>
+																<t t-foreach="range(1,olc)" t-as="op">
+																	<tr class="small">
+																		<td class="text-left">.</td>
+																	</tr>
+																</t>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+								
+							</td>
+						</tr>
+					</table>
+					<br/>
+			
+		</t>
+<!-- template ends -->
+		</t>
+	</t>
+</template>
+
+<!--record id="ls" model="report.paperformat">
+    <field name="name">A4LS</field>
+    <field name="default" eval="False"/>
+    <field name="format">A4</field>
+    <field name="orientation">Landscape</field>
+    <field name="margin_top">3</field>
+    <field name="margin_bottom">3</field>
+    <field name="margin_left">3</field>
+    <field name="margin_right">3</field>
+    <field name="header_line" eval="False"/>
+    <field name="header_spacing">3</field>
+    <field name="dpi">100</field>
+</record-->
+
+
+	<report 
+		id="action_report_prprint"
+		string="Production Process Report"
+		model="simrp.item" 
+		report_type="qweb-pdf"
+		file="simrp.prprint" 
+		name="simrp.prprint"
+		print_report_name="'%s' % (object.name)"
+	/>
+
+</odoo>

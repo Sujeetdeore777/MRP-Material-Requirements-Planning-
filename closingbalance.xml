@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_closingbalance_form" model="ir.ui.view">
+		<field name="name">simrp.closingbalance.form</field>
+		<field name="model">simrp.closingbalance</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet string="Closingbalance">
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+
+					<group col="4">
+						<field name="partyaccount_" colspan="2" options="{'no_create': True, 'no_open': True}"/>
+						<field name="cdate" colspan="2"/>
+						<hr colspan="4"/>
+						<field name="tdate"/>
+						<field name="tduedays"/>
+						<field name="tamtdr"/>
+						<field name="tamtcr"/>
+						<field name="trefname"/>
+						<button name="addline" type="object" class="oe_stat_button" icon="fa-folder-open" string="Add Bill Wise Line" groups="simrp.group_simrp_user" colspan="1"/>
+						<button name="addlineac" type="object" class="oe_stat_button" icon="fa-folder-open" string="Add Balance" groups="simrp.group_simrp_user" colspan="1"/>
+						<hr colspan="4"/>
+					</group>
+
+					<notebook>
+						<page name="p1" string="Account Postings">
+							<group col="4">
+								<field name="accline_s" nolabel="1" colspan="4"/>
+							</group>
+						</page>
+						<page name="Info" string="">
+							<group col="4">
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_closingbalance_tree" model="ir.ui.view">
+		<field name="name">simrp.closingbalance.tree</field>
+		<field name="model">simrp.closingbalance</field>
+		<field name="arch" type="xml">
+			<tree >
+				<field name="partyaccount_"/>
+				<field name="name"/>
+				<field name="cdate" string="Closing Date"/>
+				<field name="amttot" sum="s"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_closingbalance_search" model="ir.ui.view">
+		<field name="name">simrp.closingbalance.search</field>
+		<field name="model">simrp.closingbalance</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="partyaccount_"/>
+				<field name="cdate"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_closingbalance_action" model="ir.actions.act_window">
+		<field name="name">Opening balance</field>
+		<field name="res_model">simrp.closingbalance</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_closingbalance_action" id="simrp_closingbalance_menu" name="Opening balance" parent="simrp_Mopen" sequence="" groups="group_simrp_user"/>		
+</odoo>

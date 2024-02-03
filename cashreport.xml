@@ -1,0 +1,45 @@
+<odoo>
+
+    <report
+        id="simrp_cashreportx"
+        model="report.simrp.cashreportx"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="report.simrp.cashreportx"
+        file="r1"
+        attachment_use="False"
+    />
+
+	<record id="simrp_cashreportx_form" model="ir.ui.view">
+		<field name="name">report.simrp.cashreportx.form</field>
+		<field name="model">report.simrp.cashreportx</field>
+		<field name="arch" type="xml">
+			<form>
+				<group>
+					<group>
+						<field name="fromdate"/>
+						<field name="todate"/>
+						<field name="type"/>
+						<button name="generate" type="object" class="oe_stat_button" icon="fa-folder-open" string="Generate Report" groups="simrp.group_simrp_user" />
+						<!--button name="loadcsv" type="object" class="oe_stat_button" icon="fa-check" string="Generate CSV" groups="simrp.group_simrp_user"/ -->
+
+					</group>
+					<group>
+					</group>
+				</group>
+			</form>
+		</field>
+	</record>
+
+
+
+	<record id="simrp_cashreportx_action" model="ir.actions.act_window">
+		<field name="name">Report Generation</field>
+		<field name="res_model">report.simrp.cashreportx</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_cashreportx_action" id="simrp_cashreport1_menu" name="Cash Mangement Reports" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/>
+
+</odoo>

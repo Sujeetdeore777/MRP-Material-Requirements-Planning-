@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+	
+		<record id="irc1" model="ir.config_parameter">
+			<field name="key">inv.bankname</field>
+			<field name="value">HDFC Bank, Thatte Nagar, Nashik</field>
+		</record>
+		<record id="irc2" model="ir.config_parameter">
+			<field name="key">inv.bankifsc</field>
+			<field name="value">HDFC0000064</field>
+		</record>
+		<record id="irc3" model="ir.config_parameter">
+			<field name="key">inv.bankacno</field>
+			<field name="value">C/A No. 0064 256 000 0000</field>
+		</record>
+		<record id="irc4" model="ir.config_parameter">
+			<field name="key">inv.iec</field>
+			<field name="value"></field>
+		</record>
+		<record id="irc5" model="ir.config_parameter">
+			<field name="key">inv.dport</field>
+			<field name="value">8000</field>
+		</record>
+		<record id="irc7" model="ir.config_parameter">
+			<field name="key">inv.dw</field>
+			<field name="value">100</field>
+		</record>
+		<record id="irc8" model="ir.config_parameter">
+			<field name="key">inv.dh</field>
+			<field name="value">30</field>
+		</record>
+		<record id="irc9" model="ir.config_parameter">
+			<field name="key">inv.dx</field>
+			<field name="value">400</field>
+		</record>
+		<record id="irc10" model="ir.config_parameter">
+			<field name="key">inv.dy</field>
+			<field name="value">50</field>
+		</record>
+		<record id="irc11" model="ir.config_parameter">
+			<field name="key">inv.dsha1</field>
+			<field name="value">8F87584B2AFF09128A28937A355AD169B8354998</field>
+		</record>
+
+	
+		<record id="seq_item" model="ir.sequence">
+			<field name="name">Item Code sequence</field>
+			<field name="code">simrp.item</field>
+			<field name="prefix"/>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_subcon" model="ir.sequence">
+			<field name="name">Subcon Code sequence</field>
+			<field name="code">simrp.subcon</field>
+			<field name="prefix">SA</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_rejection" model="ir.sequence">
+			<field name="name">Rejection Code sequence</field>
+			<field name="code">simrp.rejection</field>
+			<field name="prefix">RJ</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_redtag" model="ir.sequence">
+			<field name="name">Red Tag sequence</field>
+			<field name="code">simrp.redtag</field>
+			<field name="prefix">RT</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_itemrate" model="ir.sequence">
+			<field name="name">Itemrate sequence</field>
+			<field name="code">simrp.itemrate</field>
+			<field name="prefix">IR-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_saleorder" model="ir.sequence">
+			<field name="name">Saleorder sequence</field>
+			<field name="code">simrp.saleorder</field>
+			<field name="prefix">SO-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_dispatch" model="ir.sequence">
+			<field name="name">Dispatch sequence</field>
+			<field name="code">simrp.dispatch</field>
+			<field name="prefix">DC-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">4</field>
+		</record>
+
+		<record id="seq_dispatchinvoice" model="ir.sequence">
+			<field name="name">Dispatch invoice sequence</field>
+			<field name="code">simrp.dispatchinvoice</field>
+			<field name="prefix">JIA-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_porder" model="ir.sequence">
+			<field name="name">Porder sequence</field>
+			<field name="code">simrp.porder</field>
+			<field name="prefix">PO-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_grnmaster" model="ir.sequence">
+			<field name="name">Grnmaster sequence</field>
+			<field name="code">simrp.grnmaster</field>
+			<field name="prefix">INW-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_qcinspection" model="ir.sequence">
+			<field name="name">Qcinspection sequence</field>
+			<field name="code">simrp.qcinspection</field>
+			<field name="prefix">QI-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_grn" model="ir.sequence">
+			<field name="name">Grn sequence</field>
+			<field name="code">simrp.grn</field>
+			<field name="prefix">GRN-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_subcondc" model="ir.sequence">
+			<field name="name">Subcondc sequence</field>
+			<field name="code">simrp.subcondc</field>
+			<field name="prefix">SDC-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_purchase" model="ir.sequence">
+			<field name="name">Purchase sequence</field>
+			<field name="code">simrp.purchase</field>
+			<field name="prefix">PUR-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_debit" model="ir.sequence">
+			<field name="name">debit sequence</field>
+			<field name="code">simrp.debit</field>
+			<field name="prefix">DN-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_complaint" model="ir.sequence">
+			<field name="name">Complaint sequence</field>
+			<field name="code">simrp.complaint</field>
+			<field name="prefix">CC-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_credit" model="ir.sequence">
+			<field name="name">Credit sequence</field>
+			<field name="code">simrp.credit</field>
+			<field name="prefix">CN-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_partymaterial" model="ir.sequence">
+			<field name="name">Partymaterial sequence</field>
+			<field name="code">simrp.partymaterial</field>
+			<field name="prefix">TRM-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_csubcondc" model="ir.sequence">
+			<field name="name">Csubcondc sequence</field>
+			<field name="code">simrp.csubcondc</field>
+			<field name="prefix">CM-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_sjournal" model="ir.sequence">
+			<field name="name">Sjournal sequence</field>
+			<field name="code">simrp.sjournal</field>
+			<field name="prefix">SJ-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_cmdc" model="ir.sequence">
+			<field name="name">Cmdc sequence</field>
+			<field name="code">simrp.cmdc</field>
+			<field name="prefix">CDC-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_fundtransaction" model="ir.sequence">
+			<field name="name">Fundtransaction sequence</field>
+			<field name="code">simrp.fundtransaction</field>
+			<field name="prefix">FTN-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_indirectexpense" model="ir.sequence">
+			<field name="name">Indirectexpense sequence</field>
+			<field name="code">simrp.indirectexpense</field>
+			<field name="prefix">IExp-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_jtransaction" model="ir.sequence">
+			<field name="name">Jtransaction sequence</field>
+			<field name="code">simrp.jtransaction</field>
+			<field name="prefix">JV-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_wo" model="ir.sequence">
+			<field name="name">Wo sequence</field>
+			<field name="code">simrp.wo</field>
+			<field name="prefix">WO-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">3</field>
+		</record>
+
+		<record id="seq_woproduction" model="ir.sequence">
+			<field name="name">Woproduction sequence</field>
+			<field name="code">simrp.woproduction</field>
+			<field name="prefix">PR-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_physicalstock" model="ir.sequence">
+			<field name="name">Physicalstock sequence</field>
+			<field name="code">simrp.physicalstock</field>
+			<field name="prefix">PSTK-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">4</field>
+		</record>
+
+		<record id="seq_openingstock" model="ir.sequence">
+			<field name="name">Opening stock sequence</field>
+			<field name="code">simrp.openingstock</field>
+			<field name="prefix">OSTK-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">4</field>
+		</record>
+
+
+		<record id="seq_shopio" model="ir.sequence">
+			<field name="name">Shopio sequence</field>
+			<field name="code">simrp.shopio</field>
+			<field name="prefix">SFIO-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">3</field>
+		</record>
+
+		<record id="seq_womfg" model="ir.sequence">
+			<field name="name">Womfg sequence</field>
+			<field name="code">simrp.womfg</field>
+			<field name="prefix">MFG-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">4</field>
+		</record>
+
+		<record id="seq_employee" model="ir.sequence">
+			<field name="name">Employee sequence</field>
+			<field name="code">simrp.employee</field>
+			<field name="prefix">E-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">4</field>
+		</record>
+
+		<record id="seq_advancegrn" model="ir.sequence">
+			<field name="name"> Adv Grn sequence</field>
+			<field name="code">simrp.advancegrn</field>
+			<field name="prefix">aGRN-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_cash" model="ir.sequence">
+			<field name="name">Cash sequence</field>
+			<field name="code">simrp.cash</field>
+			<field name="prefix">CTX-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">4</field>
+		</record>
+
+
+		<record id="seq_sdispatch" model="ir.sequence">
+			<field name="name">Dispatch sequence</field>
+			<field name="code">simrp.scrapdispatch</field>
+			<field name="prefix">D-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">4</field>
+		</record>
+
+		<record id="seq_transporttrip" model="ir.sequence">
+			<field name="name">Transport sequence</field>
+			<field name="code">simrp.transporttrip</field>
+			<field name="prefix">TRPT-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">4</field>
+		</record>
+
+		<record id="seq_incident" model="ir.sequence">
+			<field name="name">HR Incident</field>
+			<field name="code">simrp.incident</field>
+			<field name="prefix">EI-</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">6</field>
+		</record>
+
+		<record id="seq_purchasedraft" model="ir.sequence">
+			<field name="name">Purchase Draft sequence</field>
+			<field name="code">simrp.purchasedraft</field>
+			<field name="prefix">d</field>
+			<field eval="1" name="number_next"/>
+			<field eval="1" name="number_increment"/>
+			<field eval="False" name="use_date_range"/>
+			<field eval="False" name="company_id"/>
+			<field name="padding">4</field>
+		</record>
+
+
+	</data>
+</odoo>

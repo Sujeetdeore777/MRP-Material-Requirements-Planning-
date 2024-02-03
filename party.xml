@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="partyf" model="ir.ui.view">
+		<field name="name">simrp.party.form</field>
+		<field name="model">simrp.party</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="unlock" type="object" class="oe_stat_button" icon="fa-check-circle" string="Unlock" attrs="{'invisible': [('state','=',('o'))]}" groups="simrp.group_simrp_works"/>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Item">
+					<div class="oe_button_box" name="button_box">
+						<button name="submit" type="object" class="oe_stat_button" icon="fa-fast-forward" string="Submit Commercials" attrs="{'invisible': [('state','in',['l'])]}" groups="simrp.group_simrp_works"/>
+					</div>
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name"  attrs="{'readonly': [('state','!=','o')]}"/>
+						</h1>
+					</div>
+					<group col="6" style="background-color:#ffffe6">
+						<group col="4" colspan="4" >
+							<field name="shortname" colspan="4"/>
+							<field name="address1" colspan="4"/>
+							<field name="address2" colspan="4"/>
+							<field name="address3" colspan="4"/>
+							<field name="state_" widget="selection"/>
+							<div style="position:relative; left:-2.5vw; width:50%;">
+								<field name="pincode" nolabel="1" placeholder="Pincode"/>
+							</div>
+							<div style="position:relative; left:-9vw; width:143%;">
+								<field name="email" placeholder="Email" nolabel="1"/>
+							</div>
+							<field name="mobile" placeholder="Phone nos" colspan="4"/>
+						</group>
+						<group colspan="2">
+							<field name="category"  attrs="{'readonly': [('state','!=','o')]}"/>
+							<field name="gstno"  attrs="{'readonly': [('state','!=','o')]}"/>
+							<field name="panno"  attrs="{'readonly': [('state','!=','o')]}"/>
+							<field name="bankac" attrs="{'readonly': [('state','!=','o')]}"/>
+							<field name="bankifsc" attrs="{'readonly': [('state','!=','o')]}"/>
+							<!-- <field name="bank"/> -->
+							<field name="bankphoto" filename="bankphotoname" target="_blank" attrs="{'readonly': [('state','!=','o')]}"/>
+							<field name="bankphotoname" invisible="1"/>
+						</group>
+					</group>
+					<group col="6" style="background-color:#e6ffe6">
+						<group col="4" colspan="4">
+						<!-- attrs="{'readonly': [('associate','!=',False),('state','!=','o')]}" -->
+							<field name="associate" colspan="4" required="1"  />
+							<field name="owner" attrs="{'required': [('associate','in',['TDS94Ci'])]}" colspan="2"/>
+							<field name="dispmode"/>
+							<field name="creditperiod"/>
+							<field name="tdsdeduct"  attrs="{'readonly': [('state','!=','o')]}"/>
+							<!-- <field name="firmtype"/> -->
+						</group>
+						<group colspan="2">
+							<field name="vcode"/>
+							<field name="copies"/>
+							<field name="distance"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="partyt" model="ir.ui.view">
+		<field name="name">simrp.party.tree</field>
+		<field name="model">simrp.party</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+				<field name="shortname"/>
+				<field name="vcode" string="VCode"/>
+				<field name="gstno"/>
+				<field name="mobile"/>
+				<field name="bankac" invisible="1"/>
+				<field name="creditperiod" string="PTerm"/>
+				<button name="dummy" type="object" class="oe_stat_button" icon="fa-id-card-o" string="Bank Details Locked" attrs="{'invisible': [('bankac','=','')]}" groups="simrp.group_simrp_iuser" />
+				<!-- <field name="associate"/> -->
+				<field name="category"/>
+				<!-- <field name="state"/> -->
+			</tree>
+		</field>
+	</record>
+	<record id="partys" model="ir.ui.view">
+		<field name="name">simrp.party.search</field>
+		<field name="model">simrp.party</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="vcode"/>
+				<field name="gstno"/>
+				<field name="panno"/>
+				<!-- <field name="firmtype"/> -->
+				<field name="associate"/>
+				<field name="category"/>
+							<field name="dispmode"/>
+				<field name="tdsdeduct"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+	<record id="partya" model="ir.actions.act_window">
+		<field name="name">Party Records</field>
+		<field name="res_model">simrp.party</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+	<menuitem action="partya" id="mparty" name="Party Records" parent="simrp_menu_master_account" sequence="2" groups="group_simrp_user"/>
+</odoo>

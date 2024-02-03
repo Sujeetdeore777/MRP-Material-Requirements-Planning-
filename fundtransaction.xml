@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_fthelper_action" model="ir.actions.act_window">
+		<field name="name">Allocate Account</field>
+		<field name="res_model">simrp.tfundsubmit</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	
+	<record id="simrp_fundtransaction_form" model="ir.ui.view">
+		<field name="name">simrp.fundtransaction.form</field>
+		<field name="model">simrp.fundtransaction</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="submit" type="object" class="oe_stat_button" icon="fa-check" string="Submit" attrs="{'invisible': [('state','not in',['d'])]}" groups="simrp.group_simrp_user" />
+					<button name="reset" type="object" class="oe_stat_button" icon="fa-undo" string="Reset Record" groups="simrp.group_simrp_ceo" />
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Fundtransaction">
+				<div class="oe_button_box" name="button_box">
+	<button name="%(simrp_fthelper_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="Mark Account" groups="simrp.group_simrp_user" context="{'default_ft_':id, 'default_statementid': statementid, 'default_party_':party_, 'default_type':type, 'default_amount': amount, 'default_des':des, 'default_v':1 }" attrs="{'invisible': ['|',('party_','&gt;',0),('state','not in',['d'])]}"/>
+	<button name="%(simrp_fthelper_action)d" type="action" class="oe_stat_button" icon="fa-calendar" string="Allocate References" groups="simrp.group_simrp_user" context="{'default_ft_':id, 'default_statementid': statementid, 'default_party_':party_, 'default_type':type, 'default_amount': amount, 'default_des':des, 'default_v':2, 'default_fundaccline_': fundaccline_}" attrs="{'invisible': ['|','|',('accounttype','!=','p'),('baladjAmount','=',0),('state','not in',['s'])]}"/>
+				</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group>
+						<group>
+    <field name="fundaccount_" domain="[ ( 'type', '=', 'fund' ) ]" options='{"no_create": True}' widget="selection" attrs="{'readonly': ['|',('state','not in',['d']),('statementid','!=',False)]}"/>
+    <field name="type" attrs="{'readonly': ['|',('state','not in',['d']),('statementid','!=',False)]}"/>
+	<field name="party_" options='{"no_create": True}' attrs="{'readonly': [('state','not in',['d'])]}"/>
+						</group>
+						<group>
+    <field name="ftdate" attrs="{'readonly': ['|',('state','not in',['d']),('statementid','!=',False)]}"/>
+    <field name="amount" attrs="{'readonly': ['|',('state','not in',['d']),('statementid','!=',False)]}"/>
+    <field name="des" attrs="{'readonly': [('state','not in',['d'])]}"/>
+    <field name="fundaccline_" invisible="1"/>
+    <field name="accounttype" invisible="1"/>
+	<field name="baladjAmount" attrs="{'invisible': ['|',('accounttype','!=','p'),('baladjAmount','=',0)]}"/>
+						</group>
+					</group>
+							<group col="4">
+								<field name="statementid" colspan="4"/>
+								<field name="refadj_s" nolabel="1" colspan="4">
+									<tree>
+										<field name="agstaccline_"/>
+										<field name="adjAmount" sum="s"/>
+									</tree>
+								</field>
+							</group>
+
+					<notebook>
+						<page name="p1" string="Account Postings">
+							<group col="4">
+								<field name="accline_s" nolabel="1" colspan="4"/>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_fundtransaction_tree" model="ir.ui.view">
+		<field name="name">simrp.fundtransaction.tree</field>
+		<field name="model">simrp.fundtransaction</field>
+		<field name="arch" type="xml">
+			<tree decoration-warning="(wa==0) and (da==0)" decoration-success="state=='s'" limit="300" >
+    <field name="name"/>
+    <field name="id" invisible="1"/>
+    <field name="statementid" invisible="1"/>
+    <field name="des" invisible="1"/>
+    <field name="fundaccline_" invisible="1"/>
+    <field name="ftdate"/>
+    <field name="type"/>
+	<field name="party_"/>
+	<button name="%(simrp_fthelper_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="Mark Account" groups="simrp.group_simrp_user" context="{'default_ft_':id, 'default_statementid': statementid, 'default_party_':party_, 'default_type':type, 'default_amount': amount, 'default_des':des, 'default_v':1 }" attrs="{'invisible': ['|',('party_','&gt;',0),('state','not in',['d'])]}"/>
+	
+    <field name="fundaccount_"/>
+    <field name="wa" sum="T:"  attrs="{'invisible': [('wa','=',0)]}"/>
+    <field name="da" sum="T:" attrs="{'invisible': [('da','=',0)]}"/>
+	<field name="amount" attrs="{'invisible': ['|',('da','!=',0),('wa','!=',0)]}"/>
+	
+    <field name="accounttype" invisible="1"/>
+    <field name="baladjAmount" attrs="{'invisible': ['|',('accounttype','!=','p'),('baladjAmount','=',0)]}"/>
+	<button name="%(simrp_fthelper_action)d" type="action" class="oe_stat_button" icon="fa-calendar" string="Allocate References" groups="simrp.group_simrp_user" context="{'default_ft_':id, 'default_statementid': statementid, 'default_party_':party_, 'default_type':type, 'default_amount': amount, 'default_des':des, 'default_v':2, 'default_fundaccline_': fundaccline_}" attrs="{'invisible': ['|','|',('accounttype','!=','p'),('baladjAmount','=',0),('state','not in',['s'])]}"/>
+    <field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_fundtransaction_search" model="ir.ui.view">
+		<field name="name">simrp.fundtransaction.search</field>
+		<field name="model">simrp.fundtransaction</field>
+		<field name="arch" type="xml">
+			<search>
+    <field name="name"/>
+    <field name="ftdate"/>
+    <field name="type"/>
+	<field name="party_"/>
+    <field name="fundaccount_"/>
+    <field name="state"/>
+								<field name="statementid"/>
+    <field name="amount" string="Any Amount" filter_domain="['|','|','|', ('wa','=',self), ('da','=',self), ('amount', '=', self), ('baladjAmount', '=', self)]"/>
+								<field name="wa"/>
+								<field name="da"/>
+				<filter string="Unmarked Transactions" domain="[('state','!=','s')]" name="pendingftn"></filter>
+				<filter string="Unallocated Transactions" domain="[('accounttype','=','p'),('baladjAmount','!=',0)]" name="unallocftn"></filter>
+				<filter string="Uncleared Transactions" domain="[('da','=',0),('wa','=',0)]" name="unclearftn"></filter>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_fundtransaction_action" model="ir.actions.act_window">
+		<field name="name">Fund Transaction</field>
+		<field name="res_model">simrp.fundtransaction</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{'search_default_pendingftn': 1, 'search_default_unclearftn': 1, }</field>
+	</record>
+
+	<menuitem action="simrp_fundtransaction_action" id="simrp_fundtransaction_menu" name="Fund Transaction" parent="simrp_menu_account_fund" sequence="" groups="group_simrp_user"/>
+
+	<!-- <record id="simrp_fundtransaction_action1" model="ir.actions.act_window"> -->
+		<!-- <field name="name">Pending Fund Transaction</field> -->
+		<!-- <field name="res_model">simrp.fundtransaction</field> -->
+		<!-- <field name="view_type">form</field> -->
+		<!-- <field name="view_mode">tree,form</field> -->
+		<!-- <field name="context">{'search_default_pendingftn': 1}</field>  -->
+	<!-- </record> -->
+	<!-- <menuitem action="simrp_fundtransaction_action1" id="simrp_fundtransaction_menu1" name="Unmarked Transactions" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/> -->
+
+
+	<record id="simrp_tfundsubmit_form" model="ir.ui.view">
+		<field name="name">simrp.tfundsubmit.form</field>
+		<field name="model">simrp.tfundsubmit</field>
+		<field name="arch" type="xml">
+			<form>
+				<group col="4">
+					<field name="type"/>
+					<field name="amount"/>
+					<field name="statementid" colspan="4"/>
+					<field name="party_" options='{"no_create": True}' colspan="2"  attrs="{'readonly': ['|',('v','!=',1),('mergeft_','&gt;',0)]}"/>
+					<field name="mergeft_" options='{"no_create": True, "no_open":True}' colspan="2"  attrs="{'readonly': ['|',('v','!=',1),('party_','&gt;',0)]}" domain="[ ('wa','=',0),('da','=',0),('amount','=',amount)]"/>
+					<field name="des"  attrs="{'readonly': ['|',('v','!=',1),('mergeft_','&gt;',0)]}"/>
+					<field name="ref_s"  colspan="4"  attrs="{'invisible': [('v','=',1)]}">
+						<tree create="false" delete="false" editable="bottom">
+							<field name="agstaccline_"/>
+							<field name="docdate"/>
+							<field name="origAmount"  sum="s"/>
+							<field name="check"/>
+                                <!-- <button name="checkon" attrs="{'invisible':[('check','=',True)]}" type="object" class="oe_stat_button" icon="fa-check-circle" string="Select" groups="simrp.group_simrp_user" /> -->
+                                <!-- <button name="cancel" attrs="{'invisible':[('check','=',False)]}" type="object" class="oe_stat_button" icon="fa-close" string="Reject" groups="simrp.group_simrp_user" /> -->
+							<field name="adjAmount"  sum="s1"/>
+							
+						</tree>
+					</field>
+					<field name="v" invisible="1"/>
+					<!-- <field name="unmarkamt" attrs="{'invisible': [('v','=',1)]}"/> -->
+							<!-- <button name="dummy" attrs="{'invisible':[('v','=',1)]}" type="object" class="oe_stat_button" icon="fa-check-circle" string="Select" groups="simrp.group_simrp_user" /> -->
+				</group>
+				<footer>
+					<button string="Delete Merge [Careful]" name="deletemerge" type="object" class="btn-primary" icon="fa-plus" groups="simrp.group_simrp_ceo"  attrs="{'invisible': [('v','!=',1)]}"/>
+					<button string="Allocate" name="allocate" type="object" class="btn-primary" icon="fa-plus" groups="simrp.group_simrp_user"  attrs="{'invisible': [('v','!=',1)]}"/>
+					<button string="Mark Bill References" name="mark" type="object" class="btn-primary" icon="fa-plus" groups="simrp.group_simrp_user"  attrs="{'invisible': [('v','!=',2)]}"/>
+					<button string="Cancel" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+
+
+</odoo>

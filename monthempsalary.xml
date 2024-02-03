@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="simrp_monthempsalary_form" model="ir.ui.view">
+		<field name="name">simrp.monthempsalary.form</field>
+		<field name="model">simrp.monthempsalary</field>
+		<field name="arch" type="xml">
+			<form>
+                <header>
+                    <button name="updateall" type="object" class="oe_stat_button" icon="fa-folder-open" string="Update All" groups="simrp.group_simrp_works"  attrs="{'invisible': [('state','=','l')]}" />
+                    <!-- <button name="refresh" type="object" class="oe_stat_button" icon="fa-folder-open" string="Refresh" groups="simrp.group_simrp_works" /> -->
+					<button name="submit" type="object" class="oe_stat_button" icon="fa-check" string="Submit" attrs="{'invisible': [('state','!=','c')]}" groups="simrp.group_simrp_works"/>
+                    <button name="lock" type="object" class="oe_stat_button" icon="fa-folder-open" string="Lock" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','!=','s')]}"/>
+                    <button name="unlock" type="object" class="oe_stat_button" icon="fa-folder-open" string="UnLock" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','=','c')]}"/>
+					<field name="state" widget="statusbar"/>
+				</header>
+                    <group colspan="4" col="8">
+							<field name="month_end" attrs="{'readonly': [('state','!=','d')]}"/>
+								<field name="month_days" />
+									<field name="Attend_days" />
+										<field name="ph_workdays"  attrs="{'readonly': [('state','=','l')]}"/>
+							<field name="monthpt"  attrs="{'readonly': [('state','=','l')]}"/>
+								<field name="weeklyoff"  attrs="{'readonly': [('state','=','l')]}"/>
+									<field name="salary_days" />
+										<field name="ph_weeklyoff"  attrs="{'readonly': [('state','=','l')]}"/>
+					</group>
+					<notebook>
+						<page name="p1" string="Summary">
+							<group col="4" colspan="4">
+								<field name="salaryrecord_s_summary" nolabel="1" colspan="4"  class="small">
+									<tree default_order="bu_, contractparty_, salarytype desc, postworkdays" create="false" editable="bottom" limit="500">
+
+    <field name="code" style="color:blue"/>
+    <field name="postworkdays" string="Employee" style="color:blue"/>
+    <field name="bu_" style="color:blue"/>
+    <field name="contractparty_" style="color:blue"/>
+    <field name="salarytype" string="Type" style="color:green"/>
+
+    <field name="pay_days" string="Days"/>
+    <!-- <field name="auto_ot"/> -->
+    <field name="ot"/>
+    <field name="grosspay" widget="integer"  style="color:blue"  sum="s3"/>
+    <field name="NetA" widget="integer" style="color:blue"  sum="s9"/>
+
+    <field name="total_deduction"/>
+    <field name="net_pay" style="color:blue"  sum="s10"/>
+    <field name="bankac" invisible="1"/>
+										<button name="dummy" type="object" class="oe_stat_button" icon="fa-id-card-o" string="Bank Details Locked" attrs="{'invisible': [('bankac','=','')]}" groups="simrp.group_simrp_iuser" />
+    <field name="selectgenerate"/>
+    <field name="chq_no"/>
+
+									</tree>
+								</field>
+								<field name="summary" nolabel="1" colspan="4"/>
+								<field name="bu_"  options="{'no_create': True, 'no_open': True}"/>
+								<field name="bankfile" filename="bankfilename" readonly="1"/>
+                    <button name="bankfilegen" type="object" class="oe_stat_button" icon="fa-print" string="Generate Bank File" attrs="{'invisible': [('state','!=','l')]}" groups="simrp.group_simrp_works" />
+								<field name="bankfilename" invisible="1"/>
+							</group>
+						</page>
+						<page name="p2a" string="Attendance Review">
+							<group colspan="4">
+								<field name="salaryrecord_s_att" nolabel="1" colspan="4"  attrs="{'readonly': [('state','=','l')]}" class="small">
+									<tree create="false" default_order="bu_, contractparty_, salarytype desc, postworkdays" limit="500" editable="bottom">
+    <field name="postworkdays" string="Employee" style="color:blue"/>
+    <field name="bu_" style="color:blue"/>
+    <field name="contractparty_" style="color:blue"/>
+
+    <field name="salarytype" string="Type" style="color:green"/>
+    <field name="workhr" string="Hours" style="color:green"/>
+
+    <field name="auto_days"/>
+    <field name="adjdays"/>
+    <field name="ph_flag" string="PH"/>
+    <field name="pay_days" string="Days"  style="color:brown"/>
+    <field name="auto_ot"/>
+    <field name="adjot"/>
+    <field name="ot" style="color:brown"/>
+									</tree>
+								</field>
+							</group>
+						</page>
+						<page name="p2" string="Calculation Review">
+							<group colspan="4">
+								<field name="salaryrecord_s_calc" nolabel="1" colspan="4"  attrs="{'readonly': [('state','=','l')]}" class="small">
+									<tree create="false" default_order="bu_, contractparty_, salarytype desc, postworkdays" limit="500" editable="bottom">
+    <!-- <field name="employee_"/> -->
+    <field name="postworkdays" string="Employee" style="color:blue"/>
+    <field name="bu_" style="color:blue"/>
+    <field name="contractparty_" style="color:blue"/>
+
+    <field name="salarytype" string="Type" style="color:green"/>
+    <field name="workhr" string="Hours" style="color:green"/>
+    <field name="agreed_salary" string="Salary" attrs="{'invisible': [('salarytype','=','d')]}" style="color:green"/>
+    <field name="perday_salary" string="Per Day" style="color:green"/>
+    <!-- <field name="netperhrs"/> -->
+
+    <field name="pay_days" string="Days"/>
+    <field name="ot"/>
+    <!-- <field name="present_days"/> -->
+
+    <field name="pay" sum="s1"/>
+    <field name="otpay" sum="s2"/>
+    <field name="grosspay" widget="integer"  style="color:blue"  sum="s3"/>
+    <field name="esic" sum="s4" attrs="{'invisible': [('esic','=',0)]}"/>
+    <field name="pf" sum="s5" attrs="{'invisible': [('pf','=',0)]}"/>
+    <field name="tds" sum="s6" attrs="{'invisible': [('tds','=',0)]}"/>
+    <field name="lwf" sum="s7" attrs="{'invisible': [('lwf','=',0)]}"/>
+    <field name="monthpt" string="PT"  sum="s8" attrs="{'invisible': [('monthpt','=',0)]}"/>
+    <field name="NetA" widget="integer" style="color:blue"  sum="s9"/>
+
+    <!-- <field name="u_absent"/> -->
+    <!-- <field name="incident_amt"/> -->
+
+    <!-- <field name="state"/> -->
+									</tree>
+								</field>
+							</group>
+						</page>
+						<page name="p31" string="Advances Review">
+							<group colspan="4">
+								<field name="salaryrecord_s_advance" nolabel="1" colspan="4"  attrs="{'readonly': [('state','=','l')]}" class="small">
+									<tree create="false" default_order="bu_, contractparty_, salarytype desc, postworkdays" limit="500">
+    <field name="postworkdays" string="Employee" style="color:blue"/>
+    <field name="bu_" style="color:blue"/>
+    <field name="contractparty_" style="color:blue"/>
+    <field name="salarytype" invisible="1"/>
+
+    <field name="NetA" widget="integer" style="color:blue"  sum="s9"/>
+    <field name="openadvance"  style="color:green" sum="s1"/>
+    <field name="adv_deduction"  style="color:red" sum="s2"/>
+
+									</tree>
+								</field>
+							</group>
+						</page>
+						<page name="p3" string="Deduction Review">
+							<group colspan="4">
+								<field name="salaryrecord_s_deduct" nolabel="1" colspan="4"  attrs="{'readonly': [('state','=','l')]}" class="small">
+									<tree create="false" default_order="bu_, contractparty_, salarytype desc, postworkdays" editable="bottom" limit="500">
+    <field name="postworkdays" string="Employee" style="color:blue"/>
+    <field name="bu_" style="color:blue"/>
+    <field name="contractparty_" style="color:blue"/>
+    <field name="salarytype" invisible="1"/>
+
+    <field name="NetA" widget="integer" style="color:blue"  sum="s9"/>
+    <!-- <field name="openadvance"  style="color:green" sum="s1"/> -->
+    <field name="adv_deduction"  style="color:red" sum="s2"/>
+    <!-- <field name="advancebal"  style="color:green" sum="s21"/> -->
+	
+    <field name="aprleaves_count" attrs="{'invisible': [('aprleaves_count','=',0)]}"  style="color:green"/>
+    <field name="uabsentdays" attrs="{'invisible': [('uabsentdays','=',0)]}"  style="color:red"/>
+    <field name="incident_count" attrs="{'invisible': [('incident_count','=',0)]}"  style="color:red"/>
+    <field name="addpenaltyreward"  style="color:red"  sum="s3"/>
+    <field name="leave_encashment" string="Leaves+"  style="color:green"  sum="s4"/>
+    <field name="annual_bg" string="Bonus/Gift+" style="color:green"  sum="s5"/>
+    <field name="stardays" string="Rewards+" style="color:green"  sum="s6"/>
+    <field name="add_nonslip" string="NonSlip+" style="color:green"  sum="s7"/>
+    <field name="net_pay" style="color:blue"  sum="s8"/>
+
+
+									</tree>
+								</field>
+							</group>
+						</page>
+						<page name="p4" string="Slips">
+							<group colspan="4">
+								<field name="salaryrecord_s_slip" nolabel="1" colspan="4"  attrs="{'readonly': [('state','=','l')]}" class="small">
+									<tree create="false" default_order="bu_, contractparty_, salarytype desc, postworkdays" limit="500">
+    <field name="postworkdays" string="Employee" style="color:blue"/>
+    <field name="bu_" style="color:blue"/>
+    <field name="contractparty_" style="color:blue"/>
+    <field name="salarytype" invisible="1"/>
+
+    <field name="attend_register"/>
+    <field name="wages"/>
+    <field name="hra"/>
+    <field name="conv"/>
+    <field name="uniform"/>
+    <field name="medical"/>
+    <field name="others"/>
+    <field name="grosspay" widget="integer"  style="color:blue"  sum="s3"/>
+    <field name="esic" sum="s4" attrs="{'invisible': [('esic','=',0)]}"/>
+    <field name="pf" sum="s5" attrs="{'invisible': [('pf','=',0)]}"/>
+    <field name="tds" sum="s6" attrs="{'invisible': [('tds','=',0)]}"/>
+    <field name="lwf" sum="s7" attrs="{'invisible': [('lwf','=',0)]}"/>
+    <field name="monthpt" string="PT"  sum="s8" attrs="{'invisible': [('monthpt','=',0)]}"/>
+    <field name="NetA" widget="integer" style="color:blue"  sum="s9"/>
+    <field name="total_deduction"/>
+    <field name="net_pay" style="color:blue"  sum="s10"/>
+									</tree>
+								</field>
+<button name="salaryslip" type="object" class="oe_stat_button" icon="fa-print" string="Salary Slip" groups="simrp.group_simrp_works" attrs="{'invisible': [('state','!=','l')]}"/>
+							</group>
+						</page>
+					</notebook>
+                    <group colspan="4" col="4">
+                        <field name="employee_"  attrs="{'readonly': [('state','=','l')]}" options="{'no_create': True, 'no_open': True}" domain="['|', ( 'active', '=', True ), ( 'active', '=', False )]"/>
+                        <div class="oe_button_box" name="button_box">
+                        <button string="Single Employee" name="single_employee" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user" attrs="{'invisible': [('state','=','l')]}"/>
+                        <button string="Load All Employees" name="loadallemployees" type="object" class="btn-primary o_open_tasks" icon="fa-plus" groups="simrp.group_simrp_user" attrs="{'invisible': [('state','=','l')]}"/>
+                        </div>
+                    </group>
+			</form>
+		</field>
+	</record>
+
+    <record id="simrp_monthempsalary_tree" model="ir.ui.view">
+		<field name="name">simrp.monthempsalary.tree</field>
+		<field name="model">simrp.monthempsalary</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+							<field name="month_end"/>
+							<!-- <field name="bu_"/> -->
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+    <record id="simrp_monthempsalary_s" model="ir.ui.view">
+		<field name="name">simrp.monthempsalary.search</field>
+		<field name="model">simrp.monthempsalary</field>
+		<field name="arch" type="xml">
+			<search>
+							<field name="name"/>
+							<field name="month_end"/>
+							<!-- <field name="bu_"/> -->
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_monthempsalary_action" model="ir.actions.act_window">
+		<field name="name">Salary Records</field>
+		<field name="res_model">simrp.monthempsalary</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+    
+	<menuitem action="simrp_monthempsalary_action" id="simrp_monthempsalary_menu" name="Salary Records" parent="simrp_menu_hr_utilities" sequence="" groups="group_simrp_user"/>
+
+<!-- //Employee Transient Model Form View  -->
+
+</odoo>

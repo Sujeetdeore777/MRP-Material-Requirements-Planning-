@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="itemprocessf" model="ir.ui.view">
+		<field name="name">simrp.itemprocess.form</field>
+		<field name="model">simrp.itemprocess</field>
+		<field name="arch" type="xml">
+			<form create="false" delete="false">
+				<header>
+							<field name="item_" readonly="1" />
+							<field name="id" invisible="1"/>
+					<field name="name" style="font: bold 2.5vh arial; position:relative; left: 1vw;"/>
+							<field name="active" style="position:relative; left: 2vw;"/>
+							
+					<button name="modify" type="object" 
+								class="oe_stat_button" icon="fa-check-circle" string="Modify" 
+								attrs="{'invisible': [('state','!=','a')]}" 
+								groups="simrp.group_simrp_works" />
+					<button name="approve" type="object" 
+								class="oe_stat_button" icon="fa-check-circle" string="Approve" 
+								attrs="{'invisible': [('state','!=','d')]}" 
+								groups="simrp.group_simrp_works" />
+
+
+					<field name="state" widget="statusbar" />
+				</header>
+					<group col="8" style="position:relative; top: -4vh;">
+								<field name="seq" string="Process / Subcon"/>
+								<field name="processtype" widget="selection" options='{"no_open": True}' nolabel="1"/>
+								<field name="allowsubcon" nolabel="1"/>
+								<field name="cycletime" string="Machine Time"/>
+								<field name="loadtime"/>
+								<field name="des" colspan="2"/>
+								<button name="iotsync" type="object" 
+											class="oe_stat_button" icon="fa-check-circle" string="IoT Sync" 
+											groups="simrp.group_simrp_works" />
+								<field name="loadper"/>
+								<field name="speed"/>
+							<!-- <label for="qadetails" string="Quality Control Plan" colspan="4"/> -->
+								<field name="qadetails" nolabel="1" colspan="5" class="small" style="background-color:green">
+									<tree editable="bottom">
+										<field name="param"/>
+										<field name="type"/>
+										<field name="low"/>
+										<field name="high"/>
+										<field name="freq"/>
+										<field name="instrumentcategory_"  options="{'no_create': True}"/>
+										<field name="insrumentcode"  options="{'no_create': True}"/>
+										<field name="pdir" class="small"/>
+										<field name="react"/>
+									</tree>
+								</field>
+								<field name="toollist" nolabel="1" colspan="3" class="small" style="background-color:red">
+									<tree editable="bottom" >
+										<field name="item_"  options="{'no_create': True}" string="Tool Name"/>
+										<field name="expectedlife" string="Edge life"/>
+									</tree>
+								</field>
+								<field name="subcon" nolabel="1" colspan="3"  attrs="{'readonly': [('allowsubcon','=',False)]}" context="{'default_inputitem_': item_, 'default_item_':item_, 'default_itemprocess_':id}"  class="small" style="background-color:yellow">
+									<tree>
+										<field name="code" string="Code"/>
+										<field name="party_" options="{'no_create': True}"/>
+										<field name="rate"/>
+										<field name="rateuom_" string="pc"/>
+										<field name="uomconv" string="conv."/>
+									</tree>
+								</field>
+							<field name="operinst" nolabel="1" colspan="3" class="small" style="background-color:blue">
+								<tree editable="bottom">
+									<field name="name" string="Operator Instruction"/>
+								</tree>
+							</field>						
+							<field name="byproduct" nolabel="1" colspan="2" class="small" style="background-color:purple">
+								<tree editable="bottom">
+									<field name="item_" options="{'no_create': True}" string="By-Product"/>
+									<field name="qty" string="/unit"/>
+								</tree>
+							</field>
+                            <field name="setupinst" nolabel="1" colspan="5" class="small" style="background-color:orange">
+								<tree editable="bottom">
+									<field name="name" string="Setup Instruction"/>
+									<field name="type" string="type"/>
+									<field name="low" string="Low"/>
+									<field name="high" string="High"/>
+								</tree>
+							</field>
+							<field name="iofile_s" nolabel="1" colspan="3" class="small" style="background-color:blue">
+                                <tree editable="bottom">
+                                    <!-- <field name="itemprocess_" invisible="1"/> -->
+                                    <field name="name"/> 
+                                    <field name="type"/>
+                                    <field name="store" widget="download_link" filename="storename"/>
+                                    <field name="storename" invisible="1"/>
+                                </tree>
+                            </field>
+							<!-- <label for="toollist" string="Tools and consumption" colspan="4"/> -->
+							<!-- <label for="subcon" string="Subcontracting Agreements" colspan="4" attrs="{'invisible': [('allowsubcon','=',False)]}"/> -->
+							<!-- <label for="byproduct" string="Process By-products" colspan="4"/> -->
+							<!-- <label for="setupinst" string="Setup checklist / instructions" colspan="4"/> -->
+							<!-- <label for="operinst" string="Operator SOP" colspan="4"/> -->
+							
+					</group>
+					<notebook style="position:relative;top:-8vh;">
+						<page name="p1" string="Log" >
+							<group col="4">
+								<field name="qaplanrev"/>
+								<field name="qaplandate"/>
+								<!-- <field name="qaplandes"/> -->
+							</group>
+							<group col="4">
+								<field name="log" widget="html"/>
+							</group>
+						</page>
+						<page name="p1" string="Actions" >
+							<group col="4">
+								<field name="changeitem_" colspan="2" groups="simrp.group_simrp_ceo"/>
+								<button name="shiftitem" type="object" class="oe_stat_button" icon="fa-print" string="Shift to new item" groups="simrp.group_simrp_ceo" />
+							</group>
+						</page>
+					</notebook>
+			</form>
+		</field>
+	</record>
+
+	<record id="itemprocesst" model="ir.ui.view">
+		<field name="name">simrp.itemprocess.tree</field>
+		<field name="model">simrp.itemprocess</field>
+		<field name="arch" type="xml">
+			<tree create="false">
+								<field name="item_"/>
+								<field name="seq"/>
+								<field name="name" string="Process Name"/>
+								<field name="allowsubcon" string="Subc"/>
+								<field name="speed" string="spd/hr"/>
+								<field name="qaplandate" string="QA Date"/>
+								<field name="active" string="Act"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="itemprocesss" model="ir.ui.view">
+		<field name="name">simrp.itemprocess.search</field>
+		<field name="model">simrp.itemprocess</field>
+		<field name="arch" type="xml">
+			<search>
+								<field name="item_"/>
+								<field name="name" string="Process Name"/>
+								<field name="allowsubcon" string="Subc"/>
+								<field name="active" string="Act"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="itemprocessa" model="ir.actions.act_window">
+		<field name="name">Processes</field>
+		<field name="res_model">simrp.itemprocess</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="itemprocessa" id="mitemprocess" name="Process List" parent="simrp_menu_master_process" sequence="100" groups="group_simrp_user"/>
+
+</odoo>

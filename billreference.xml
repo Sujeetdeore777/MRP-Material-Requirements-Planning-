@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_billreference_form" model="ir.ui.view">
+		<field name="name">simrp.billreference.form</field>
+		<field name="model">simrp.billreference</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+				</header>
+				<sheet string="Billreference">
+
+					<field name="id" invisible="1"/>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name"/>
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="partyaccount_"/>
+							<field name="refdate"/>
+							<field name="duedate"/>
+
+
+						</group>
+						<group>
+							<field name="newAmount"/>
+							<field name="adjAmount"/>
+							<field name="baladjAmount"/>
+						</group>
+					</group>
+
+					<group colspan="4">
+						<field name="accline_s" nolabel="1" colspan="4"/>
+						<field name="refadj_s" colspan="4">
+							<tree editable="bottom">
+								<field name="agstbillreference_" domain="[('partyaccount_','=',parent.partyaccount_), ('baladjAmount','!=',0), ('id','!=',parent.id)]" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+								<field name="adjAmount"/>
+							</tree>
+						</field>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_billreference_tree" model="ir.ui.view">
+		<field name="name">simrp.billreference.tree</field>
+		<field name="model">simrp.billreference</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="baladjAmount &gt; 0" decoration-danger="baladjAmount &lt; 0" >
+				<field name="refdate"/>
+				<field name="duedate"/>
+
+				<field name="partyaccount_"/>
+							<field name="name"/>
+
+				<field name="newAmount"/>
+				<field name="adjAmount"/>
+				<field name="baladjAmount" sum="Balance"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_billreference_search" model="ir.ui.view">
+		<field name="name">simrp.billreference.search</field>
+		<field name="model">simrp.billreference</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="refdate"/>
+							<field name="name"/>
+				<field name="duedate"/>
+
+				<field name="partyaccount_"/>
+
+				<field name="newAmount"/>
+				<field name="baladjAmount"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_billreference_action" model="ir.actions.act_window">
+		<field name="name">Bill Reference</field>
+		<field name="res_model">simrp.billreference</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('baladjAmount','!=',0)]</field>
+	</record>
+
+	<menuitem action="simrp_billreference_action" id="simrp_billreference_menu" name="Bill Reference" parent="simrp_menu_account_fund" sequence="" groups="group_simrp_user"/>
+
+</odoo>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_attendance_tree" model="ir.ui.view">
+		<field name="name">simrp.attendance.tree</field>
+		<field name="model">simrp.attendance</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='l'" editable="bottom" >
+				<field name="employee_" options="{'no_create': True, 'no_edit': True, 'no_open': True}"  attrs="{'readonly': [('state','=','l')]}" />
+				<field name="amonth"/>
+				<field name="adate" attrs="{'readonly': [('state','=','l')]}" />
+				<field name="hhin"  attrs="{'readonly': [('state','=','l')]}" />
+				<field name="mmin"  attrs="{'readonly': [('state','=','l')]}" />
+				<field name="hhout" attrs="{'readonly': [('state','=','l')]}" />
+				<field name="mmout" attrs="{'readonly': [('state','=','l')]}" />
+
+				<field name="type" attrs="{'readonly': [('state','=','l')]}"/>
+				<field name="hadj" widget="float_time" attrs="{'readonly': [('state','=','l')]}" sum="s1"	/>
+
+				<field name="present"  sum="s2"/>
+				<field name="logflag" invisible="1"/>
+				<field name="autoflag" invisible="1"/>
+				<button name="logshow" type="object" class="oe_stat_button" icon="fa-circle" string="Log" groups="simrp.group_simrp_works" attrs="{'invisible': [('logflag','=',False)]}"/>
+				<button name="logshow" type="object" class="oe_stat_button" icon="fa-medium" string="Log" groups="simrp.group_simrp_works" attrs="{'invisible': [('autoflag','=',True)]}"/>
+				<field name="ot" sum="s3"/>
+				<field name="state"/>
+				<field name="create_date"/>
+				<button name="markout" type="object" class="oe_stat_button" icon="fa-sign-out" string="OUT" groups="simrp.group_simrp_ceo" attrs="{'invisible': [('state','!=',('i'))]}"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_attendance_search" model="ir.ui.view">
+		<field name="name">simrp.attendance.search</field>
+		<field name="model">simrp.attendance</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="employee_"/>
+				<field name="amonth"/>
+				<field name="adate"/>
+				<field name="state"/>
+				<field name="hadj"/>
+				<field name="type"/>
+				<field name="logflag"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_attendance_action" model="ir.actions.act_window">
+		<field name="name">Attendance Records</field>
+		<field name="res_model">simrp.attendance</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_attendance_action" id="simrp_attendance_menu" name="Attendance Records" parent="simrp_menu_hr_salary" sequence="" groups="group_simrp_user"/>
+	
+	
+
+<!--
+	<record id="simrp_tattendanceday_form" model="ir.ui.view">
+		<field name="name">simrp.tattendanceday.form</field>
+		<field name="model">simrp.tattendanceday</field>
+		<field name="arch" type="xml">
+			<form>
+					<group>
+						<field name="tdate"/>
+						<field name="dest"/>
+					</group>
+				<footer>
+					<button string="Generate" name="generate" type="object" class="btn-primary" icon="fa-plus" groups="simrp.group_simrp_user"/>
+					<button string="Cancel" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_tattendanceday_action" model="ir.actions.act_window">
+		<field name="name">Attendance Helper</field>
+		<field name="res_model">simrp.tattendanceday</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<menuitem action="simrp_tattendanceday_action" id="simrp_tattendanceday_menu" name="Attendance Helper" parent="simrp_menu_hr_salary" sequence="" groups="group_simrp_user"/>
+-->	
+</odoo>

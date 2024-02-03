@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="cmdc_form_action" model="ir.actions.act_window">
+		<field name="name">Customer material return</field>
+		<field name="res_model">simrp.cmdc</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<record id="simrp_csubcondc_form" model="ir.ui.view">
+		<field name="name">simrp.csubcondc.form</field>
+		<field name="model">simrp.csubcondc</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Csubcondc">
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+						<button name="confirm" type="object" class="oe_stat_button" icon="fa-folder-open" string="Confirm Qty Sale Order" attrs="{'invisible': [('state','!=',('d'))]}" groups="simrp.group_simrp_user" />
+						<button name="%(cmdc_form_action)d" type="action" class="oe_stat_button" icon="fa-fast-forward" string="Material or Scrap Return" attrs="{'invisible': [('state','!=',('o'))]}" groups="simrp.group_simrp_user" context="{'default_csubcondc_':id}"/>
+						<button name="close" type="object" class="oe_stat_button" icon="fa-folder-open" string="Close Record" attrs="{'invisible': [('state','!=',('o'))]}" groups="simrp.group_simrp_works" />
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group col="8">
+							<field name="party_" options='{"no_create": True}' colspan="6" attrs="{'readonly': [('state','!=',('d'))]}"  style="font-weight: bold"/>
+							<field name="partydcdate" required="1" attrs="{'readonly': [('state','!=',('d'))]}"/>
+
+							<field name="itemrate_" domain="[('party_','=',party_)]" options='{"no_create": True}' colspan="6" attrs="{'readonly': [('state','!=',('d'))]}"/>
+							<field name="partydc" required="1" attrs="{'readonly': [('state','!=',('d'))]}"/>
+							
+							<field name="item_" colspan="6" style="font-weight: bold"/>
+							<field name="qtydc" required="1" attrs="{'readonly': [('state','!=',('d'))]}"/>
+							
+							<field name="itemprocess_" colspan="6"/>
+							<field name="inqty" attrs="{'readonly': [('state','!=',('d'))]}"/>
+
+							<field name="recdate" colspan="4" string="In Time"/>
+							<field name="saleorder_"/>
+							<field name="crosscheck" colspan="2" attrs="{'readonly': [('state','!=',('d'))]}"/>
+							
+							<field name="outputitem_" colspan="4"  style="font-weight: bold"/>
+							<field name="outputexpected"/>
+							<field name="outputuom_" nolabel="1" colspan="2"/>
+
+
+						<field name="dispatch_s" colspan="8">
+									<tree decoration-success="state in ['i']" decoration-warning="state in ['c']" decoration-danger="state in ['d']">
+								<field name="name"/>
+								<field name="invdate"/>
+								<field name="asn"/>
+								<field name="okoutqty" sum="a"/>
+								<field name="invoice_"/>    
+								<field name="state"/>    
+									</tree>
+						</field>
+							<field name="byproductitem_" colspan="4"/>
+							<field name="byproductexpected"/>
+							<field name="byproductuom_" nolabel="1" colspan="2"/>
+
+							<field name="balanceqtyo" string="Balance Qty"/>
+							<field name="balanceqtyi" string="Input"/>
+							<field name="balanceqtyb" string="Byproduct" colspan="4"/>
+						<field name="cmdc_s" colspan="8" context="{'csubcondc_':id}"/>
+
+
+							<field name="opconv"/>
+							<field name="byconv"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_csubcondc_tree" model="ir.ui.view">
+		<field name="name">simrp.csubcondc.tree</field>
+		<field name="model">simrp.csubcondc</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='a'" >
+				<field name="name"/>
+				<field name="recdate"/>
+				<field name="party_"/>
+				<field name="item_"/>
+
+				<field name="partydc"/>
+				<field name="partydcdate"/>
+				<field name="inqty"/>
+
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_csubcondc_search" model="ir.ui.view">
+		<field name="name">simrp.csubcondc.search</field>
+		<field name="model">simrp.csubcondc</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="recdate"/>
+				<field name="party_"/>
+				<field name="item_"/>
+
+				<field name="partydc"/>
+				<field name="partydcdate"/>
+
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_csubcondc_action" model="ir.actions.act_window">
+		<field name="name">Customer Subcon DC</field>
+		<field name="res_model">simrp.csubcondc</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_csubcondc_action" id="simrp_csubcondc_menu" name="Customer Subcon DC" parent="simrp_menu_material_in" sequence="" groups="group_simrp_user"/>
+
+</odoo>

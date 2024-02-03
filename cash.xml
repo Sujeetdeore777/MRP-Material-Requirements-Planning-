@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="simrp_cash_form" model="ir.ui.view">
+		<field name="name">simrp.cash.form</field>
+		<field name="model">simrp.cash</field>
+		<field name="arch" type="xml">
+			<form>
+			    <header>
+                        <field name="state" widget="statusbar"/>
+                </header>
+				<sheet string="Cash Transaction">
+							<div class="oe_title pr-0">
+								<h1 class="d-flex flex-row "></h1>
+							</div>
+								<div class="oe_button_box" name="button_box">
+								<button  name="apprv" type="object" 
+								class="oe_stat_button" icon="fa-check-circle" string="Approved"
+								attrs="{'invisible': [('state','!=','submit')]}"
+								groups="simrp.group_simrp_works"
+								context="{'default_leave_req_id':id,'default_state':state}"/>
+								<button name="submit" type="object" class="oe_stat_button" icon="fa-folder-open" string="Submit" attrs="{'invisible': [('state','!=','draft')]}" groups="simrp.group_simrp_user" />
+							</div>
+					<group col="4">
+						<field name="type" attrs="{'readonly': [('state','=','approved')]}"/>
+						<field name="name"/>
+						<field name="exp_head" domain="[('type', 'in', ['ex','iex'])]" attrs="{'required':[('type','=','cash_exp')], 'invisible': [('type','not in',['cash_exp'])], 'readonly': [('state','=','approved')]}" options="{'no_create': True, 'no_open': True}"/>
+						<field name="date"/>
+						<field name="cash_ledger_acc_out" domain="[('type', '=', 'cash')]" attrs="{'readonly': [('state','=','approved')]}" options="{'no_create': True, 'no_open': True}"/>
+						<field name="cash_ledger_acc_in" attrs="{'required':[('type','=','cash_tran')],'invisible': [('type','not in',['cash_tran'])], 'readonly': [('state','=','approved')]}" domain="[('type', '=', 'cash')]" options="{'no_create': True, 'no_open': True}"/>
+						<field name="out_amount" attrs="{'readonly': [('state','=','approved')], 'readonly': [('state','=','approved')]}"/>
+						<field name="Description" colspan="4" attrs="{'readonly': [('state','=','approved')]}"/>
+					</group>
+					<field name="accline_s" nolabel="1" colspan="6" attrs="{'readonly': [('state','=','approved')] ,'invisible':[('state','not in',['approved'])] }"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_cash_tree" model="ir.ui.view">
+		<field name="name">simrp.cash.tree</field>
+		<field name="model">simrp.cash</field>
+		<field name="arch" type="xml">
+			<tree decoration-success="state=='approved'">
+				<field name="name" />
+				<field name="date"/>
+				<field name="type"/>
+				<field name="cash_ledger_acc_in"/>
+				<field name="out_amount"/>
+				<field name="exp_head"/>
+				<field name="cash_ledger_acc_out"/>
+				<field name="Description"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_cash_search" model="ir.ui.view">
+		<field name="name">simrp.cash.search</field>
+		<field name="model">simrp.cash</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name" />
+				<field name="type" />
+				<field name="cash_ledger_acc_in"/>
+				<field name="out_amount"/>
+				<field name="exp_head"/>
+				<field name="cash_ledger_acc_out"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_cash_action" model="ir.actions.act_window">
+		<field name="name">Cash Transaction</field>
+		<field name="res_model">simrp.cash</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_cash_action" id="simrp_cash_menu" name="Cash Transaction" parent="simrp_menu_account_fund" sequence="" groups="group_simrp_user"/>
+</odoo>

@@ -1,0 +1,178 @@
+Wo issue -> target qty is x .. required division
+DN Post Accounting -> Button and states
+
+
+Improvements:
+7	item master approval locking
+8	all objects state locking
+10	transport bill booking against purchase
+4	itemquery
+5	customerquery
+6	supplierquery
+9	physical stock printouts
+2	wo p&l
+3	dashboards - sales, production, pqcdsm, etc...
+1	ledgerquery
+
+Features:
+1	Salary
+	asset
+2	cash
+3	advance
+4	leave
+5	production load and plan
+6	tooling planning / wo tooling planning
+7	reorder levels for items
+	rca
+	kaizen
+	calibration
+	Machine Maintenance
+	rework record
+	tool breakage / damage
+	cost of item, cost at item stage, rm cost, tooling cost, manpower cost, machine cost, etc..
+	link task system - woproduction cia, ...
+
+Todo:
+	Daily Net Activity Log, daily cash P&L
+5	Electricity
+4	attendance logging
+2	woproduction PRsheet print
+1	woproduction methods - generate byproduct & stock records, tool consumption records
+3	rm planning
+	
+
+
+Dashboards
+==========
+P - Productivity
+    
+    -Capacity Utilisation
+    -Operator Productivity
+    -Machine Red Tag Score
+    v-Machine Breakdown hours
+    v-Downtime Analysis
+    -MLT
+    -Setup Time Analysis
+    v-OEE
+    -RM Yield
+    
+Q - Quality
+
+    -No. of customer complaints
+    -Supplier Rejection
+    -Inprocess rejection
+    FG Rejection
+    Rework and sorting hours
+    Calibration score
+    RCA Task progress %
+    
+C - Cost
+
+    VA
+    VA/e
+    Contribution
+    C/e
+    COPQ - 
+    Inventory cost
+    Elec. cost
+    Maint & Breakage costs
+    Waste management targets
+    Tooling cost
+    
+D - Delivery
+
+    OTD Score
+    OTIF Score
+    Sales
+    RM Avg Lead time
+    RM Rejection
+    Supplier scoring ( lead time and quality )
+    
+M - Morale
+
+    5S Score
+    No of Kaizens
+    Top 5 scorers
+    On time salary
+    Last Q12 score
+    
+S - Safety
+
+    Safety Audit Score
+    Accident free days
+
+
+Finance Dashboard
+
+    ROI
+    ROTA
+    VA/e
+    C/e
+    GP
+    NP
+    Recoveries
+    Wastes view
+	Current Ratio
+	Quick Ratio
+	Inventory Value
+
+Operations Dashboard from System
+
+R = Ready
+M = Manual
+
+
+R        Sale Order View
+R        QA View
+R            Rejections
+R            Pending Customer Complaints
+            RCA view
+R            Actions View
+R        Procurement View
+        Cash flow view
+            Payables
+            Receivables
+        Dates View
+            Due dates
+            Taxation compliance
+R        System View
+R            Item Process Master
+R            PO for Approvals
+R            DC for Approvals
+R            GRN pending
+R            QC Pending transactions
+R            Purchase for approvals
+R            DN / CN for approvals
+        HR View
+R            Puntuality score
+R            Absenteeism
+            Skill Matrix
+            KRA and appraisals
+        Business Dev
+            Leads
+            Enquiries
+            Development
+
+customer subcon dc -> sale order -> work order
+
+
+  File "/usr/lib/python3/dist-packages/odoo/addons/web/controllers/main.py", line 966, in call_button
+    action = self._call_kw(model, method, args, {})
+  File "/usr/lib/python3/dist-packages/odoo/addons/web/controllers/main.py", line 954, in _call_kw
+    return call_kw(request.env[model], method, args, kwargs)
+  File "/opt/odoo/odoo/odoo/api.py", line 749, in call_kw
+    return _call_kw_multi(method, model, args, kwargs)
+  File "/opt/odoo/odoo/odoo/api.py", line 736, in _call_kw_multi
+    result = method(recs, *args, **kwargs)
+  File "/usr/lib/python3/dist-packages/odoo/addons/simrp/womfg.py", line 146, in start
+    nt = shiftinfo.getlocaltime( ntnow, self.env.user.tz )
+  File "/usr/lib/python3/dist-packages/odoo/addons/simrp/shiftinfo.py", line 13, in getlocaltime
+    usertz = pytz.timezone( tzone or pytz.utc )
+  File "/home/kaushal/.local/lib/python3.5/site-packages/pytz/__init__.py", line 160, in timezone
+    if zone.upper() == 'UTC':
+AttributeError: 'UTC' object has no attribute 'upper'
+
+If this error, show instruction to select timezone in preferences
+
+
+How to remove entry from M2o field

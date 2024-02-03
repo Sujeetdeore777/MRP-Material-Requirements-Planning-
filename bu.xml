@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="simrp_bu_tree" model="ir.ui.view">
+<field name="name">simrp.bu.tree</field>
+<field name="model">simrp.bu</field>
+<field name="arch" type="xml">
+<tree editable="bottom" >
+    <field name="name"/>
+    <field name="buc"/>
+    <field name="bname"/>
+	<button name="initemp" type="object" class="oe_stat_button" icon="fa-check" string="Init BU for existing Emp Records" 
+		groups="simrp.group_simrp_ceo" />
+</tree>
+</field>
+</record>
+
+<record id="simrp_bu_search" model="ir.ui.view">
+<field name="name">simrp.bu.search</field>
+<field name="model">simrp.bu</field>
+<field name="arch" type="xml">
+<search>
+    <field name="name"/>
+    <field name="buc"/>
+    <field name="bname"/>
+</search>
+</field>
+</record>
+
+<record id="simrp_bu_action" model="ir.actions.act_window">
+<field name="name">Bu</field>
+<field name="res_model">simrp.bu</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+</record>
+
+<menuitem action="simrp_bu_action" id="simrp_bu_menu" name="Business Units" parent="simrp_Mlist" sequence="100" groups="group_simrp_user"/>
+
+
+		
+		</odoo>
+		

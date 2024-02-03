@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="simrp_complaint_form" model="ir.ui.view">
+		<field name="name">simrp.complaint.form</field>
+		<field name="model">simrp.complaint</field>
+		<field name="arch" type="xml">
+			<form create="false" delete="false">
+				<header>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet string="Complaint">
+
+					<field name="id" invisible="1"/>
+					<div class="oe_button_box" name="button_box">
+						<button name="submit" type="object" class="oe_stat_button" icon="fa-folder-open" string="Mark Action Submitted" attrs="{'invisible': [('state','!=',('n'))]}" groups="simrp.group_simrp_user" />
+						<button name="credit" type="object" class="oe_stat_button" icon="fa-folder-open" string="Initiate Credit Note" attrs="{'invisible': [('state','!=',('a'))]}" groups="simrp.group_simrp_works" />
+						<button name="close" type="object" class="oe_stat_button" icon="fa-folder-open" string="Close w/o Credit Note" attrs="{'invisible': [('state','!=',('a'))]}" groups="simrp.group_simrp_ceo" />
+					</div>
+
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row ">
+							<field name="name" />
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="cdate"/>
+							<field name="raisedby"/>
+							<field name="info"/>
+							<field name="defect"/>
+							<field name="qty"/>
+						</group>
+						<group>
+							<field name="party_" options='{"no_create": True}'/>
+							<field name="item_" domain="[('state', '=', 'a')]" options='{"no_create": True}'/>
+							<field name="saleorder_"/>
+							<field name="action"/>
+							<field name="credit_"/>
+						</group>
+					</group>
+
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_complaint_tree" model="ir.ui.view">
+		<field name="name">simrp.complaint.tree</field>
+		<field name="model">simrp.complaint</field>
+		<field name="arch" type="xml">
+			<tree create="false" delete="false">
+				<field name="name"/>
+				<field name="cdate"/>
+				<field name="raisedby"/>
+				<field name="saleorder_"/>
+				<field name="item_"/>
+				<field name="party_"/>
+				<field name="qty"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="simrp_complaint_search" model="ir.ui.view">
+		<field name="name">simrp.complaint.search</field>
+		<field name="model">simrp.complaint</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name"/>
+				<field name="cdate"/>
+				<field name="raisedby"/>
+				<field name="saleorder_"/>
+				<field name="item_"/>
+				<field name="party_"/>
+				<field name="state"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="simrp_complaint_action" model="ir.actions.act_window">
+		<field name="name">Customer Complaints</field>
+		<field name="res_model">simrp.complaint</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem action="simrp_complaint_action" id="simrp_complaint_menu" name="Customer Complaints" parent="simrp_menu_qc_history" sequence="" groups="group_simrp_user"/>
+
+
+
+</odoo>

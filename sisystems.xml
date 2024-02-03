@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<template id="si1" inherit_id="web.login_layout">
+            <xpath expr="//div[@t-if='not disable_footer']" position="replace"></xpath>
+        </template>		
+
+
+	
+</odoo>

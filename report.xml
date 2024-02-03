@@ -1,0 +1,60 @@
+<odoo>
+
+    <report
+        id="simrp_reportx"
+        model="report.simrp.reportx"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="report.simrp.reportx"
+        file="r1"
+        attachment_use="False"
+    />
+
+	<record id="simrp_reportx_form" model="ir.ui.view">
+		<field name="name">report.simrp.reportx.form</field>
+		<field name="model">report.simrp.reportx</field>
+		<field name="arch" type="xml">
+			<form>
+				<group>
+					<group>
+						<field name="fromdate" attrs="{'invisible': [('type','=','uniform')]}"/>
+						<field name="todate" attrs="{'invisible': [('type','=','uniform')]}"/>
+						<field name="type"/>
+						<!-- <field name="ignorezero" attrs="{'invisible': [('type','!=','tl')]}"/> -->
+						<field name="date" attrs="{'invisible': [('type','!=','uniform')]}"/>
+						<field name="trainee_day" attrs="{'invisible': [('type','!=','uniform')]}"/>
+						<field name="Reissue_interval" attrs="{'invisible': [('type','!=','uniform')]}"/>
+						<button name="generate" type="object" class="oe_stat_button" icon="fa-folder-open" string="Generate Report" groups="simrp.group_simrp_user" />
+						<button name="loadcsv" type="object" class="oe_stat_button" icon="fa-check" string="Generate CSV" groups="simrp.group_simrp_user"/>
+					<!-- <button name="setjson" type="object" class="oe_stat_button" icon="fa-check" string="Generate JSON" groups="simrp.group_simrp_user" attrs="{'invisible': [('type','not in',['gstr1'])]}" /> -->
+						<field name="json" widget="download_link" filename="storename" attrs="{'invisible': [('storename','=','')]}" readonly="1"/><field name="storename" invisible="1"/>
+						<field name="json1" widget="download_link" filename="storename1" attrs="{'invisible': [('storename1','=','')]}" readonly="1"/><field name="storename1" invisible="1"/>
+						<field name="json2" widget="download_link" filename="storename2" attrs="{'invisible': [('storename2','=','')]}" readonly="1"/><field name="storename2" invisible="1"/>
+						<field name="json3" widget="download_link" filename="storename3" attrs="{'invisible': [('storename3','=','')]}" readonly="1"/><field name="storename3" invisible="1"/>
+						<field name="json4" widget="download_link" filename="storename4" attrs="{'invisible': [('storename4','=','')]}" readonly="1"/><field name="storename4" invisible="1"/>
+
+					</group>
+					<group>
+					</group>
+				</group>
+				<group col="4">
+					<field name="csv" colspan="4"/>
+				</group>
+				<group col="4">
+					<field name="htest" colspan="4" nolabel="1" widget="text"/>
+					<field name="htestcom" colspan="4" nolabel="1"/>
+				</group>
+			</form>
+		</field>
+	</record>
+
+	<record id="simrp_reportx_action" model="ir.actions.act_window">
+		<field name="name">Report Generation</field>
+		<field name="res_model">report.simrp.reportx</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+	</record>
+
+	<menuitem action="simrp_reportx_action" id="simrp_report1_menu" name="Reports" parent="simrp_menu_report" sequence="" groups="group_simrp_user"/>
+
+</odoo>
